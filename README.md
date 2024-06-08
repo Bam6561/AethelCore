@@ -26,7 +26,9 @@
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
-Minecraft plugin written for Aethel SMP. Successor to [Aethel Plugin](https://github.com/Bam6561/AethelPlugin).
+Minecraft plugin written for Aethel SMP. 
+
+**Successor to [Aethel Plugin](https://github.com/Bam6561/AethelPlugin).**
 
 See the [Wiki](https://github.com/Bam6561/AethelCore/wiki/Home) for documentation on its features.
 
