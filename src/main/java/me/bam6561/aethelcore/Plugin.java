@@ -1,5 +1,7 @@
 package me.bam6561.aethelcore;
 
+import me.bam6561.aethelcore.listeners.BlockListener;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
@@ -10,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
  * handle various requests given to it by its users and the server.
  *
  * @author Danny Nguyen
- * @version 0.0.1
+ * @version 0.0.3
  * @since 0.0.1
  */
 public class Plugin extends JavaPlugin {
@@ -23,11 +25,12 @@ public class Plugin extends JavaPlugin {
   /**
    * On enable:
    * <ul>
-   *   <li>
+   *   <li>{@link #registerEventListeners() Registers} event listeners.
    * </ul>
    */
   @Override
   public void onEnable() {
+    registerEventListeners();
   }
 
   /**
@@ -41,9 +44,17 @@ public class Plugin extends JavaPlugin {
   }
 
   /**
-   * Gets the plugin object.
+   * Registers the plugin's event listeners.
+   */
+  private void registerEventListeners() {
+    PluginManager manager = getServer().getPluginManager();
+    manager.registerEvents(new BlockListener(), this);
+  }
+
+  /**
+   * Gets the plugin.
    *
-   * @return return plugin instance
+   * @return plugin instance
    */
   @NotNull
   public static Plugin getInstance() {

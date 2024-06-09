@@ -13,7 +13,7 @@ import java.util.Objects;
  * Represents a block action done while a player is sneaking.
  *
  * @author Danny Nguyen
- * @version 0.0.2
+ * @version 0.0.3
  * @since 0.0.2
  */
 public class SneakingBlockActionEvent extends Event implements Cancellable {
@@ -53,6 +53,7 @@ public class SneakingBlockActionEvent extends Event implements Cancellable {
    *
    * @return interacting player
    */
+  @NotNull
   public Player getPlayer() {
     return this.player;
   }
@@ -62,6 +63,7 @@ public class SneakingBlockActionEvent extends Event implements Cancellable {
    *
    * @return block action
    */
+  @NotNull
   public Action getAction() {
     return this.action;
   }
@@ -94,6 +96,16 @@ public class SneakingBlockActionEvent extends Event implements Cancellable {
   @NotNull
   @Override
   public HandlerList getHandlers() {
+    return handlers;
+  }
+
+  /**
+   * Gets the event's handlers.
+   *
+   * @return event handlers
+   */
+  @NotNull
+  public static HandlerList getHandlerList() {
     return handlers;
   }
 }
