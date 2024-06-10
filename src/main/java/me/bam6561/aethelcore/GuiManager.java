@@ -13,7 +13,7 @@ import java.util.Map;
  * Registers inventories to GUIs that are managed by the {@link Plugin}.
  *
  * @author Danny Nguyen
- * @version 0.0.7
+ * @version 0.0.9
  * @since 0.0.7
  */
 public class GuiManager {
@@ -21,6 +21,12 @@ public class GuiManager {
    * Inventories managed by the {@link Plugin}.
    */
   private final Map<Inventory, GuiHandler> guis = new HashMap<>();
+
+  /**
+   * No parameter constructor.
+   */
+  public GuiManager() {
+  }
 
   /**
    * Pairs the {@link me.bam6561.aethelcore.interfaces.GUI} with its {@link GuiHandler}.
@@ -44,7 +50,7 @@ public class GuiManager {
   /**
    * Handles clicks for {@link me.bam6561.aethelcore.interfaces.GUI guis}.
    *
-   * @param event
+   * @param event inventory click event
    */
   public void handleClick(InventoryClickEvent event) {
     GuiHandler handler = guis.get(event.getInventory());
@@ -56,7 +62,7 @@ public class GuiManager {
   /**
    * Handles {@link me.bam6561.aethelcore.interfaces.GUI guis} opening.
    *
-   * @param event
+   * @param event inventory open vent
    */
   public void handleOpen(InventoryOpenEvent event) {
     GuiHandler handler = guis.get(event.getInventory());
@@ -68,7 +74,7 @@ public class GuiManager {
   /**
    * Handles {@link me.bam6561.aethelcore.interfaces.GUI guis} closing.
    *
-   * @param event
+   * @param event inventory close event
    */
   public void handleClose(InventoryCloseEvent event) {
     Inventory gui = event.getInventory();
