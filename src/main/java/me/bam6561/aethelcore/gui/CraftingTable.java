@@ -10,14 +10,14 @@ import org.jetbrains.annotations.NotNull;
  * Represents a crafting table's {@link Workstation}.
  *
  * @author Danny Nguyen
- * @version 0.0.5
+ * @version 0.0.6
  * @since 0.0.5
  */
 public class CraftingTable implements InventoryHolder, Workstation {
   /**
    * Inventory.
    */
-  private final Inventory inventory = Bukkit.createInventory(this, 54);
+  private final Inventory inventory = Bukkit.createInventory(this, 54, "Crafting Table");
 
   /**
    * No parameter constructor.

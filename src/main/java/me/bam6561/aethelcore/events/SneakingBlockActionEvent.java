@@ -1,11 +1,13 @@
 package me.bam6561.aethelcore.events;
 
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.block.Action;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -13,7 +15,7 @@ import java.util.Objects;
  * Represents a block action done while a player is sneaking.
  *
  * @author Danny Nguyen
- * @version 0.0.3
+ * @version 0.0.6
  * @since 0.0.2
  */
 public class SneakingBlockActionEvent extends Event implements Cancellable {
@@ -38,14 +40,21 @@ public class SneakingBlockActionEvent extends Event implements Cancellable {
   private final Action action;
 
   /**
+   * Interacting block.
+   */
+  private final Block block;
+
+  /**
    * Associates the event with its player and action.
    *
    * @param player interacting player
    * @param action block action
+   * @param block  interacting block
    */
-  public SneakingBlockActionEvent(@NotNull Player player, @NotNull Action action) {
+  public SneakingBlockActionEvent(@NotNull Player player, @NotNull Action action, @Nullable Block block) {
     this.player = Objects.requireNonNull(player, "Null player");
     this.action = Objects.requireNonNull(action, "Null action");
+    this.block = block;
   }
 
   /**
@@ -58,6 +67,7 @@ public class SneakingBlockActionEvent extends Event implements Cancellable {
     return this.player;
   }
 
+
   /**
    * Gets the block action.
    *
@@ -66,6 +76,16 @@ public class SneakingBlockActionEvent extends Event implements Cancellable {
   @NotNull
   public Action getAction() {
     return this.action;
+  }
+
+  /**
+   * Gets the interacting block.
+   *
+   * @return interacting block
+   */
+  @Nullable
+  public Block getBlock() {
+    return this.block;
   }
 
   /**
