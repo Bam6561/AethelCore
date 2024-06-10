@@ -1,15 +1,12 @@
 package me.bam6561.aethelcore.listeners;
 
-import me.bam6561.aethelcore.Plugin;
 import me.bam6561.aethelcore.events.GuiOpenEvent;
-import me.bam6561.aethelcore.events.SneakingBlockActionEvent;
-import me.bam6561.aethelcore.gui.CraftingTable;
+import me.bam6561.aethelcore.events.SneakingBlockInteractEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -18,7 +15,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
  * Collection of listeners related to block interactions.
  *
  * @author Danny Nguyen
- * @version 0.0.6
+ * @version 0.0.7
  * @since 0.0.3
  */
 public class BlockListener implements Listener {
@@ -37,22 +34,23 @@ public class BlockListener implements Listener {
   private void onPlayerInteract(PlayerInteractEvent event) {
     Player player = event.getPlayer();
     if (player.isSneaking()) {
-      SneakingBlockActionEvent sneakingBlockAction = new SneakingBlockActionEvent(player, event.getAction(), event.getClickedBlock());
-      Bukkit.getPluginManager().callEvent(sneakingBlockAction);
+      SneakingBlockInteractEvent sneakingBlockInteract = new SneakingBlockInteractEvent(event);
+      Bukkit.getPluginManager().callEvent(sneakingBlockInteract);
     }
   }
 
   /**
-   * Routes sneaking block actions.
+   * Routes {@link SneakingBlockInteractEvent} interactions.
    *
-   * @param event sneaking block action event
+   * @param event {@link SneakingBlockInteractEvent}
    */
   @EventHandler
-  private void onSneakingBlockAction(SneakingBlockActionEvent event) {
-    if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-      Block block = event.getBlock();
+  private void onSneakingBlockInteract(SneakingBlockInteractEvent event) {
+    PlayerInteractEvent interaction = event.getInteraction();
+    if (interaction.getAction() == Action.RIGHT_CLICK_BLOCK) {
+      Block block = interaction.getClickedBlock();
       if (block != null) {
-        openWorkstation(event.getPlayer(), block);
+        openWorkstation(interaction);
       }
     }
   }
@@ -60,17 +58,17 @@ public class BlockListener implements Listener {
   /**
    * Opens the block's {@link me.bam6561.aethelcore.interfaces.Workstation}.
    *
-   * @param player interacting player
-   * @param block  interacting block
+   * @param event player interact event
    */
-  private void openWorkstation(Player player, Block block) {
-    if (block.getType() == Material.CRAFTING_TABLE) {
-      CraftingTable craftingTable = new CraftingTable();
-      GuiOpenEvent guiOpen = new GuiOpenEvent(player, craftingTable);
-      Bukkit.getScheduler().runTaskLater(Plugin.getInstance(), () -> {
-        player.openInventory(new CraftingTable().getInventory());
-        Bukkit.getPluginManager().callEvent(guiOpen);
-      }, 1);
+  private void openWorkstation(PlayerInteractEvent event) {
+    if (event.getClickedBlock().getType() == Material.CRAFTING_TABLE) {
+      GuiOpenEvent guiOpen = new GuiOpenEvent(event.getPlayer());
+      Bukkit.getPluginManager().callEvent(guiOpen);
+      if (guiOpen.isCancelled()) {
+        return;
+      }
+      event.setCancelled(true);
+      event.getPlayer().openInventory(Bukkit.createInventory(null, 54));
     }
   }
 }
