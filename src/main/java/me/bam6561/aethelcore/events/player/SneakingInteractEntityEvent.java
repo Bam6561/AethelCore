@@ -9,7 +9,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /**
- * Represents an entity interaction done while a player is sneaking.
+ * Called when a player interacts with an entity while sneaking.
+ * <p>
+ * Cancellation prevents any {@link me.bam6561.aethelcore.Plugin}
+ * features related to the event from happening.
  * <p>
  * May be cancelled without cancelling its source PlayerInteractEntityEvent.
  *

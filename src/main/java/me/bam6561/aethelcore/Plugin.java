@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Represents the plugin as an object.
  * <p>
- * Through event listeners and command executors, the plugin can
+ * Through command executors and event listeners, the plugin can
  * handle various requests given to it by its users and the server.
  *
  * @author Danny Nguyen

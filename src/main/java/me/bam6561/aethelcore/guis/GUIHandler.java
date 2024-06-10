@@ -5,7 +5,7 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 
 /**
- * Represents base behavior for a {@link GUI}.
+ * Defines base behavior for a {@link GUI}.
  *
  * @author Danny Nguyen
  * @version 0.0.7

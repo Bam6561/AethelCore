@@ -10,7 +10,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /**
- * Represents a {@link GUI} open event.
+ * Called before a {@link GUI} opens.
+ * <p>
+ * Cancellation prevents the {@link GUI} from opening.
  *
  * @author Danny Nguyen
  * @version 0.0.7

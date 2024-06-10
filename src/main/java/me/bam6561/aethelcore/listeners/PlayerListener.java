@@ -66,7 +66,7 @@ public class PlayerListener implements Listener {
   }
 
   /**
-   * Represents a non-cancelled {@link SneakingInteractEvent}.
+   * {@link me.bam6561.aethelcore.Plugin} {@link SneakingInteractEvent} interaction.
    *
    * @param event player interact event
    * @author Danny Nguyen
@@ -112,7 +112,7 @@ public class PlayerListener implements Listener {
   }
 
   /**
-   * Represents a successful {@link SneakingInteractEntityEvent}.
+   * {@link me.bam6561.aethelcore.Plugin} {@link SneakingInteractEntityEvent} interaction.
    *
    * @param event player interact entity event
    * @author Danny Nguyen

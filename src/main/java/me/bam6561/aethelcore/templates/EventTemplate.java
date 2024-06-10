@@ -6,7 +6,7 @@ import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Represents an event.
+ * An event.
  *
  * @author Danny Nguyen
  * @version 0.0.4

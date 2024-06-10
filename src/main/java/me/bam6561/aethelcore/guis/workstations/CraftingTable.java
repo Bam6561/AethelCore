@@ -6,7 +6,7 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 
 /**
- * Represents a crafting table {@link Workstation}.
+ * Crafting table {@link Workstation}.
  *
  * @author Danny Nguyen
  * @version 0.0.12
