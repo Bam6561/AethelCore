@@ -1,7 +1,6 @@
 package me.bam6561.aethelcore.guis.workstations;
 
-import me.bam6561.aethelcore.interfaces.GUIHandler;
-import me.bam6561.aethelcore.interfaces.Workstation;
+import me.bam6561.aethelcore.guis.GUIHandler;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
@@ -10,10 +9,16 @@ import org.bukkit.event.inventory.InventoryOpenEvent;
  * Represents a crafting table {@link Workstation}.
  *
  * @author Danny Nguyen
- * @version 0.0.11
+ * @version 0.0.12
  * @since 0.0.11
  */
 public class CraftingTable implements GUIHandler, Workstation {
+  /**
+   * No parameter constructor.
+   */
+  public CraftingTable() {
+  }
+
   /**
    * Currently does nothing.
    *

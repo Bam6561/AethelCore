@@ -1,4 +1,4 @@
-package me.bam6561.aethelcore.interfaces;
+package me.bam6561.aethelcore.guis;
 
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;

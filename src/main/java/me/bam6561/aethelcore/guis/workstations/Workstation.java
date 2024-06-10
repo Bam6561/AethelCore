@@ -1,4 +1,6 @@
-package me.bam6561.aethelcore.interfaces;
+package me.bam6561.aethelcore.guis.workstations;
+
+import me.bam6561.aethelcore.guis.GUI;
 
 /**
  * Represents a {@link GUI} associated with a block type.

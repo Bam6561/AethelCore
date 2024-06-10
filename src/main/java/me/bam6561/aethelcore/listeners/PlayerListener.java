@@ -1,8 +1,8 @@
 package me.bam6561.aethelcore.listeners;
 
-import me.bam6561.aethelcore.events.GUIOpenEvent;
-import me.bam6561.aethelcore.events.SneakingInteractEntityEvent;
-import me.bam6561.aethelcore.events.SneakingInteractEvent;
+import me.bam6561.aethelcore.events.gui.GUIOpenEvent;
+import me.bam6561.aethelcore.events.player.SneakingInteractEntityEvent;
+import me.bam6561.aethelcore.events.player.SneakingInteractEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;

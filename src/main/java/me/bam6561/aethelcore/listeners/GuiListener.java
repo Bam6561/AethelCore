@@ -1,7 +1,8 @@
 package me.bam6561.aethelcore.listeners;
 
+import me.bam6561.aethelcore.guis.GUI;
+import me.bam6561.aethelcore.guis.GUIHandler;
 import me.bam6561.aethelcore.guis.GUIManager;
-import me.bam6561.aethelcore.interfaces.GUIHandler;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -12,10 +13,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /**
- * Collection of listeners related to {@link me.bam6561.aethelcore.interfaces.GUI GUIs}.
+ * Collection of listeners related to {@link GUI GUIs}.
  * <p>
- * {@link me.bam6561.aethelcore.interfaces.GUI} behavior is managed through the
- * {@link GUIManager}, which associates inventories with {@link GUIHandler GUI handlers}.
+ * {@link GUI} behavior is managed through the {@link GUIManager},
+ * which associates inventories with {@link GUIHandler GUI handlers}.
  *
  * @author Danny Nguyen
  * @version 0.0.10
@@ -37,7 +38,7 @@ public class GUIListener implements Listener {
   }
 
   /**
-   * Routes {@link me.bam6561.aethelcore.interfaces.GUI} click interactions.
+   * Routes {@link GUI} click interactions.
    *
    * @param event inventory click event
    */
@@ -47,7 +48,7 @@ public class GUIListener implements Listener {
   }
 
   /**
-   * Routes {@link me.bam6561.aethelcore.interfaces.GUI} open interactions.
+   * Routes {@link GUI} open interactions.
    *
    * @param event inventory open event
    */
@@ -57,7 +58,7 @@ public class GUIListener implements Listener {
   }
 
   /**
-   * Routes {@link me.bam6561.aethelcore.interfaces.GUI} close interactions.
+   * Routes {@link GUI} close interactions.
    *
    * @param event inventory close event
    */

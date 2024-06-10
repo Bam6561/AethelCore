@@ -1,23 +1,22 @@
-package me.bam6561.aethelcore.events;
+package me.bam6561.aethelcore.events.gui;
 
+import me.bam6561.aethelcore.guis.GUI;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
 /**
- * Represents an interaction done while a player is sneaking.
- * <p>
- * May be cancelled without cancelling its source PlayerInteractEvent.
+ * Represents a {@link GUI} open event.
  *
  * @author Danny Nguyen
  * @version 0.0.7
- * @since 0.0.2
+ * @since 0.0.4
  */
-public class SneakingInteractEvent extends Event implements Cancellable {
+public class GUIOpenEvent extends Event implements Cancellable {
   /**
    * Event handlers.
    */
@@ -29,27 +28,27 @@ public class SneakingInteractEvent extends Event implements Cancellable {
   private boolean isCancelled = false;
 
   /**
-   * Interaction.
+   * Interacting player.
    */
-  private final PlayerInteractEvent interaction;
+  private final Player player;
 
   /**
-   * Associates the event with its interaction.
+   * Associates the event with its player.
    *
-   * @param interaction player interact event
+   * @param player interacting player
    */
-  public SneakingInteractEvent(@NotNull PlayerInteractEvent interaction) {
-    this.interaction = Objects.requireNonNull(interaction, "Null interaction");
+  public GUIOpenEvent(@NotNull Player player) {
+    this.player = Objects.requireNonNull(player, "Null player");
   }
 
   /**
-   * Gets the player interaction.
+   * Gets the interacting player.
    *
-   * @return player interact event
+   * @return interacting player
    */
   @NotNull
-  public PlayerInteractEvent getInteraction() {
-    return this.interaction;
+  public Player getPlayer() {
+    return this.player;
   }
 
   /**

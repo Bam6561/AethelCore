@@ -1,7 +1,6 @@
 package me.bam6561.aethelcore.guis;
 
 import me.bam6561.aethelcore.Plugin;
-import me.bam6561.aethelcore.interfaces.GUIHandler;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
@@ -13,10 +12,9 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * Manages inventories created by the {@link Plugin}, also
- * known as {@link me.bam6561.aethelcore.interfaces.GUI GUIs}.
+ * Manages inventories created by the {@link Plugin}, also known as {@link GUI GUIs}.
  * <p>
- * Each {@link me.bam6561.aethelcore.interfaces.GUI} is managed by a {@link GUIHandler}.
+ * Each {@link GUI} is managed by a {@link GUIHandler}.
  *
  * @author Danny Nguyen
  * @version 0.0.10
@@ -57,7 +55,7 @@ public class GUIManager {
   }
 
   /**
-   * Handles {@link me.bam6561.aethelcore.interfaces.GUI} click actions.
+   * Handles {@link GUI} click actions.
    *
    * @param event inventory click event
    */
@@ -70,7 +68,7 @@ public class GUIManager {
   }
 
   /**
-   * Handles {@link me.bam6561.aethelcore.interfaces.GUI} opening actions.
+   * Handles {@link GUI} opening actions.
    *
    * @param event inventory open vent
    */
@@ -83,7 +81,7 @@ public class GUIManager {
   }
 
   /**
-   * Handles {@link me.bam6561.aethelcore.interfaces.GUI} closing actions.
+   * Handles {@link GUI} closing actions.
    *
    * @param event inventory close event
    */

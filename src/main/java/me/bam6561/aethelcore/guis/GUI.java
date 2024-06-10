@@ -1,4 +1,4 @@
-package me.bam6561.aethelcore.interfaces;
+package me.bam6561.aethelcore.guis;
 
 /**
  * Represents an inventory managed by the {@link me.bam6561.aethelcore.Plugin}.
