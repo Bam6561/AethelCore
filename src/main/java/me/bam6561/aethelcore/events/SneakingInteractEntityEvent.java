@@ -10,6 +10,8 @@ import java.util.Objects;
 
 /**
  * Represents an entity interaction done while a player is sneaking.
+ * <p>
+ * May be cancelled without cancelling its source PlayerInteractEntityEvent.
  *
  * @author Danny Nguyen
  * @version 0.0.8

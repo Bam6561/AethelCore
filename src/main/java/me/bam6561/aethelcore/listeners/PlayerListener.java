@@ -39,7 +39,9 @@ public class PlayerListener implements Listener {
       if (sneakingInteractEvent.isCancelled()) {
         return;
       }
-      new SneakingBlockInteraction(event).interpretAction();
+
+      SneakingInteraction interaction = new SneakingInteraction(event);
+      interaction.interpretAction();
     }
   }
 
@@ -57,29 +59,32 @@ public class PlayerListener implements Listener {
       if (sneakingEntityInteract.isCancelled()) {
         return;
       }
-      new SneakingEntityInteraction(event).interpretAction();
+
+      SneakingEntityInteraction interaction = new SneakingEntityInteraction(event);
+      interaction.interpretAction();
     }
   }
 
   /**
-   * Represents a successful {@link SneakingInteractEvent}.
+   * Represents a non-cancelled {@link SneakingInteractEvent}.
    *
-   * @param interaction player interact event
+   * @param event player interact event
    * @author Danny Nguyen
-   * @version 0.0.9
+   * @version 0.0.10
    * @since 0.0.9
    */
-  private record SneakingBlockInteraction(PlayerInteractEvent interaction) {
+  private record SneakingInteraction(PlayerInteractEvent event) {
     /**
-     * Opens a workstation.
+     * Opens a workstation when the player's hand is empty.
      */
     private void interpretAction() {
-      switch (interaction.getAction()) {
+      switch (event.getAction()) {
         case RIGHT_CLICK_BLOCK -> {
-          Block block = interaction.getClickedBlock();
-          if (block != null) {
-            openWorkstation(block);
+          if (event.isBlockInHand()) {
+            return;
           }
+
+          openWorkstation(event().getClickedBlock());
         }
       }
     }
@@ -92,13 +97,14 @@ public class PlayerListener implements Listener {
     private void openWorkstation(Block block) {
       switch (block.getType()) {
         case CRAFTING_TABLE -> {
-          Player player = interaction.getPlayer();
+          Player player = event.getPlayer();
           GuiOpenEvent guiOpen = new GuiOpenEvent(player);
           Bukkit.getPluginManager().callEvent(guiOpen);
           if (guiOpen.isCancelled()) {
             return;
           }
-          interaction.setCancelled(true);
+
+          event.setCancelled(true);
           player.openInventory(Bukkit.createInventory(null, 54, "Crafting Table"));
         }
       }
@@ -108,12 +114,12 @@ public class PlayerListener implements Listener {
   /**
    * Represents a successful {@link SneakingInteractEntityEvent}.
    *
-   * @param interaction player interact entity event
+   * @param event player interact entity event
    * @author Danny Nguyen
    * @version 0.0.9
    * @since 0.0.9
    */
-  private record SneakingEntityInteraction(PlayerInteractEntityEvent interaction) {
+  private record SneakingEntityInteraction(PlayerInteractEntityEvent event) {
     /**
      * Currently doesn't do anything.
      */
