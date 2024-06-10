@@ -15,7 +15,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
  * Collection of listeners related to block interactions.
  *
  * @author Danny Nguyen
- * @version 0.0.7
+ * @version 0.0.8
  * @since 0.0.3
  */
 public class BlockListener implements Listener {
@@ -23,20 +23,6 @@ public class BlockListener implements Listener {
    * No parameter constructor.
    */
   public BlockListener() {
-  }
-
-  /**
-   * Routes player interactions with blocks.
-   *
-   * @param event player interact event
-   */
-  @EventHandler
-  private void onPlayerInteract(PlayerInteractEvent event) {
-    Player player = event.getPlayer();
-    if (player.isSneaking()) {
-      SneakingBlockInteractEvent sneakingBlockInteract = new SneakingBlockInteractEvent(event);
-      Bukkit.getPluginManager().callEvent(sneakingBlockInteract);
-    }
   }
 
   /**

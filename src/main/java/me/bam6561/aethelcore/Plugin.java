@@ -1,6 +1,7 @@
 package me.bam6561.aethelcore;
 
 import me.bam6561.aethelcore.listeners.BlockListener;
+import me.bam6561.aethelcore.listeners.PlayerListener;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
@@ -12,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
  * handle various requests given to it by its users and the server.
  *
  * @author Danny Nguyen
- * @version 0.0.3
+ * @version 0.0.8
  * @since 0.0.1
  */
 public class Plugin extends JavaPlugin {
@@ -49,6 +50,7 @@ public class Plugin extends JavaPlugin {
   private void registerEventListeners() {
     PluginManager manager = getServer().getPluginManager();
     manager.registerEvents(new BlockListener(), this);
+    manager.registerEvents(new PlayerListener(), this);
   }
 
   /**
