@@ -1,6 +1,7 @@
 package me.bam6561.aethelcore;
 
-import me.bam6561.aethelcore.listeners.GuiListener;
+import me.bam6561.aethelcore.guis.GUIManager;
+import me.bam6561.aethelcore.listeners.GUIListener;
 import me.bam6561.aethelcore.listeners.PlayerListener;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -49,7 +50,7 @@ public class Plugin extends JavaPlugin {
    */
   private void registerEventListeners() {
     PluginManager manager = getServer().getPluginManager();
-    manager.registerEvents(new GuiListener(new GuiManager()), this);
+    manager.registerEvents(new GUIListener(new GUIManager()), this);
     manager.registerEvents(new PlayerListener(), this);
   }
 

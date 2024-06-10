@@ -1,6 +1,6 @@
 package me.bam6561.aethelcore.listeners;
 
-import me.bam6561.aethelcore.events.GuiOpenEvent;
+import me.bam6561.aethelcore.events.GUIOpenEvent;
 import me.bam6561.aethelcore.events.SneakingInteractEntityEvent;
 import me.bam6561.aethelcore.events.SneakingInteractEvent;
 import org.bukkit.Bukkit;
@@ -98,7 +98,7 @@ public class PlayerListener implements Listener {
       switch (block.getType()) {
         case CRAFTING_TABLE -> {
           Player player = event.getPlayer();
-          GuiOpenEvent guiOpen = new GuiOpenEvent(player);
+          GUIOpenEvent guiOpen = new GUIOpenEvent(player);
           Bukkit.getPluginManager().callEvent(guiOpen);
           if (guiOpen.isCancelled()) {
             return;

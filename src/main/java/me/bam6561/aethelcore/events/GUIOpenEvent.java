@@ -9,13 +9,13 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /**
- * Represents a GUI open event.
+ * Represents a {@link me.bam6561.aethelcore.interfaces.GUI} open event.
  *
  * @author Danny Nguyen
  * @version 0.0.7
  * @since 0.0.4
  */
-public class GuiOpenEvent extends Event implements Cancellable {
+public class GUIOpenEvent extends Event implements Cancellable {
   /**
    * Event handlers.
    */
@@ -36,7 +36,7 @@ public class GuiOpenEvent extends Event implements Cancellable {
    *
    * @param player interacting player
    */
-  public GuiOpenEvent(@NotNull Player player) {
+  public GUIOpenEvent(@NotNull Player player) {
     this.player = Objects.requireNonNull(player, "Null player");
   }
 

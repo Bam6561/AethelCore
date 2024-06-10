@@ -1,6 +1,7 @@
-package me.bam6561.aethelcore;
+package me.bam6561.aethelcore.guis;
 
-import me.bam6561.aethelcore.interfaces.GuiHandler;
+import me.bam6561.aethelcore.Plugin;
+import me.bam6561.aethelcore.interfaces.GUIHandler;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
@@ -12,33 +13,34 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * Manages inventories created by the {@link Plugin}, also known as GUIs.
+ * Manages inventories created by the {@link Plugin}, also
+ * known as {@link me.bam6561.aethelcore.interfaces.GUI GUIs}.
  * <p>
- * GUIs are managed by {@link GuiHandler GUI handlers}.
+ * Each {@link me.bam6561.aethelcore.interfaces.GUI} is managed by a {@link GUIHandler}.
  *
  * @author Danny Nguyen
  * @version 0.0.10
  * @since 0.0.7
  */
-public class GuiManager {
+public class GUIManager {
   /**
    * Managed inventories.
    */
-  private final Map<Inventory, GuiHandler> guis = new HashMap<>();
+  private final Map<Inventory, GUIHandler> guis = new HashMap<>();
 
   /**
    * No parameter constructor.
    */
-  public GuiManager() {
+  public GUIManager() {
   }
 
   /**
-   * Associates an inventory with a {@link GuiHandler}.
+   * Associates an inventory with a {@link GUIHandler}.
    *
    * @param inventory interacting inventory
-   * @param handler   {@link GuiHandler}
+   * @param handler   {@link GUIHandler}
    */
-  public void registerGui(@NotNull Inventory inventory, @NotNull GuiHandler handler) {
+  public void registerGUI(@NotNull Inventory inventory, @NotNull GUIHandler handler) {
     Objects.requireNonNull(inventory, "Null inventory");
     Objects.requireNonNull(handler, "Null GUI handler");
     guis.put(inventory, handler);
@@ -49,49 +51,49 @@ public class GuiManager {
    *
    * @param inventory interacting inventory
    */
-  public void unregisterGui(@NotNull Inventory inventory) {
+  public void unregisterGUI(@NotNull Inventory inventory) {
     Objects.requireNonNull(inventory, "Null inventory");
     guis.remove(inventory);
   }
 
   /**
-   * Handles GUI click actions.
+   * Handles {@link me.bam6561.aethelcore.interfaces.GUI} click actions.
    *
    * @param event inventory click event
    */
   public void handleClick(@NotNull InventoryClickEvent event) {
     Objects.requireNonNull(event, "Null inventory click event");
-    GuiHandler handler = guis.get(event.getInventory());
+    GUIHandler handler = guis.get(event.getInventory());
     if (handler != null) {
       handler.onClick(event);
     }
   }
 
   /**
-   * Handles GUI opening actions.
+   * Handles {@link me.bam6561.aethelcore.interfaces.GUI} opening actions.
    *
    * @param event inventory open vent
    */
   public void handleOpen(@NotNull InventoryOpenEvent event) {
     Objects.requireNonNull(event, "Null inventory open event");
-    GuiHandler handler = guis.get(event.getInventory());
+    GUIHandler handler = guis.get(event.getInventory());
     if (handler != null) {
       handler.onOpen(event);
     }
   }
 
   /**
-   * Handles GUI closing actions.
+   * Handles {@link me.bam6561.aethelcore.interfaces.GUI} closing actions.
    *
    * @param event inventory close event
    */
   public void handleClose(@NotNull InventoryCloseEvent event) {
     Objects.requireNonNull(event, "Null inventory close event");
-    Inventory gui = event.getInventory();
-    GuiHandler handler = guis.get(gui);
+    Inventory inventory = event.getInventory();
+    GUIHandler handler = guis.get(inventory);
     if (handler != null) {
       handler.onClose(event);
-      unregisterGui(gui);
+      unregisterGUI(inventory);
     }
   }
 }
