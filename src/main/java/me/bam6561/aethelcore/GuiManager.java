@@ -10,15 +10,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Registers inventories to GUIs that are managed by the {@link Plugin}.
+ * Manages inventories created by the {@link Plugin}, also known as GUIs.
  *
  * @author Danny Nguyen
- * @version 0.0.9
+ * @version 0.0.9.1
  * @since 0.0.7
  */
 public class GuiManager {
   /**
-   * Inventories managed by the {@link Plugin}.
+   * Managed inventories.
    */
   private final Map<Inventory, GuiHandler> guis = new HashMap<>();
 
@@ -29,26 +29,26 @@ public class GuiManager {
   }
 
   /**
-   * Pairs the {@link me.bam6561.aethelcore.interfaces.GUI} with its {@link GuiHandler}.
+   * Associates an inventory with a {@link GuiHandler}.
    *
-   * @param gui     {@link me.bam6561.aethelcore.interfaces.GUI}
-   * @param handler {@link GuiHandler}
+   * @param inventory interacting inventory
+   * @param handler   {@link GuiHandler}
    */
-  public void registerGui(Inventory gui, GuiHandler handler) {
-    guis.put(gui, handler);
+  public void registerGui(Inventory inventory, GuiHandler handler) {
+    guis.put(inventory, handler);
   }
 
   /**
-   * Stops managing the {@link me.bam6561.aethelcore.interfaces.GUI}.
+   * Disassociates an inventory from the manager.
    *
-   * @param gui {@link me.bam6561.aethelcore.interfaces.GUI}.
+   * @param inventory interacting inventory
    */
-  public void unregisterGui(Inventory gui) {
-    guis.remove(gui);
+  public void unregisterGui(Inventory inventory) {
+    guis.remove(inventory);
   }
 
   /**
-   * Handles clicks for {@link me.bam6561.aethelcore.interfaces.GUI guis}.
+   * Handles clicks for GUIs.
    *
    * @param event inventory click event
    */
@@ -60,7 +60,7 @@ public class GuiManager {
   }
 
   /**
-   * Handles {@link me.bam6561.aethelcore.interfaces.GUI guis} opening.
+   * Handles GUIs opening.
    *
    * @param event inventory open vent
    */
@@ -72,7 +72,7 @@ public class GuiManager {
   }
 
   /**
-   * Handles {@link me.bam6561.aethelcore.interfaces.GUI guis} closing.
+   * Handles GUIs closing.
    *
    * @param event inventory close event
    */

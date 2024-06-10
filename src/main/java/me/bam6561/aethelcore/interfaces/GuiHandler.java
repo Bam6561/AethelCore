@@ -5,7 +5,7 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 
 /**
- * Represents base behavior for a {@link GUI}.
+ * Represents base behavior for a GUI.
  *
  * @author Danny Nguyen
  * @version 0.0.7
@@ -20,14 +20,14 @@ public interface GuiHandler {
   void onClick(InventoryClickEvent event);
 
   /**
-   * What to do when the {@link GUI} is opened.
+   * What to do when the GUI is opened.
    *
    * @param event inventory open event
    */
   void onOpen(InventoryOpenEvent event);
 
   /**
-   * What to do when the {@link GUI} is closed.
+   * What to do when the GUI is closed.
    *
    * @param event inventory close event
    */

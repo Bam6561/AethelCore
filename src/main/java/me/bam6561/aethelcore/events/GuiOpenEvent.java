@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /**
- * Represents a {@link me.bam6561.aethelcore.interfaces.GUI} open event.
+ * Represents a GUI open event.
  *
  * @author Danny Nguyen
  * @version 0.0.7

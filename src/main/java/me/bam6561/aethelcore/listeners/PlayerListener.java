@@ -71,7 +71,7 @@ public class PlayerListener implements Listener {
    */
   private record SneakingBlockInteraction(PlayerInteractEvent interaction) {
     /**
-     * Opens a {@link me.bam6561.aethelcore.interfaces.Workstation}.
+     * Opens a workstation.
      */
     private void interpretAction() {
       switch (interaction.getAction()) {
@@ -85,7 +85,7 @@ public class PlayerListener implements Listener {
     }
 
     /**
-     * Opens the {@link me.bam6561.aethelcore.interfaces.Workstation} associated with the block type.
+     * Opens the workstation associated with the block type.
      *
      * @param block interacting block
      */
@@ -115,7 +115,7 @@ public class PlayerListener implements Listener {
    */
   private record SneakingEntityInteraction(PlayerInteractEntityEvent interaction) {
     /**
-     * Doesn't currently do anything.
+     * Currently doesn't do anything.
      */
     private void interpretAction() {
     }
