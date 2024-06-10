@@ -1,8 +1,13 @@
 name: AethelCore
-version: 0.0.12.1
+version: 0.0.13
 api-version: 1.20.6
 author: Bam6561
 main: me.bam6561.aethelcore.Plugin
 prefix: Aethel
 website: https://linktr.ee/aethelsmp
 description: Aethel SMP core features.
+commands:
+  itemdatabase:
+    description: Opens the item database.
+    usage: /itemdatabase
+    aliases: [ db ]
