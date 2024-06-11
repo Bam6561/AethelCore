@@ -1,6 +1,6 @@
 package me.bam6561.aethelcore;
 
-import me.bam6561.aethelcore.commands.ItemDatabaseCommand;
+import me.bam6561.aethelcore.commands.DatabaseCommand;
 import me.bam6561.aethelcore.guis.GUIManager;
 import me.bam6561.aethelcore.listeners.GUIListener;
 import me.bam6561.aethelcore.listeners.PlayerListener;
@@ -51,7 +51,7 @@ public class Plugin extends JavaPlugin {
    * Registers the plugin's commands.
    */
   private void registerCommandExecutors() {
-    this.getCommand("itemdatabase").setExecutor(new ItemDatabaseCommand());
+    this.getCommand("database").setExecutor(new DatabaseCommand());
   }
 
   /**
