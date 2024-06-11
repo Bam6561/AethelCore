@@ -53,7 +53,7 @@ public class GUIManager {
    * @param event inventory click event
    */
   public void handleClick(@NotNull InventoryClickEvent event) {
-    Objects.requireNonNull(event, "Null inventory click event");
+    Objects.requireNonNull(event, "Null InventoryClickEvent");
     InventoryHandler handler = guis.get(event.getInventory());
     if (handler != null) {
       handler.onClick(event);
@@ -66,7 +66,7 @@ public class GUIManager {
    * @param event inventory open vent
    */
   public void handleOpen(@NotNull InventoryOpenEvent event) {
-    Objects.requireNonNull(event, "Null inventory open event");
+    Objects.requireNonNull(event, "Null InventoryOpenEvent");
     InventoryHandler handler = guis.get(event.getInventory());
     if (handler != null) {
       handler.onOpen(event);
@@ -79,7 +79,7 @@ public class GUIManager {
    * @param event inventory close event
    */
   public void handleClose(@NotNull InventoryCloseEvent event) {
-    Objects.requireNonNull(event, "Null inventory close event");
+    Objects.requireNonNull(event, "Null InventoryCloseEvent");
     Inventory inventory = event.getInventory();
     InventoryHandler handler = guis.get(inventory);
     if (handler != null) {

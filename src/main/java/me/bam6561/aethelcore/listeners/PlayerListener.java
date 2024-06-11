@@ -4,7 +4,7 @@ import me.bam6561.aethelcore.events.gui.GUIOpenEvent;
 import me.bam6561.aethelcore.events.player.SneakingInteractEntityEvent;
 import me.bam6561.aethelcore.events.player.SneakingInteractEvent;
 import me.bam6561.aethelcore.guis.GUIManager;
-import me.bam6561.aethelcore.guis.workstations.CraftingTableWorkstation;
+import me.bam6561.aethelcore.guis.blocks.CraftingTableWorkstation;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -35,7 +35,7 @@ public class PlayerListener implements Listener {
    * @param guiManager {@link GUIManager}
    */
   public PlayerListener(@NotNull GUIManager guiManager) {
-    this.guiManager = Objects.requireNonNull(guiManager, "Null GUI manager.");
+    this.guiManager = Objects.requireNonNull(guiManager, "Null GUIManager.");
   }
 
   /**
@@ -82,7 +82,7 @@ public class PlayerListener implements Listener {
    * {@link me.bam6561.aethelcore.Plugin} {@link SneakingInteractEvent} interaction.
    *
    * @author Danny Nguyen
-   * @version 0.0.15
+   * @version 0.0.18
    * @since 0.0.9
    */
   private class SneakingInteraction {
@@ -131,7 +131,7 @@ public class PlayerListener implements Listener {
           }
 
           event.setCancelled(true);
-          guiManager.registerGUI(Bukkit.createInventory(null, 54, "Crafting Table"), new CraftingTableWorkstation());
+          guiManager.openGUI(player, new CraftingTableWorkstation());
         }
       }
     }

@@ -1,4 +1,4 @@
-package me.bam6561.aethelcore.guis.workstations;
+package me.bam6561.aethelcore.guis.blocks;
 
 import org.bukkit.Bukkit;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -7,11 +7,13 @@ import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
+
 /**
  * Crafting table {@link Workstation}.
  *
  * @author Danny Nguyen
- * @version 0.0.16
+ * @version 0.0.18
  * @since 0.0.11
  */
 public class CraftingTableWorkstation extends Workstation {
@@ -26,8 +28,9 @@ public class CraftingTableWorkstation extends Workstation {
    *
    * @return inventory
    */
+  @NotNull
   @Override
-  protected @NotNull Inventory createInventory() {
+  protected Inventory createInventory() {
     return Bukkit.createInventory(null, 54, "Database");
   }
 
@@ -37,7 +40,8 @@ public class CraftingTableWorkstation extends Workstation {
    * @param event inventory click event
    */
   @Override
-  public void onClick(InventoryClickEvent event) {
+  public void onClick(@NotNull InventoryClickEvent event) {
+    Objects.requireNonNull(event, "Null InventoryClickEvent");
   }
 
   /**
@@ -46,7 +50,8 @@ public class CraftingTableWorkstation extends Workstation {
    * @param event inventory open event
    */
   @Override
-  public void onOpen(InventoryOpenEvent event) {
+  public void onOpen(@NotNull InventoryOpenEvent event) {
+    Objects.requireNonNull(event, "Null InventoryOpenEvent");
   }
 
   /**
@@ -55,6 +60,7 @@ public class CraftingTableWorkstation extends Workstation {
    * @param event inventory close event
    */
   @Override
-  public void onClose(InventoryCloseEvent event) {
+  public void onClose(@NotNull InventoryCloseEvent event) {
+    Objects.requireNonNull(event, "Null InventoryCloseEvent");
   }
 }

@@ -15,8 +15,8 @@ import java.util.Objects;
 /**
  * Collection of listeners related to {@link GUI GUIs}.
  * <p>
- * {@link GUI} behavior is managed through the {@link GUIManager}, which
- * associates inventories with {@link InventoryHandler inventory handlers}.
+ * {@link GUI} behavior is managed through the {@link GUIManager} by
+ * associating inventories with {@link InventoryHandler inventory handlers}.
  *
  * @author Danny Nguyen
  * @version 0.0.10
@@ -34,7 +34,7 @@ public class GUIListener implements Listener {
    * @param guiManager {@link GUIManager}
    */
   public GUIListener(@NotNull GUIManager guiManager) {
-    this.guiManager = Objects.requireNonNull(guiManager, "Null GUI manager");
+    this.guiManager = Objects.requireNonNull(guiManager, "Null GUIManager");
   }
 
   /**

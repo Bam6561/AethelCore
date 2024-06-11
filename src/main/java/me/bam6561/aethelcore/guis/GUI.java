@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
  * Inventory managed by the {@link me.bam6561.aethelcore.Plugin}.
  *
  * @author Danny Nguyen
- * @version 0.0.16
+ * @version 0.0.18
  * @since 0.0.11
  */
 public abstract class GUI implements InventoryHandler {
@@ -15,6 +15,12 @@ public abstract class GUI implements InventoryHandler {
    * Inventory.
    */
   private final Inventory inventory = createInventory();
+
+  /**
+   * No parameter constructor.
+   */
+  public GUI() {
+  }
 
   /**
    * Creates the inventory.

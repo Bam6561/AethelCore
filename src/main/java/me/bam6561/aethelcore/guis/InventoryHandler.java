@@ -3,6 +3,7 @@ package me.bam6561.aethelcore.guis;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Describes basic interactions for an inventory.
@@ -17,19 +18,19 @@ public interface InventoryHandler {
    *
    * @param event inventory click event
    */
-  void onClick(InventoryClickEvent event);
+  void onClick(@NotNull InventoryClickEvent event);
 
   /**
    * What to do when the inventory is opened.
    *
    * @param event inventory open event
    */
-  void onOpen(InventoryOpenEvent event);
+  void onOpen(@NotNull InventoryOpenEvent event);
 
   /**
    * What to do when the inventory is closed.
    *
    * @param event inventory close event
    */
-  void onClose(InventoryCloseEvent event);
+  void onClose(@NotNull InventoryCloseEvent event);
 }

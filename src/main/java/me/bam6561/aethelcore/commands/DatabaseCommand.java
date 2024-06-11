@@ -28,9 +28,11 @@ public class DatabaseCommand implements CommandExecutor {
 
   /**
    * Associates the command with its {@link GUIManager}.
+   *
+   * @param guiManager {@link GUIManager}
    */
   public DatabaseCommand(@NotNull GUIManager guiManager) {
-    this.guiManager = Objects.requireNonNull(guiManager, "Null GUI Manager");
+    this.guiManager = Objects.requireNonNull(guiManager, "Null GUIManager");
   }
 
   /**

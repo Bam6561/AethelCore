@@ -42,7 +42,7 @@ public class SneakingInteractEvent extends Event implements Cancellable {
    * @param interaction player interact event
    */
   public SneakingInteractEvent(@NotNull PlayerInteractEvent interaction) {
-    this.interaction = Objects.requireNonNull(interaction, "Null interaction");
+    this.interaction = Objects.requireNonNull(interaction, "Null PlayerInteractEvent");
   }
 
   /**
