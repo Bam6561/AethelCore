@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
  * @version 0.0.14
  * @since 0.0.14
  */
-public enum Permission {
+public enum CommandPermission {
   /**
    * {@link DatabaseCommand}
    */
@@ -25,7 +25,7 @@ public enum Permission {
    *
    * @param value value
    */
-  Permission(String value) {
+  CommandPermission(String value) {
     this.value = value;
   }
 

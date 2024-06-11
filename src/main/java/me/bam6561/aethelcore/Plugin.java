@@ -20,7 +20,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class Plugin extends JavaPlugin {
   /**
-   * {@link GUIManager}.
+   * {@link GUIManager}
    */
   private final GUIManager guiManager = new GUIManager();
 
@@ -33,7 +33,8 @@ public class Plugin extends JavaPlugin {
   /**
    * On enable:
    * <ul>
-   *   <li>{@link #registerEventListeners() Registers} event listeners.
+   *   <li>{@link #registerCommandExecutors() Registers commands}.
+   *   <li>{@link #registerEventListeners() Registers event listeners}.
    * </ul>
    */
   @Override
@@ -56,7 +57,7 @@ public class Plugin extends JavaPlugin {
    * Registers the plugin's commands.
    */
   private void registerCommandExecutors() {
-    this.getCommand("database").setExecutor(new DatabaseCommand(guiManager));
+    getCommand("database").setExecutor(new DatabaseCommand(guiManager));
   }
 
   /**

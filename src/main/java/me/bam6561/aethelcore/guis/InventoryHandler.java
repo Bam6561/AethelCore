@@ -6,7 +6,7 @@ import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Describes basic interactions for an inventory.
+ * Outlines base interactions for a {@link me.bam6561.aethelcore.Plugin} managed inventory.
  *
  * @author Danny Nguyen
  * @version 0.0.7

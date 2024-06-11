@@ -15,7 +15,7 @@ import java.util.Objects;
 /**
  * Manages inventories created by the {@link Plugin}, also known as {@link GUI GUIs}.
  * <p>
- * Each {@link GUI} is managed by a {@link InventoryHandler}.
+ * Each {@link GUI} is managed by its {@link InventoryHandler}.
  *
  * @author Danny Nguyen
  * @version 0.0.16

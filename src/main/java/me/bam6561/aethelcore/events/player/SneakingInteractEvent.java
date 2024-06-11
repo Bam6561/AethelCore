@@ -32,27 +32,27 @@ public class SneakingInteractEvent extends Event implements Cancellable {
   private boolean isCancelled = false;
 
   /**
-   * Interaction.
+   * Event source.
    */
-  private final PlayerInteractEvent interaction;
+  private final PlayerInteractEvent source;
 
   /**
-   * Associates the event with its interaction.
+   * Associates the event with its source.
    *
-   * @param interaction player interact event
+   * @param source player interact event
    */
-  public SneakingInteractEvent(@NotNull PlayerInteractEvent interaction) {
-    this.interaction = Objects.requireNonNull(interaction, "Null PlayerInteractEvent");
+  public SneakingInteractEvent(@NotNull PlayerInteractEvent source) {
+    this.source = Objects.requireNonNull(source, "Null PlayerInteractEvent");
   }
 
   /**
-   * Gets the player interaction.
+   * Gets the source event.
    *
    * @return player interact event
    */
   @NotNull
-  public PlayerInteractEvent getInteraction() {
-    return this.interaction;
+  public PlayerInteractEvent getSource() {
+    return this.source;
   }
 
   /**

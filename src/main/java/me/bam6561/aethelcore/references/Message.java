@@ -1,5 +1,6 @@
-package me.bam6561.aethelcore;
+package me.bam6561.aethelcore.references;
 
+import me.bam6561.aethelcore.Plugin;
 import net.md_5.bungee.api.ChatColor;
 import org.jetbrains.annotations.NotNull;
 

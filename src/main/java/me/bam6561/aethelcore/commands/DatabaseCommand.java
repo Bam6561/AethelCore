@@ -1,9 +1,9 @@
 package me.bam6561.aethelcore.commands;
 
-import me.bam6561.aethelcore.Message;
 import me.bam6561.aethelcore.events.gui.GUIOpenEvent;
 import me.bam6561.aethelcore.guis.GUIManager;
-import me.bam6561.aethelcore.guis.commands.DatabaseMenu;
+import me.bam6561.aethelcore.guis.commands.DatabaseGUI;
+import me.bam6561.aethelcore.references.Message;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -50,7 +50,7 @@ public class DatabaseCommand implements CommandExecutor {
       sender.sendMessage(Message.Error.PLAYER_ONLY_COMMAND.getMessage());
       return true;
     }
-    if (!player.hasPermission(Permission.DATABASE.getValue())) {
+    if (!player.hasPermission(CommandPermission.DATABASE.getValue())) {
       player.sendMessage(Message.Error.INSUFFICIENT_PERMISSION.getMessage());
       return true;
     }
@@ -60,7 +60,7 @@ public class DatabaseCommand implements CommandExecutor {
     if (guiOpen.isCancelled()) {
       return true;
     }
-    guiManager.openGUI(player, new DatabaseMenu());
+    guiManager.openGUI(player, new DatabaseGUI());
     return true;
   }
 }

@@ -1,5 +1,6 @@
-package me.bam6561.aethelcore.guis.commands;
+package me.bam6561.aethelcore.guis.blocks;
 
+import me.bam6561.aethelcore.guis.GUI;
 import org.bukkit.Bukkit;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
@@ -10,17 +11,17 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /**
- * {@link me.bam6561.aethelcore.commands.DatabaseCommand} {@link Menu}.
+ * Crafting table {@link GUI}.
  *
  * @author Danny Nguyen
- * @version 0.0.18
- * @since 0.0.15
+ * @version 0.0.19
+ * @since 0.0.11
  */
-public class DatabaseMenu extends Menu {
+public class CraftingTableGUI extends GUI implements Workstation {
   /**
    * No parameter constructor.
    */
-  public DatabaseMenu() {
+  public CraftingTableGUI() {
   }
 
   /**

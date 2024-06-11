@@ -4,7 +4,7 @@ import me.bam6561.aethelcore.events.gui.GUIOpenEvent;
 import me.bam6561.aethelcore.events.player.SneakingInteractEntityEvent;
 import me.bam6561.aethelcore.events.player.SneakingInteractEvent;
 import me.bam6561.aethelcore.guis.GUIManager;
-import me.bam6561.aethelcore.guis.blocks.CraftingTableWorkstation;
+import me.bam6561.aethelcore.guis.blocks.CraftingTableGUI;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -17,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /**
- * Collection of listeners related to player interactions.
+ * Collection of player interaction listeners.
  *
  * @author Danny Nguyen
  * @version 0.0.15
@@ -79,7 +79,7 @@ public class PlayerListener implements Listener {
   }
 
   /**
-   * {@link me.bam6561.aethelcore.Plugin} {@link SneakingInteractEvent} interaction.
+   * {@link SneakingInteractEvent} interaction.
    *
    * @author Danny Nguyen
    * @version 0.0.18
@@ -92,7 +92,7 @@ public class PlayerListener implements Listener {
     private final PlayerInteractEvent event;
 
     /**
-     * Associates the interaction with its player interact event.
+     * Associates the interaction with its source.
      *
      * @param event player interact event
      */
@@ -101,7 +101,7 @@ public class PlayerListener implements Listener {
     }
 
     /**
-     * Opens a workstation when the player's hand is empty.
+     * Opens a {@link me.bam6561.aethelcore.guis.blocks.Workstation} when the player's hand is empty.
      */
     private void interpretAction() {
       switch (event.getAction()) {
@@ -116,7 +116,7 @@ public class PlayerListener implements Listener {
     }
 
     /**
-     * Opens the workstation associated with the block type.
+     * Opens the {@link me.bam6561.aethelcore.guis.blocks.Workstation} associated with the block type.
      *
      * @param block interacting block
      */
@@ -131,14 +131,14 @@ public class PlayerListener implements Listener {
           }
 
           event.setCancelled(true);
-          guiManager.openGUI(player, new CraftingTableWorkstation());
+          guiManager.openGUI(player, new CraftingTableGUI());
         }
       }
     }
   }
 
   /**
-   * {@link me.bam6561.aethelcore.Plugin} {@link SneakingInteractEntityEvent} interaction.
+   * {@link SneakingInteractEntityEvent} interaction.
    *
    * @author Danny Nguyen
    * @version 0.0.15
@@ -151,7 +151,7 @@ public class PlayerListener implements Listener {
     private final PlayerInteractEntityEvent event;
 
     /**
-     * Associates the interaction with its player interact entity event.
+     * Associates the interaction with its source.
      *
      * @param event player interact entity event
      */
