@@ -1,22 +1,34 @@
-package me.bam6561.aethelcore.guis.commands;
+package me.bam6561.aethelcore.guis.workstations;
 
-import me.bam6561.aethelcore.guis.GUIHandler;
+import org.bukkit.Bukkit;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
+import org.bukkit.inventory.Inventory;
+import org.jetbrains.annotations.NotNull;
 
 /**
- * {@link me.bam6561.aethelcore.commands.DatabaseCommand} {@link Menu}.
+ * Crafting table {@link Workstation}.
  *
  * @author Danny Nguyen
- * @version 0.0.15
- * @since 0.0.15
+ * @version 0.0.16
+ * @since 0.0.11
  */
-public class Database implements GUIHandler, Menu {
+public class CraftingTableWorkstation extends Workstation {
   /**
    * No parameter constructor.
    */
-  public Database() {
+  public CraftingTableWorkstation() {
+  }
+
+  /**
+   * Creates the inventory.
+   *
+   * @return inventory
+   */
+  @Override
+  protected @NotNull Inventory createInventory() {
+    return Bukkit.createInventory(null, 54, "Database");
   }
 
   /**

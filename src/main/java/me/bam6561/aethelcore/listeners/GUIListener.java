@@ -1,8 +1,8 @@
 package me.bam6561.aethelcore.listeners;
 
 import me.bam6561.aethelcore.guis.GUI;
-import me.bam6561.aethelcore.guis.GUIHandler;
 import me.bam6561.aethelcore.guis.GUIManager;
+import me.bam6561.aethelcore.guis.InventoryHandler;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -15,8 +15,8 @@ import java.util.Objects;
 /**
  * Collection of listeners related to {@link GUI GUIs}.
  * <p>
- * {@link GUI} behavior is managed through the {@link GUIManager},
- * which associates inventories with {@link GUIHandler GUI handlers}.
+ * {@link GUI} behavior is managed through the {@link GUIManager}, which
+ * associates inventories with {@link InventoryHandler inventory handlers}.
  *
  * @author Danny Nguyen
  * @version 0.0.10

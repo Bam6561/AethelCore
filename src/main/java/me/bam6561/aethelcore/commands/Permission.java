@@ -1,5 +1,7 @@
 package me.bam6561.aethelcore.commands;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Command permissions.
  *
@@ -32,6 +34,7 @@ public enum Permission {
    *
    * @return permission value
    */
+  @NotNull
   public String getValue() {
     return this.value;
   }

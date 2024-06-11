@@ -1,6 +1,7 @@
 package me.bam6561.aethelcore;
 
 import net.md_5.bungee.api.ChatColor;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Commonly used {@link Plugin} messages.
@@ -49,6 +50,7 @@ public enum Message {
      *
      * @return error message
      */
+    @NotNull
     public String getMessage() {
       return this.message;
     }
