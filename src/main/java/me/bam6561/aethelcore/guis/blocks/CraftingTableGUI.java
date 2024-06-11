@@ -32,7 +32,7 @@ public class CraftingTableGUI extends GUI implements Workstation {
   @NotNull
   @Override
   protected Inventory createInventory() {
-    return Bukkit.createInventory(null, 54, "Database");
+    return Bukkit.createInventory(null, 54, "Crafting Table");
   }
 
   /**
