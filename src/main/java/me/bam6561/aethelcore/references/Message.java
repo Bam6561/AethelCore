@@ -5,14 +5,18 @@ import net.md_5.bungee.api.ChatColor;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Commonly used {@link Plugin} messages.
+ * {@link Plugin} messages.
  *
  * @author Danny Nguyen
- * @version 0.0.14
+ * @version 0.0.21
  * @since 0.0.14
  */
-public enum Message {
-  ;
+public class Message {
+  /**
+   * For enum usage only.
+   */
+  private Message() {
+  }
 
   /**
    * Error messages.

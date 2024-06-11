@@ -1,5 +1,6 @@
 package me.bam6561.aethelcore.commands;
 
+import me.bam6561.aethelcore.references.Permission;
 import me.bam6561.aethelcore.events.gui.GUIOpenEvent;
 import me.bam6561.aethelcore.guis.GUIManager;
 import me.bam6561.aethelcore.guis.commands.DatabaseGUI;
@@ -50,7 +51,7 @@ public class DatabaseCommand implements CommandExecutor {
       sender.sendMessage(Message.Error.PLAYER_ONLY_COMMAND.getMessage());
       return true;
     }
-    if (!player.hasPermission(CommandPermission.DATABASE.getValue())) {
+    if (!player.hasPermission(Permission.Command.DATABASE.getValue())) {
       player.sendMessage(Message.Error.INSUFFICIENT_PERMISSION.getMessage());
       return true;
     }
