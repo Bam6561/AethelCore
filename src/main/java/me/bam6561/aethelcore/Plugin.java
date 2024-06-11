@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
  * handle various requests given to it by its users and the server.
  *
  * @author Danny Nguyen
- * @version 0.0.13
+ * @version 0.0.15
  * @since 0.0.1
  */
 public class Plugin extends JavaPlugin {
@@ -59,8 +59,9 @@ public class Plugin extends JavaPlugin {
    */
   private void registerEventListeners() {
     PluginManager manager = getServer().getPluginManager();
-    manager.registerEvents(new GUIListener(new GUIManager()), this);
-    manager.registerEvents(new PlayerListener(), this);
+    GUIManager guiManager = new GUIManager();
+    manager.registerEvents(new GUIListener(guiManager), this);
+    manager.registerEvents(new PlayerListener(guiManager), this);
   }
 
   /**

@@ -3,6 +3,8 @@ package me.bam6561.aethelcore.listeners;
 import me.bam6561.aethelcore.events.gui.GUIOpenEvent;
 import me.bam6561.aethelcore.events.player.SneakingInteractEntityEvent;
 import me.bam6561.aethelcore.events.player.SneakingInteractEvent;
+import me.bam6561.aethelcore.guis.GUIManager;
+import me.bam6561.aethelcore.guis.workstations.CraftingTable;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -10,19 +12,30 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
 
 /**
  * Collection of listeners related to player interactions.
  *
  * @author Danny Nguyen
- * @version 0.0.9
+ * @version 0.0.15
  * @since 0.0.8
  */
 public class PlayerListener implements Listener {
   /**
-   * No parameter constructor.
+   * {@link GUIManager}
    */
-  public PlayerListener() {
+  private final GUIManager guiManager;
+
+  /**
+   * Associates the listener with a {@link GUIManager}.
+   *
+   * @param guiManager {@link GUIManager}
+   */
+  public PlayerListener(@NotNull GUIManager guiManager) {
+    this.guiManager = Objects.requireNonNull(guiManager, "Null GUI manager.");
   }
 
   /**
@@ -68,12 +81,25 @@ public class PlayerListener implements Listener {
   /**
    * {@link me.bam6561.aethelcore.Plugin} {@link SneakingInteractEvent} interaction.
    *
-   * @param event player interact event
    * @author Danny Nguyen
-   * @version 0.0.10
+   * @version 0.0.15
    * @since 0.0.9
    */
-  private record SneakingInteraction(PlayerInteractEvent event) {
+  private class SneakingInteraction {
+    /**
+     * Player interact event.
+     */
+    private final PlayerInteractEvent event;
+
+    /**
+     * Associates the interaction with its player interact event.
+     *
+     * @param event player interact event
+     */
+    SneakingInteraction(PlayerInteractEvent event) {
+      this.event = event;
+    }
+
     /**
      * Opens a workstation when the player's hand is empty.
      */
@@ -84,7 +110,7 @@ public class PlayerListener implements Listener {
             return;
           }
 
-          openWorkstation(event().getClickedBlock());
+          openWorkstation(event.getClickedBlock());
         }
       }
     }
@@ -105,7 +131,7 @@ public class PlayerListener implements Listener {
           }
 
           event.setCancelled(true);
-          player.openInventory(Bukkit.createInventory(null, 54, "Crafting Table"));
+          guiManager.registerGUI(Bukkit.createInventory(null, 54, "Crafting Table"), new CraftingTable());
         }
       }
     }
@@ -114,14 +140,27 @@ public class PlayerListener implements Listener {
   /**
    * {@link me.bam6561.aethelcore.Plugin} {@link SneakingInteractEntityEvent} interaction.
    *
-   * @param event player interact entity event
    * @author Danny Nguyen
-   * @version 0.0.9
+   * @version 0.0.15
    * @since 0.0.9
    */
-  private record SneakingEntityInteraction(PlayerInteractEntityEvent event) {
+  private class SneakingEntityInteraction {
     /**
-     * Currently doesn't do anything.
+     * Player interact entity event.
+     */
+    private final PlayerInteractEntityEvent event;
+
+    /**
+     * Associates the interaction with its player interact entity event.
+     *
+     * @param event player interact entity event
+     */
+    SneakingEntityInteraction(PlayerInteractEntityEvent event) {
+      this.event = event;
+    }
+
+    /**
+     * Currently does nothing.
      */
     private void interpretAction() {
     }
