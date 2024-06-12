@@ -36,7 +36,7 @@ public class PlayerListener implements Listener {
   @EventHandler
   private void onAsyncMessageSent(AsyncPlayerChatEvent event) {
     String message = event.getMessage();
-    if (message.startsWith("-c") && event.getPlayer().hasPermission(Permission.Chat.COLOR.getValue())) {
+    if (message.startsWith("-c") && event.getPlayer().hasPermission(Permission.ChatFlag.COLOR.getValue())) {
       event.setMessage(TextUtils.Color.translate(message.substring(3), '&'));
     }
   }

@@ -1,5 +1,6 @@
 package me.bam6561.aethelcore.listeners;
 
+import me.bam6561.aethelcore.Plugin;
 import me.bam6561.aethelcore.guis.GUI;
 import me.bam6561.aethelcore.guis.GUIManager;
 import org.bukkit.event.EventHandler;
@@ -7,9 +8,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.Objects;
 
 /**
  * Collection of {@link GUI} listeners.
@@ -17,22 +15,19 @@ import java.util.Objects;
  * {@link GUI} behavior is managed through the {@link GUIManager}.
  *
  * @author Danny Nguyen
- * @version 0.0.10
+ * @version 0.0.25
  * @since 0.0.10
  */
 public class GUIListener implements Listener {
   /**
    * {@link GUIManager}
    */
-  private final GUIManager guiManager;
+  private final GUIManager guiManager = Plugin.getGUIManager();
 
   /**
-   * Associates the listener with its {@link GUIManager}.
-   *
-   * @param guiManager {@link GUIManager}
+   * No parameter constructor.
    */
-  public GUIListener(@NotNull GUIManager guiManager) {
-    this.guiManager = Objects.requireNonNull(guiManager, "Null GUIManager");
+  public GUIListener() {
   }
 
   /**

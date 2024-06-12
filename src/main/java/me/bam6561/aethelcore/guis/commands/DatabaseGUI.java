@@ -14,10 +14,10 @@ import java.util.Objects;
  * {@link me.bam6561.aethelcore.commands.DatabaseCommand} {@link GUI}.
  *
  * @author Danny Nguyen
- * @version 0.0.19
+ * @version 0.0.25
  * @since 0.0.15
  */
-public class DatabaseGUI extends GUI implements Editor, Paginated {
+public class DatabaseGUI extends GUI implements Database, Editor, Paginated {
   /**
    * No parameter constructor.
    */

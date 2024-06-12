@@ -19,17 +19,17 @@ public class Permission {
   }
 
   /**
-   * Chat permissions.
+   * Chat flag permissions.
    *
    * @author Danny Nguyen
-   * @version 0.0.22
+   * @version 0.0.25
    * @since 0.0.22
    */
-  public enum Chat {
+  public enum ChatFlag {
     /**
      * Ability to color chat messages.
      */
-    COLOR("aethel.chat.color");
+    COLOR("aethel.chatflag.color");
 
     /**
      * Permission value.
@@ -41,7 +41,7 @@ public class Permission {
      *
      * @param value value
      */
-    Chat(String value) {
+    ChatFlag(String value) {
       this.value = value;
     }
 
