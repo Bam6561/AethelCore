@@ -5,11 +5,14 @@ import me.bam6561.aethelcore.events.player.SneakingInteractEntityEvent;
 import me.bam6561.aethelcore.events.player.SneakingInteractEvent;
 import me.bam6561.aethelcore.guis.GUIManager;
 import me.bam6561.aethelcore.guis.blocks.CraftingTableGUI;
+import me.bam6561.aethelcore.references.Permission;
+import me.bam6561.aethelcore.utils.TextTool;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.jetbrains.annotations.NotNull;
@@ -20,7 +23,7 @@ import java.util.Objects;
  * Collection of player interaction listeners.
  *
  * @author Danny Nguyen
- * @version 0.0.15
+ * @version 0.0.23
  * @since 0.0.8
  */
 public class PlayerListener implements Listener {
@@ -36,6 +39,19 @@ public class PlayerListener implements Listener {
    */
   public PlayerListener(@NotNull GUIManager guiManager) {
     this.guiManager = Objects.requireNonNull(guiManager, "Null GUIManager.");
+  }
+
+  /**
+   * Routes player messages sent.
+   *
+   * @param event async player chat event
+   */
+  @EventHandler
+  private void onAsyncMessageSent(AsyncPlayerChatEvent event) {
+    String message = event.getMessage();
+    if (message.startsWith("-c") && event.getPlayer().hasPermission(Permission.Chat.COLOR.getValue())) {
+      event.setMessage(TextTool.Color.translate(message.substring(3), '&'));
+    }
   }
 
   /**

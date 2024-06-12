@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
  * {@link Plugin} permissions.
  *
  * @author Danny Nguyen
- * @version 0.0.21
+ * @version 0.0.22
  * @since 0.0.14
  */
 public class Permission {
@@ -16,6 +16,44 @@ public class Permission {
    * Enum usage only.
    */
   private Permission() {
+  }
+
+  /**
+   * Chat permissions.
+   *
+   * @author Danny Nguyen
+   * @version 0.0.22
+   * @since 0.0.22
+   */
+  public enum Chat {
+    /**
+     * Ability to color chat messages.
+     */
+    COLOR("aethel.chat.color");
+
+    /**
+     * Permission value.
+     */
+    private final String value;
+
+    /**
+     * Associates a permission with its value.
+     *
+     * @param value value
+     */
+    Chat(String value) {
+      this.value = value;
+    }
+
+    /**
+     * Gets the permission value.
+     *
+     * @return permission value
+     */
+    @NotNull
+    public String getValue() {
+      return this.value;
+    }
   }
 
   /**
@@ -29,7 +67,7 @@ public class Permission {
     /**
      * {@link DatabaseCommand}
      */
-    DATABASE("aethel.database");
+    DATABASE("aethel.command.database");
 
     /**
      * Permission value.

@@ -1,6 +1,6 @@
 package me.bam6561.aethelcore.utils;
 
-import org.bukkit.ChatColor;
+import net.md_5.bungee.api.ChatColor;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -25,7 +25,7 @@ public class TextTool {
    * Colors text.
    *
    * @author Danny Nguyen
-   * @version 0.0.22
+   * @version 0.0.23
    * @since 0.0.22
    */
   public static class Color {
@@ -103,7 +103,7 @@ public class TextTool {
           newText.append(ChatColor.getByChar(nextCharacter));
           current += 2;
         } else if (isHexColorCode(nextCharacter, current, characters)) {
-          newText.append(ChatColor.valueOf(new String(Arrays.copyOfRange(characters, current + 2, current + 8))));
+          newText.append(ChatColor.of(new String(Arrays.copyOfRange(characters, current + 1, current + 8))));
           current = current + 8;
         } else {
           newText.append(characters[current]);
@@ -112,6 +112,9 @@ public class TextTool {
         start = current;
       }
 
+      if (start != current) {
+        newText.append(text, start, current);
+      }
       return newText.toString();
     }
 
