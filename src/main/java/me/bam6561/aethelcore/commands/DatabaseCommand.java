@@ -1,10 +1,10 @@
 package me.bam6561.aethelcore.commands;
 
-import me.bam6561.aethelcore.references.Permission;
 import me.bam6561.aethelcore.events.gui.GUIOpenEvent;
 import me.bam6561.aethelcore.guis.GUIManager;
 import me.bam6561.aethelcore.guis.commands.DatabaseGUI;
 import me.bam6561.aethelcore.references.Message;
+import me.bam6561.aethelcore.references.Permission;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

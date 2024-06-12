@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class Message {
   /**
-   * For enum usage only.
+   * Enum usage only.
    */
   private Message() {
   }
