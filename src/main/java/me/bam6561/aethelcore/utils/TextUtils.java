@@ -14,11 +14,11 @@ import java.util.Set;
  * @version 0.0.22
  * @since 0.0.20
  */
-public class TextTool {
+public class TextUtils {
   /**
    * Utility methods only.
    */
-  private TextTool() {
+  private TextUtils() {
   }
 
   /**

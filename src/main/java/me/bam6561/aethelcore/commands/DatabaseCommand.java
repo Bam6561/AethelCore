@@ -1,7 +1,7 @@
 package me.bam6561.aethelcore.commands;
 
+import me.bam6561.aethelcore.Plugin;
 import me.bam6561.aethelcore.events.gui.GUIOpenEvent;
-import me.bam6561.aethelcore.guis.GUIManager;
 import me.bam6561.aethelcore.guis.commands.DatabaseGUI;
 import me.bam6561.aethelcore.references.Message;
 import me.bam6561.aethelcore.references.Permission;
@@ -12,28 +12,18 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
-
 /**
  * Command invocation that provides information on key terms and items.
  *
  * @author Danny Nguyen
- * @version 0.0.17
+ * @version 0.0.24
  * @since 0.0.13
  */
 public class DatabaseCommand implements CommandExecutor {
   /**
-   * {@link GUIManager}
+   * No parameter constructor.
    */
-  private final GUIManager guiManager;
-
-  /**
-   * Associates the command with its {@link GUIManager}.
-   *
-   * @param guiManager {@link GUIManager}
-   */
-  public DatabaseCommand(@NotNull GUIManager guiManager) {
-    this.guiManager = Objects.requireNonNull(guiManager, "Null GUIManager");
+  public DatabaseCommand() {
   }
 
   /**
@@ -61,7 +51,7 @@ public class DatabaseCommand implements CommandExecutor {
     if (guiOpen.isCancelled()) {
       return true;
     }
-    guiManager.openGUI(player, new DatabaseGUI());
+    Plugin.getGUIManager().openGUI(player, new DatabaseGUI());
     return true;
   }
 }

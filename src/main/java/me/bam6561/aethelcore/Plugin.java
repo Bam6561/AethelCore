@@ -15,14 +15,14 @@ import org.jetbrains.annotations.NotNull;
  * handle various requests given to it by its users and the server.
  *
  * @author Danny Nguyen
- * @version 0.0.17
+ * @version 0.0.24
  * @since 0.0.1
  */
 public class Plugin extends JavaPlugin {
   /**
    * {@link GUIManager}
    */
-  private final GUIManager guiManager = new GUIManager();
+  private static final GUIManager guiManager = new GUIManager();
 
   /**
    * No parameter constructor.
@@ -57,7 +57,7 @@ public class Plugin extends JavaPlugin {
    * Registers the plugin's commands.
    */
   private void registerCommandExecutors() {
-    getCommand("database").setExecutor(new DatabaseCommand(guiManager));
+    getCommand("database").setExecutor(new DatabaseCommand());
   }
 
   /**
@@ -65,8 +65,8 @@ public class Plugin extends JavaPlugin {
    */
   private void registerEventListeners() {
     PluginManager manager = getServer().getPluginManager();
-    manager.registerEvents(new GUIListener(guiManager), this);
-    manager.registerEvents(new PlayerListener(guiManager), this);
+    manager.registerEvents(new GUIListener(), this);
+    manager.registerEvents(new PlayerListener(), this);
   }
 
   /**
@@ -77,5 +77,15 @@ public class Plugin extends JavaPlugin {
   @NotNull
   public static Plugin getInstance() {
     return getPlugin(Plugin.class);
+  }
+
+  /**
+   * Gets the {@link GUIManager}.
+   *
+   * @return {@link GUIManager}
+   */
+  @NotNull
+  public static GUIManager getGUIManager() {
+    return guiManager;
   }
 }
