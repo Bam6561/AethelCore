@@ -1,13 +1,12 @@
 package me.bam6561.aethelcore.references;
 
-import me.bam6561.aethelcore.commands.DatabaseCommand;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Plugin permissions.
  *
  * @author Danny Nguyen
- * @version 0.0.22
+ * @version 0.0.27
  * @since 0.0.14
  */
 public class Permission {
@@ -18,17 +17,57 @@ public class Permission {
   }
 
   /**
+   * Permission headers.
+   *
+   * @author Danny Nguyen
+   * @version 0.0.27
+   * @since 0.0.27
+   */
+  private enum Header {
+    /**
+     * {@link ChatFlag}
+     */
+    CHATFLAG("aethel.chatflag."),
+
+    /**
+     * {@link Command}
+     */
+    COMMAND("aethel.command.");
+
+    /**
+     * Permission header value.
+     */
+    private final String value;
+
+    /**
+     * Associates a permission header with its value.
+     */
+    Header(String value) {
+      this.value = value;
+    }
+
+    /**
+     * Gets the permission header's value.
+     *
+     * @return permission header's value
+     */
+    private String getValue() {
+      return this.value;
+    }
+  }
+
+  /**
    * Chat flag permissions.
    *
    * @author Danny Nguyen
-   * @version 0.0.25
+   * @version 0.0.27
    * @since 0.0.22
    */
   public enum ChatFlag {
     /**
      * Ability to color chat messages.
      */
-    COLOR("aethel.chatflag.color");
+    COLOR(Header.CHATFLAG.getValue() + "color");
 
     /**
      * Permission value.
@@ -59,14 +98,19 @@ public class Permission {
    * Command permissions.
    *
    * @author Danny Nguyen
-   * @version 0.0.21
+   * @version 0.0.27
    * @since 0.0.21
    */
   public enum Command {
     /**
-     * {@link DatabaseCommand}
+     * {@link me.bam6561.aethelcore.commands.DatabaseCommand}
      */
-    DATABASE("aethel.command.database");
+    DATABASE(Header.COMMAND.getValue() + "database"),
+
+    /**
+     * {@link me.bam6561.aethelcore.commands.ItemEditorCommand}
+     */
+    ITEMEDITOR(Header.COMMAND.getValue() + "itemeditor");
 
     /**
      * Permission value.
