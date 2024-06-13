@@ -1,6 +1,5 @@
 package me.bam6561.aethelcore.guis;
 
-import me.bam6561.aethelcore.Plugin;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
@@ -13,7 +12,7 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * Manages inventories created by the {@link Plugin}, also known as {@link GUI GUIs}.
+ * Manages inventories created by the plugin, also known as {@link GUI GUIs}.
  * <p>
  * Each {@link GUI} is managed by its {@link InventoryHandler}.
  *
@@ -53,7 +52,7 @@ public class GUIManager {
    * @param event inventory click event
    */
   public void handleClick(@NotNull InventoryClickEvent event) {
-    Objects.requireNonNull(event, "Null InventoryClickEvent");
+    Objects.requireNonNull(event, "Null event");
     InventoryHandler handler = guis.get(event.getInventory());
     if (handler != null) {
       handler.onClick(event);
@@ -66,7 +65,7 @@ public class GUIManager {
    * @param event inventory open vent
    */
   public void handleOpen(@NotNull InventoryOpenEvent event) {
-    Objects.requireNonNull(event, "Null InventoryOpenEvent");
+    Objects.requireNonNull(event, "Null event");
     InventoryHandler handler = guis.get(event.getInventory());
     if (handler != null) {
       handler.onOpen(event);
@@ -79,7 +78,7 @@ public class GUIManager {
    * @param event inventory close event
    */
   public void handleClose(@NotNull InventoryCloseEvent event) {
-    Objects.requireNonNull(event, "Null InventoryCloseEvent");
+    Objects.requireNonNull(event, "Null event");
     Inventory inventory = event.getInventory();
     InventoryHandler handler = guis.get(inventory);
     if (handler != null) {

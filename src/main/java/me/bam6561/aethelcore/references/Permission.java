@@ -1,11 +1,10 @@
 package me.bam6561.aethelcore.references;
 
-import me.bam6561.aethelcore.Plugin;
 import me.bam6561.aethelcore.commands.DatabaseCommand;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * {@link Plugin} permissions.
+ * Plugin permissions.
  *
  * @author Danny Nguyen
  * @version 0.0.22

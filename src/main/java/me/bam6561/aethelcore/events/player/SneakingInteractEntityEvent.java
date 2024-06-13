@@ -11,9 +11,6 @@ import java.util.Objects;
 /**
  * Called when a player interacts with an entity while sneaking.
  * <p>
- * Cancellation prevents any {@link me.bam6561.aethelcore.Plugin}
- * features related to the event from happening.
- * <p>
  * May be cancelled without cancelling its source PlayerInteractEntityEvent.
  *
  * @author Danny Nguyen
@@ -42,7 +39,7 @@ public class SneakingInteractEntityEvent extends Event implements Cancellable {
    * @param source player interact entity event
    */
   public SneakingInteractEntityEvent(@NotNull PlayerInteractEntityEvent source) {
-    this.source = Objects.requireNonNull(source, "Null PlayerInteractEntityEvent");
+    this.source = Objects.requireNonNull(source, "Null source");
   }
 
   /**

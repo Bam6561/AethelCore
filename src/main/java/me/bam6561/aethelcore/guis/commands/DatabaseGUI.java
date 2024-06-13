@@ -42,7 +42,7 @@ public class DatabaseGUI extends GUI implements Database, Editor, Paginated {
    */
   @Override
   public void onClick(@NotNull InventoryClickEvent event) {
-    Objects.requireNonNull(event, "Null InventoryClickEvent");
+    Objects.requireNonNull(event, "Null event");
   }
 
   /**
@@ -52,7 +52,7 @@ public class DatabaseGUI extends GUI implements Database, Editor, Paginated {
    */
   @Override
   public void onOpen(@NotNull InventoryOpenEvent event) {
-    Objects.requireNonNull(event, "Null InventoryOpenEvent");
+    Objects.requireNonNull(event, "Null event");
   }
 
   /**
@@ -62,6 +62,6 @@ public class DatabaseGUI extends GUI implements Database, Editor, Paginated {
    */
   @Override
   public void onClose(@NotNull InventoryCloseEvent event) {
-    Objects.requireNonNull(event, "Null InventoryCloseEvent");
+    Objects.requireNonNull(event, "Null event");
   }
 }

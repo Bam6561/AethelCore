@@ -15,7 +15,7 @@ import java.util.Objects;
  * Cancellation prevents the {@link GUI} from opening.
  *
  * @author Danny Nguyen
- * @version 0.0.7
+ * @version 0.0.26
  * @since 0.0.4
  */
 public class GUIOpenEvent extends Event implements Cancellable {
@@ -35,12 +35,19 @@ public class GUIOpenEvent extends Event implements Cancellable {
   private final Player player;
 
   /**
-   * Associates the event with its player.
+   * {@link Cause}
+   */
+  private final Cause cause;
+
+  /**
+   * Associates the event with its player and {@link Cause}.
    *
    * @param player interacting player
+   * @param cause  {@link Cause}
    */
-  public GUIOpenEvent(@NotNull Player player) {
+  public GUIOpenEvent(@NotNull Player player, @NotNull Cause cause) {
     this.player = Objects.requireNonNull(player, "Null player");
+    this.cause = Objects.requireNonNull(cause, "Null cause");
   }
 
   /**
@@ -51,6 +58,16 @@ public class GUIOpenEvent extends Event implements Cancellable {
   @NotNull
   public Player getPlayer() {
     return this.player;
+  }
+
+  /**
+   * Gets the {@link Cause}.
+   *
+   * @return {@link Cause}
+   */
+  @NotNull
+  public Cause getCause() {
+    return this.cause;
   }
 
   /**
@@ -92,5 +109,24 @@ public class GUIOpenEvent extends Event implements Cancellable {
   @NotNull
   public static HandlerList getHandlerList() {
     return handlers;
+  }
+
+  /**
+   * Cause of the {@link GUI} open event.
+   *
+   * @author Danny Nguyen
+   * @version 0.0.26
+   * @since 0.0.26
+   */
+  public enum Cause {
+    /**
+     * By command.
+     */
+    COMMAND,
+
+    /**
+     * By world interaction.
+     */
+    INTERACTION
   }
 }

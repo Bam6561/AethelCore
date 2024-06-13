@@ -1,4 +1,4 @@
 /**
- * {@link me.bam6561.aethelcore.Plugin} commands.
+ * Classes relevant to commands.
  */
 package me.bam6561.aethelcore.commands;

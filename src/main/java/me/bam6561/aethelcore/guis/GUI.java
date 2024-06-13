@@ -4,7 +4,7 @@ import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * {@link me.bam6561.aethelcore.Plugin} managed inventory.
+ * Plugin managed inventory.
  *
  * @author Danny Nguyen
  * @version 0.0.18

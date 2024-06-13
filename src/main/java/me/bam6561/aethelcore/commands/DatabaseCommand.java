@@ -3,8 +3,8 @@ package me.bam6561.aethelcore.commands;
 import me.bam6561.aethelcore.Plugin;
 import me.bam6561.aethelcore.events.gui.GUIOpenEvent;
 import me.bam6561.aethelcore.guis.commands.DatabaseGUI;
-import me.bam6561.aethelcore.references.Message;
 import me.bam6561.aethelcore.references.Permission;
+import me.bam6561.aethelcore.utils.CommandUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
  * Command invocation that provides information on key terms and items.
  *
  * @author Danny Nguyen
- * @version 0.0.24
+ * @version 0.0.26
  * @since 0.0.13
  */
 public class DatabaseCommand implements CommandExecutor {
@@ -37,20 +37,17 @@ public class DatabaseCommand implements CommandExecutor {
    */
   @Override
   public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-    if (!(sender instanceof Player player)) {
-      sender.sendMessage(Message.Error.PLAYER_ONLY_COMMAND.getMessage());
-      return true;
-    }
-    if (!player.hasPermission(Permission.Command.DATABASE.getValue())) {
-      player.sendMessage(Message.Error.INSUFFICIENT_PERMISSION.getMessage());
+    if (!CommandUtils.isPlayerWithPermission(sender, Permission.Command.DATABASE)) {
       return true;
     }
 
-    GUIOpenEvent guiOpen = new GUIOpenEvent(player);
+    Player player = (Player) sender;
+    GUIOpenEvent guiOpen = new GUIOpenEvent(player, GUIOpenEvent.Cause.COMMAND);
     Bukkit.getPluginManager().callEvent(guiOpen);
     if (guiOpen.isCancelled()) {
       return true;
     }
+
     Plugin.getGUIManager().openGUI(player, new DatabaseGUI());
     return true;
   }

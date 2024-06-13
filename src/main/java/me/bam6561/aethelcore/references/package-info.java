@@ -1,4 +1,4 @@
 /**
- * {@link me.bam6561.aethelcore.Plugin} references.
+ * Classes relevant to internal plugin references.
  */
 package me.bam6561.aethelcore.references;

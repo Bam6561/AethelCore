@@ -13,7 +13,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
  * {@link SneakingInteractEvent} interaction.
  *
  * @author Danny Nguyen
- * @version 0.0.24
+ * @version 0.0.26
  * @since 0.0.9
  */
 public class SneakingInteraction {
@@ -55,7 +55,7 @@ public class SneakingInteraction {
     switch (block.getType()) {
       case CRAFTING_TABLE -> {
         Player player = event.getPlayer();
-        GUIOpenEvent guiOpen = new GUIOpenEvent(player);
+        GUIOpenEvent guiOpen = new GUIOpenEvent(player, GUIOpenEvent.Cause.INTERACTION);
         Bukkit.getPluginManager().callEvent(guiOpen);
         if (guiOpen.isCancelled()) {
           return;
