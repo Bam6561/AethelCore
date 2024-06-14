@@ -2,6 +2,7 @@ package me.bam6561.aethelcore.guis.commands;
 
 import me.bam6561.aethelcore.guis.GUI;
 import org.bukkit.Bukkit;
+import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
@@ -12,10 +13,10 @@ import org.jetbrains.annotations.NotNull;
  * {@link me.bam6561.aethelcore.commands.ItemEditorCommand} {@link GUI}.
  *
  * @author Danny Nguyen
- * @version 0.0.27
+ * @version 0.0.28
  * @since 0.0.27
  */
-public class ItemEditorGUI extends GUI {
+public class ItemEditorGUI extends GUI implements Editor {
   /**
    * No parameter constructor.
    */
