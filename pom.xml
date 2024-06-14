@@ -6,7 +6,7 @@
 
     <groupId>Bam6561</groupId>
     <artifactId>AethelCore</artifactId>
-    <version>0.0.28</version>
+    <version>0.1.0</version>
 
     <build>
         <plugins>

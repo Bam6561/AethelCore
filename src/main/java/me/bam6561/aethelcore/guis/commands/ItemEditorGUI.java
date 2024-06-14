@@ -2,7 +2,6 @@ package me.bam6561.aethelcore.guis.commands;
 
 import me.bam6561.aethelcore.guis.GUI;
 import org.bukkit.Bukkit;
-import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;

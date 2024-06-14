@@ -2,7 +2,6 @@ package me.bam6561.aethelcore.commands;
 
 import me.bam6561.aethelcore.Plugin;
 import me.bam6561.aethelcore.events.gui.GUIOpenEvent;
-import me.bam6561.aethelcore.guis.commands.DatabaseGUI;
 import me.bam6561.aethelcore.guis.commands.ItemEditorGUI;
 import me.bam6561.aethelcore.references.Permission;
 import me.bam6561.aethelcore.utils.CommandUtils;
