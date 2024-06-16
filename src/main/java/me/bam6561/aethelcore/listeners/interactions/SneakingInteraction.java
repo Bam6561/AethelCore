@@ -4,6 +4,7 @@ import me.bam6561.aethelcore.Plugin;
 import me.bam6561.aethelcore.events.gui.GUIOpenEvent;
 import me.bam6561.aethelcore.events.player.SneakingInteractEvent;
 import me.bam6561.aethelcore.guis.blocks.CraftingTableGUI;
+import me.bam6561.aethelcore.guis.blocks.markers.Workstation;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -32,7 +33,7 @@ public class SneakingInteraction {
   }
 
   /**
-   * Opens a {@link me.bam6561.aethelcore.guis.blocks.Workstation} when the player's hand is empty.
+   * Opens a {@link Workstation} when the player's hand is empty.
    */
   public void interpretAction() {
     switch (event.getAction()) {
@@ -47,7 +48,7 @@ public class SneakingInteraction {
   }
 
   /**
-   * Opens the {@link me.bam6561.aethelcore.guis.blocks.Workstation} associated with the block type.
+   * Opens the {@link Workstation} associated with the block type.
    *
    * @param block interacting block
    */

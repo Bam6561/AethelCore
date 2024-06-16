@@ -1,4 +1,4 @@
-package me.bam6561.aethelcore.guis.commands;
+package me.bam6561.aethelcore.guis.commands.markers;
 
 /**
  * {@link me.bam6561.aethelcore.guis.GUI} associated with a command that has pagination.

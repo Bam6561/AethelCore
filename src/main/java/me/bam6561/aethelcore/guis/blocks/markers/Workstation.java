@@ -1,4 +1,4 @@
-package me.bam6561.aethelcore.guis.blocks;
+package me.bam6561.aethelcore.guis.blocks.markers;
 
 /**
  * {@link me.bam6561.aethelcore.guis.GUI} associated

@@ -1,6 +1,7 @@
 package me.bam6561.aethelcore.guis.commands;
 
 import me.bam6561.aethelcore.guis.GUI;
+import me.bam6561.aethelcore.guis.commands.markers.Editor;
 import me.bam6561.aethelcore.utils.ItemUtils;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
@@ -16,6 +17,8 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * {@link me.bam6561.aethelcore.commands.ItemEditorCommand} {@link GUI}.
+ * <p>
+ * Collection of item metadata {@link Editor editors}.
  *
  * @author Danny Nguyen
  * @version 0.1.1
