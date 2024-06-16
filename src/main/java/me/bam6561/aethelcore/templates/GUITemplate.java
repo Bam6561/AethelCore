@@ -2,6 +2,7 @@ package me.bam6561.aethelcore.templates;
 
 import me.bam6561.aethelcore.guis.GUI;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
@@ -12,14 +13,17 @@ import org.jetbrains.annotations.NotNull;
  * {@link me.bam6561.aethelcore.guis.GUI}.
  *
  * @author Danny Nguyen
- * @version 0.0.27
+ * @version 0.1.2
  * @since 0.0.27
  */
 public class GUITemplate extends GUI {
   /**
-   * No parameter constructor.
+   * Associates the {@link GUI} with its user.
+   *
+   * @param user {@link GUI} user
    */
-  public GUITemplate() {
+  public GUITemplate(@NotNull Player user) {
+    super(user);
   }
 
   /**

@@ -1,13 +1,16 @@
 package me.bam6561.aethelcore.guis;
 
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
 
 /**
  * Plugin managed inventory.
  *
  * @author Danny Nguyen
- * @version 0.0.18
+ * @version 0.1.2
  * @since 0.0.11
  */
 public abstract class GUI implements InventoryHandler {
@@ -17,9 +20,18 @@ public abstract class GUI implements InventoryHandler {
   private final Inventory inventory = createInventory();
 
   /**
-   * No parameter constructor.
+   * {@link GUI} user.
    */
-  public GUI() {
+  protected final Player user;
+
+  /**
+   * Associates the {@link GUI} with its user.
+   *
+   * @param user {@link GUI} user
+   */
+  public GUI(@NotNull Player user) {
+    Objects.requireNonNull(user, "Null user");
+    this.user = user;
   }
 
   /**

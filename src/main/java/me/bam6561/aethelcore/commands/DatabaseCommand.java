@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
  * Command invocation that provides information on key terms and items.
  *
  * @author Danny Nguyen
- * @version 0.0.26
+ * @version 0.1.2
  * @since 0.0.13
  */
 public class DatabaseCommand implements CommandExecutor {
@@ -48,7 +48,7 @@ public class DatabaseCommand implements CommandExecutor {
       return true;
     }
 
-    Plugin.getGUIManager().openGUI(player, new DatabaseGUI());
+    Plugin.getGUIManager().openGUI(player, new DatabaseGUI(player));
     return true;
   }
 }

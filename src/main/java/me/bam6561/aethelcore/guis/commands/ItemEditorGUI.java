@@ -6,6 +6,7 @@ import me.bam6561.aethelcore.utils.ItemUtils;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
@@ -21,7 +22,7 @@ import org.jetbrains.annotations.Nullable;
  * Collection of item metadata {@link Editor editors}.
  *
  * @author Danny Nguyen
- * @version 0.1.1
+ * @version 0.1.2
  * @since 0.0.27
  */
 public class ItemEditorGUI extends GUI implements Editor {
@@ -31,11 +32,13 @@ public class ItemEditorGUI extends GUI implements Editor {
   private ItemStack item;
 
   /**
-   * Associates the {@link GUI} with its interacting item.
+   * Associates the {@link GUI} with its user and interacting item.
    *
+   * @param user {@link GUI} user
    * @param item interacting item
    */
-  public ItemEditorGUI(@Nullable ItemStack item) {
+  public ItemEditorGUI(@NotNull Player user, @Nullable ItemStack item) {
+    super(user);
     this.item = item;
   }
 
@@ -47,7 +50,7 @@ public class ItemEditorGUI extends GUI implements Editor {
   @NotNull
   @Override
   protected Inventory createInventory() {
-    Inventory inv = Bukkit.createInventory(null, 54, "ItemEditor");
+    Inventory inv = Bukkit.createInventory(null, 54, "Item Editor");
     inv.setItem(4, item);
 
     inv.setItem(10, ItemUtils.Create.createItem(Material.NAME_TAG, ChatColor.AQUA + "Appearance"));

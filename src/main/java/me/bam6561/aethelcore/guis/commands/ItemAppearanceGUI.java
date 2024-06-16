@@ -1,34 +1,41 @@
 package me.bam6561.aethelcore.guis.commands;
 
 import me.bam6561.aethelcore.guis.GUI;
-import me.bam6561.aethelcore.guis.commands.markers.Database;
 import me.bam6561.aethelcore.guis.commands.markers.Editor;
-import me.bam6561.aethelcore.guis.commands.markers.Paginated;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
 /**
- * {@link me.bam6561.aethelcore.commands.DatabaseCommand} {@link GUI}.
+ * Item appearance {@link GUI}.
  *
  * @author Danny Nguyen
  * @version 0.1.2
- * @since 0.0.15
+ * @since 0.1.2
  */
-public class DatabaseGUI extends GUI implements Database, Editor, Paginated {
+public class ItemAppearanceGUI extends GUI implements Editor {
   /**
-   * Associates the {@link GUI} with its user.
+   * Interacting item.
+   */
+  private ItemStack item;
+
+  /**
+   * Associates the {@link GUI} with its user and interacting item.
    *
    * @param user {@link GUI} user
+   * @param item interacting item
    */
-  public DatabaseGUI(@NotNull Player user) {
+  public ItemAppearanceGUI(@NotNull Player user, @Nullable ItemStack item) {
     super(user);
+    this.item = item;
   }
 
   /**
@@ -39,7 +46,7 @@ public class DatabaseGUI extends GUI implements Database, Editor, Paginated {
   @NotNull
   @Override
   protected Inventory createInventory() {
-    return Bukkit.createInventory(null, 54, "Database");
+    return Bukkit.createInventory(null, 54, "Item Appearance");
   }
 
   /**
@@ -49,7 +56,6 @@ public class DatabaseGUI extends GUI implements Database, Editor, Paginated {
    */
   @Override
   public void onClick(@NotNull InventoryClickEvent event) {
-    Objects.requireNonNull(event, "Null event");
   }
 
   /**
@@ -59,7 +65,6 @@ public class DatabaseGUI extends GUI implements Database, Editor, Paginated {
    */
   @Override
   public void onOpen(@NotNull InventoryOpenEvent event) {
-    Objects.requireNonNull(event, "Null event");
   }
 
   /**
@@ -69,6 +74,5 @@ public class DatabaseGUI extends GUI implements Database, Editor, Paginated {
    */
   @Override
   public void onClose(@NotNull InventoryCloseEvent event) {
-    Objects.requireNonNull(event, "Null event");
   }
 }
