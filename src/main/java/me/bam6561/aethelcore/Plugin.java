@@ -1,6 +1,7 @@
 package me.bam6561.aethelcore;
 
 import me.bam6561.aethelcore.commands.DatabaseCommand;
+import me.bam6561.aethelcore.commands.ItemEditorCommand;
 import me.bam6561.aethelcore.guis.GUIManager;
 import me.bam6561.aethelcore.listeners.GUIListener;
 import me.bam6561.aethelcore.listeners.PlayerListener;
@@ -15,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
  * handle various requests given to it by its users and the server.
  *
  * @author Danny Nguyen
- * @version 0.0.24
+ * @version 0.1.1
  * @since 0.0.1
  */
 public class Plugin extends JavaPlugin {
@@ -58,6 +59,7 @@ public class Plugin extends JavaPlugin {
    */
   private void registerCommandExecutors() {
     getCommand("database").setExecutor(new DatabaseCommand());
+    getCommand("itemeditor").setExecutor(new ItemEditorCommand());
   }
 
   /**

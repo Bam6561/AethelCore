@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
  * Command invocation that modifies items' metadata.
  *
  * @author Danny Nguyen
- * @version 0.0.27
+ * @version 0.1.1
  * @since 0.0.27
  */
 public class ItemEditorCommand implements CommandExecutor {
@@ -48,7 +48,7 @@ public class ItemEditorCommand implements CommandExecutor {
       return true;
     }
 
-    Plugin.getGUIManager().openGUI(player, new ItemEditorGUI());
+    Plugin.getGUIManager().openGUI(player, new ItemEditorGUI(null));
     return true;
   }
 }

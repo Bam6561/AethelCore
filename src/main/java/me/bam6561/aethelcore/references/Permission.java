@@ -41,6 +41,8 @@ public class Permission {
 
     /**
      * Associates a permission header with its value.
+     *
+     * @param value value
      */
     Header(String value) {
       this.value = value;
