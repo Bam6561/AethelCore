@@ -1,5 +1,6 @@
 package me.bam6561.aethelcore.guis.commands;
 
+import me.bam6561.aethelcore.Plugin;
 import me.bam6561.aethelcore.guis.GUI;
 import me.bam6561.aethelcore.guis.commands.markers.Editor;
 import me.bam6561.aethelcore.utils.ItemUtils;
@@ -7,11 +8,9 @@ import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.inventory.InventoryDragEvent;
-import org.bukkit.event.inventory.InventoryOpenEvent;
+import org.bukkit.event.inventory.*;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -20,12 +19,13 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * Item appearance {@link GUI}.
  *
  * @author Danny Nguyen
- * @version 0.1.5
+ * @version 0.1.6
  * @since 0.1.2
  */
 public class ItemAppearanceGUI extends GUI implements Editor {
@@ -53,36 +53,8 @@ public class ItemAppearanceGUI extends GUI implements Editor {
   protected void addButtons() {
     Inventory inv = getInventory();
     inv.setItem(2, ItemUtils.Create.createItem(Material.POTATO, ChatColor.AQUA + "Item Editor"));
-
-    if (ItemUtils.Read.isNullOrAir(item)) {
-      return;
-    }
-
     inv.setItem(4, item);
-
-    MetaDisplay metaDisplay = new MetaDisplay(item.getItemMeta());
-    inv.setItem(10, metaDisplay.iconDisplayName());
-    inv.setItem(11, metaDisplay.iconCustomModelData());
-    inv.setItem(12, metaDisplay.iconEnchantmentGlintOverride());
-
-    inv.setItem(20, metaDisplay.iconLore());
-    inv.setItem(28, ItemUtils.Create.createItem(Material.WRITABLE_BOOK, ChatColor.AQUA + "Add"));
-    inv.setItem(29, ItemUtils.Create.createItem(Material.WRITABLE_BOOK, ChatColor.AQUA + "Insert"));
-    inv.setItem(30, ItemUtils.Create.createItem(Material.WRITABLE_BOOK, ChatColor.AQUA + "Edit"));
-    inv.setItem(37, ItemUtils.Create.createItem(Material.WRITABLE_BOOK, ChatColor.AQUA + "Set"));
-    inv.setItem(38, ItemUtils.Create.createItem(Material.WRITABLE_BOOK, ChatColor.AQUA + "Remove"));
-    inv.setItem(39, ItemUtils.Create.createItem(Material.WRITABLE_BOOK, ChatColor.AQUA + "Clear"));
-
-    inv.setItem(15, ItemUtils.Create.createItem(Material.WHITE_BANNER, ChatColor.AQUA + "Item Flags"));
-    inv.setItem(23, metaDisplay.iconItemFlagHideAdditionalToolTip());
-    inv.setItem(24, metaDisplay.iconItemFlagHideArmorTrim());
-    inv.setItem(25, metaDisplay.iconItemFlagHideAttributes());
-    inv.setItem(32, metaDisplay.iconItemFlagHideDestroys());
-    inv.setItem(33, metaDisplay.iconItemFlagHideDye());
-    inv.setItem(34, metaDisplay.iconItemFlagHideEnchants());
-    inv.setItem(41, metaDisplay.iconItemFlagHidePlacedOn());
-    inv.setItem(42, metaDisplay.iconItemFlagHideUnbreakable());
-    inv.setItem(43, metaDisplay.iconHideTooltip());
+    refreshDynamicButtons();
   }
 
   /**
@@ -104,6 +76,45 @@ public class ItemAppearanceGUI extends GUI implements Editor {
   @Override
   public void onClick(@NotNull InventoryClickEvent event) {
     Objects.requireNonNull(event, "Null event");
+    Inventory cInv = event.getClickedInventory();
+    if (cInv == null) {
+      return;
+    }
+
+    if (cInv.getType() == InventoryType.PLAYER) {
+      if (event.getClick().isShiftClick()) {
+        event.setCancelled(true);
+        InventoryView view = event.getView();
+        if (ItemUtils.Read.isNullOrAir(view.getItem(4))) {
+          this.item = event.getCurrentItem();
+          view.setItem(4, event.getCurrentItem());
+          view.setItem(event.getRawSlot(), null);
+          refreshDynamicButtons();
+          return;
+        }
+      } else if (event.getAction() == InventoryAction.COLLECT_TO_CURSOR) {
+        event.setCancelled(true);
+      }
+    } else {
+      event.setCancelled(true);
+    }
+
+    switch (event.getRawSlot()) {
+      case 2 -> {
+        if (ItemUtils.Read.isNotNullOrAir(item)) {
+          Plugin.getGUIManager().openGUI(user, new ItemEditorGUI(user, item.clone()));
+        } else {
+          Plugin.getGUIManager().openGUI(user, new ItemEditorGUI(user, item));
+        }
+      }
+      case 4 -> {
+        event.setCancelled(false);
+        Bukkit.getScheduler().runTaskLater(Plugin.getInstance(), () -> {
+          this.item = getInventory().getItem(4);
+          refreshDynamicButtons();
+        }, 1);
+      }
+    }
   }
 
   /**
@@ -134,6 +145,48 @@ public class ItemAppearanceGUI extends GUI implements Editor {
   @Override
   public void onClose(@NotNull InventoryCloseEvent event) {
     Objects.requireNonNull(event, "Null event");
+  }
+
+  /**
+   * Shows options only when an item is being edited.
+   */
+  @Override
+  public void refreshDynamicButtons() {
+    Inventory inv = getInventory();
+    if (ItemUtils.Read.isNullOrAir(item)) {
+      Set<Integer> empty = Set.of(
+          10, 11, 12,
+          20, 28, 29, 30, 37, 38, 39,
+          15, 23, 24, 25, 32, 33, 34, 41, 42, 43);
+      for (int slot : empty) {
+        inv.setItem(slot, null);
+      }
+      return;
+    }
+
+    MetaDisplay metaDisplay = new MetaDisplay(item.getItemMeta());
+    inv.setItem(10, metaDisplay.iconDisplayName());
+    inv.setItem(11, metaDisplay.iconCustomModelData());
+    inv.setItem(12, metaDisplay.iconEnchantmentGlintOverride());
+
+    inv.setItem(20, metaDisplay.iconLore());
+    inv.setItem(28, ItemUtils.Create.createItem(Material.WRITABLE_BOOK, ChatColor.AQUA + "Add"));
+    inv.setItem(29, ItemUtils.Create.createItem(Material.WRITABLE_BOOK, ChatColor.AQUA + "Insert"));
+    inv.setItem(30, ItemUtils.Create.createItem(Material.WRITABLE_BOOK, ChatColor.AQUA + "Edit"));
+    inv.setItem(37, ItemUtils.Create.createItem(Material.WRITABLE_BOOK, ChatColor.AQUA + "Set"));
+    inv.setItem(38, ItemUtils.Create.createItem(Material.WRITABLE_BOOK, ChatColor.AQUA + "Remove"));
+    inv.setItem(39, ItemUtils.Create.createItem(Material.WRITABLE_BOOK, ChatColor.AQUA + "Clear"));
+
+    inv.setItem(15, ItemUtils.Create.createItem(Material.WHITE_BANNER, ChatColor.AQUA + "Item Flags"));
+    inv.setItem(23, metaDisplay.iconItemFlagHideAdditionalToolTip());
+    inv.setItem(24, metaDisplay.iconItemFlagHideArmorTrim());
+    inv.setItem(25, metaDisplay.iconItemFlagHideAttributes());
+    inv.setItem(32, metaDisplay.iconItemFlagHideDestroys());
+    inv.setItem(33, metaDisplay.iconItemFlagHideDye());
+    inv.setItem(34, metaDisplay.iconItemFlagHideEnchants());
+    inv.setItem(41, metaDisplay.iconItemFlagHidePlacedOn());
+    inv.setItem(42, metaDisplay.iconItemFlagHideUnbreakable());
+    inv.setItem(43, metaDisplay.iconHideTooltip());
   }
 
   /**

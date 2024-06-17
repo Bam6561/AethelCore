@@ -24,7 +24,7 @@ import java.util.Objects;
  * Collection of item metadata {@link Editor editors}.
  *
  * @author Danny Nguyen
- * @version 0.1.5
+ * @version 0.1.6
  * @since 0.0.27
  */
 public class ItemEditorGUI extends GUI implements Editor {
@@ -74,6 +74,7 @@ public class ItemEditorGUI extends GUI implements Editor {
     inv.setItem(23, ItemUtils.Create.createItem(Material.POTION, ChatColor.AQUA + "Potion Effects", ItemFlag.HIDE_ADDITIONAL_TOOLTIP));
     inv.setItem(24, ItemUtils.Create.createItem(Material.GOLDEN_APPLE, ChatColor.AQUA + "Food"));
     inv.setItem(25, ItemUtils.Create.createItem(Material.IRON_PICKAXE, ChatColor.AQUA + "Tool", ItemFlag.HIDE_ATTRIBUTES));
+    refreshDynamicButtons();
   }
 
   /**
@@ -99,8 +100,10 @@ public class ItemEditorGUI extends GUI implements Editor {
         event.setCancelled(true);
         InventoryView view = event.getView();
         if (ItemUtils.Read.isNullOrAir(view.getItem(4))) {
+          this.item = event.getCurrentItem();
           view.setItem(4, event.getCurrentItem());
-          view.setItem(event.getRawSlot(), new ItemStack(Material.AIR));
+          view.setItem(event.getRawSlot(), null);
+          refreshDynamicButtons();
           return;
         }
       } else if (event.getAction() == InventoryAction.COLLECT_TO_CURSOR) {
@@ -115,9 +118,16 @@ public class ItemEditorGUI extends GUI implements Editor {
         event.setCancelled(false);
         Bukkit.getScheduler().runTaskLater(Plugin.getInstance(), () -> {
           this.item = getInventory().getItem(4);
+          refreshDynamicButtons();
         }, 1);
       }
-      case 10 -> Plugin.getGUIManager().openGUI(user, new ItemAppearanceGUI(user, item.clone()));
+      case 10 -> {
+        if (ItemUtils.Read.isNotNullOrAir(item)) {
+          Plugin.getGUIManager().openGUI(user, new ItemAppearanceGUI(user, item.clone()));
+        } else {
+          Plugin.getGUIManager().openGUI(user, new ItemAppearanceGUI(user, item));
+        }
+      }
     }
   }
 
@@ -150,5 +160,18 @@ public class ItemEditorGUI extends GUI implements Editor {
   @Override
   public void onClose(@NotNull InventoryCloseEvent event) {
     Objects.requireNonNull(event, "Null event");
+  }
+
+  /**
+   * Shows or hides an "Add to Database" button.
+   */
+  @Override
+  public void refreshDynamicButtons() {
+    Inventory inv = getInventory();
+    if (ItemUtils.Read.isNotNullOrAir(item)) {
+      inv.setItem(40, ItemUtils.Create.createItem(Material.BOOKSHELF, ChatColor.AQUA + "Save to Database"));
+    } else {
+      inv.setItem(40, null);
+    }
   }
 }

@@ -19,7 +19,7 @@ import java.util.Objects;
  * {@link me.bam6561.aethelcore.commands.DatabaseCommand} {@link GUI}.
  *
  * @author Danny Nguyen
- * @version 0.1.5
+ * @version 0.1.6
  * @since 0.0.15
  */
 public class DatabaseGUI extends GUI implements Database, Editor, Paginated {
@@ -89,5 +89,12 @@ public class DatabaseGUI extends GUI implements Database, Editor, Paginated {
   @Override
   public void onClose(@NotNull InventoryCloseEvent event) {
     Objects.requireNonNull(event, "Null event");
+  }
+
+  /**
+   * Currently does nothing.
+   */
+  @Override
+  public void refreshDynamicButtons() {
   }
 }
