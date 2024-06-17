@@ -10,6 +10,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.*;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -23,7 +24,7 @@ import java.util.Objects;
  * Collection of item metadata {@link Editor editors}.
  *
  * @author Danny Nguyen
- * @version 0.1.3
+ * @version 0.1.4
  * @since 0.0.27
  */
 public class ItemEditorGUI extends GUI implements Editor {
@@ -79,13 +80,21 @@ public class ItemEditorGUI extends GUI implements Editor {
    */
   @Override
   public void onClick(@NotNull InventoryClickEvent event) {
-    Inventory clicked = event.getClickedInventory();
-    if (clicked == null) {
+    Inventory cInv = event.getClickedInventory();
+    if (cInv == null) {
       return;
     }
 
-    if (clicked.getType() == InventoryType.PLAYER) {
-      if (event.getClick().isShiftClick() || event.getAction() == InventoryAction.COLLECT_TO_CURSOR) {
+    if (cInv.getType() == InventoryType.PLAYER) {
+      if (event.getClick().isShiftClick()) {
+        event.setCancelled(true);
+        InventoryView view = event.getView();
+        if (ItemUtils.Read.isNullOrAir(view.getItem(4))) {
+          view.setItem(4, event.getCurrentItem());
+          view.setItem(event.getRawSlot(), new ItemStack(Material.AIR));
+          return;
+        }
+      } else if (event.getAction() == InventoryAction.COLLECT_TO_CURSOR) {
         event.setCancelled(true);
       }
     } else {
@@ -99,9 +108,7 @@ public class ItemEditorGUI extends GUI implements Editor {
           this.item = getInventory().getItem(4);
         }, 1);
       }
-      case 10 -> {
-        Plugin.getGUIManager().openGUI(user, new ItemAppearanceGUI(user, item));
-      }
+      case 10 -> Plugin.getGUIManager().openGUI(user, new ItemAppearanceGUI(user, item));
     }
   }
 
