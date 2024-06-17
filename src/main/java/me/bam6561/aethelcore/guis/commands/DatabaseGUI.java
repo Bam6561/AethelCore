@@ -19,7 +19,7 @@ import java.util.Objects;
  * {@link me.bam6561.aethelcore.commands.DatabaseCommand} {@link GUI}.
  *
  * @author Danny Nguyen
- * @version 0.1.3
+ * @version 0.1.5
  * @since 0.0.15
  */
 public class DatabaseGUI extends GUI implements Database, Editor, Paginated {
@@ -30,6 +30,7 @@ public class DatabaseGUI extends GUI implements Database, Editor, Paginated {
    */
   public DatabaseGUI(@NotNull Player user) {
     super(user);
+    addButtons();
   }
 
   /**
@@ -41,6 +42,13 @@ public class DatabaseGUI extends GUI implements Database, Editor, Paginated {
   @Override
   protected Inventory createInventory() {
     return Bukkit.createInventory(null, 54, "Database");
+  }
+
+  /**
+   * Currently does nothing.
+   */
+  @Override
+  protected void addButtons() {
   }
 
   /**

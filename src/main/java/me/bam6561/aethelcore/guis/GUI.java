@@ -10,7 +10,7 @@ import java.util.Objects;
  * Plugin managed inventory.
  *
  * @author Danny Nguyen
- * @version 0.1.2
+ * @version 0.1.5
  * @since 0.0.11
  */
 public abstract class GUI implements InventoryHandler {
@@ -41,6 +41,11 @@ public abstract class GUI implements InventoryHandler {
    */
   @NotNull
   protected abstract Inventory createInventory();
+
+  /**
+   * Adds inventory buttons.
+   */
+  protected abstract void addButtons();
 
   /**
    * Gets the inventory.

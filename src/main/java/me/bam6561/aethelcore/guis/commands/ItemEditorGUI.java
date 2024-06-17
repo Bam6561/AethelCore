@@ -24,7 +24,7 @@ import java.util.Objects;
  * Collection of item metadata {@link Editor editors}.
  *
  * @author Danny Nguyen
- * @version 0.1.4
+ * @version 0.1.5
  * @since 0.0.27
  */
 public class ItemEditorGUI extends GUI implements Editor {
@@ -42,6 +42,7 @@ public class ItemEditorGUI extends GUI implements Editor {
   public ItemEditorGUI(@NotNull Player user, @Nullable ItemStack item) {
     super(user);
     this.item = item;
+    addButtons();
   }
 
   /**
@@ -52,7 +53,15 @@ public class ItemEditorGUI extends GUI implements Editor {
   @NotNull
   @Override
   protected Inventory createInventory() {
-    Inventory inv = Bukkit.createInventory(null, 54, "Item Editor");
+    return Bukkit.createInventory(null, 54, "Item Editor");
+  }
+
+  /**
+   * Adds accessible {@link Editor editors}.
+   */
+  @Override
+  protected void addButtons() {
+    Inventory inv = getInventory();
     inv.setItem(4, item);
 
     inv.setItem(10, ItemUtils.Create.createItem(Material.NAME_TAG, ChatColor.AQUA + "Appearance"));
@@ -65,7 +74,6 @@ public class ItemEditorGUI extends GUI implements Editor {
     inv.setItem(23, ItemUtils.Create.createItem(Material.POTION, ChatColor.AQUA + "Potion Effects", ItemFlag.HIDE_ADDITIONAL_TOOLTIP));
     inv.setItem(24, ItemUtils.Create.createItem(Material.GOLDEN_APPLE, ChatColor.AQUA + "Food"));
     inv.setItem(25, ItemUtils.Create.createItem(Material.IRON_PICKAXE, ChatColor.AQUA + "Tool", ItemFlag.HIDE_ATTRIBUTES));
-    return inv;
   }
 
   /**
@@ -80,6 +88,7 @@ public class ItemEditorGUI extends GUI implements Editor {
    */
   @Override
   public void onClick(@NotNull InventoryClickEvent event) {
+    Objects.requireNonNull(event, "Null event");
     Inventory cInv = event.getClickedInventory();
     if (cInv == null) {
       return;
@@ -108,7 +117,7 @@ public class ItemEditorGUI extends GUI implements Editor {
           this.item = getInventory().getItem(4);
         }, 1);
       }
-      case 10 -> Plugin.getGUIManager().openGUI(user, new ItemAppearanceGUI(user, item));
+      case 10 -> Plugin.getGUIManager().openGUI(user, new ItemAppearanceGUI(user, item.clone()));
     }
   }
 
@@ -130,6 +139,7 @@ public class ItemEditorGUI extends GUI implements Editor {
    */
   @Override
   public void onOpen(@NotNull InventoryOpenEvent event) {
+    Objects.requireNonNull(event, "Null event");
   }
 
   /**
@@ -139,5 +149,6 @@ public class ItemEditorGUI extends GUI implements Editor {
    */
   @Override
   public void onClose(@NotNull InventoryCloseEvent event) {
+    Objects.requireNonNull(event, "Null event");
   }
 }

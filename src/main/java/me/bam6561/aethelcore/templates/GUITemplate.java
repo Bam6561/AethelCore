@@ -16,7 +16,7 @@ import java.util.Objects;
  * {@link me.bam6561.aethelcore.guis.GUI}.
  *
  * @author Danny Nguyen
- * @version 0.1.3
+ * @version 0.1.5
  * @since 0.0.27
  */
 public class GUITemplate extends GUI {
@@ -27,6 +27,14 @@ public class GUITemplate extends GUI {
    */
   public GUITemplate(@NotNull Player user) {
     super(user);
+    addButtons();
+  }
+
+  /**
+   * Currently does nothing.
+   */
+  @Override
+  protected void addButtons() {
   }
 
   /**
@@ -47,6 +55,7 @@ public class GUITemplate extends GUI {
    */
   @Override
   public void onClick(@NotNull InventoryClickEvent event) {
+    Objects.requireNonNull(event, "Null event");
   }
 
   /**
@@ -66,6 +75,7 @@ public class GUITemplate extends GUI {
    */
   @Override
   public void onOpen(@NotNull InventoryOpenEvent event) {
+    Objects.requireNonNull(event, "Null event");
   }
 
   /**
@@ -75,5 +85,6 @@ public class GUITemplate extends GUI {
    */
   @Override
   public void onClose(@NotNull InventoryCloseEvent event) {
+    Objects.requireNonNull(event, "Null event");
   }
 }

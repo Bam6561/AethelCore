@@ -17,7 +17,7 @@ import java.util.Objects;
  * Crafting table {@link GUI}.
  *
  * @author Danny Nguyen
- * @version 0.1.3
+ * @version 0.1.5
  * @since 0.0.11
  */
 public class CraftingTableGUI extends GUI implements Workstation {
@@ -28,6 +28,7 @@ public class CraftingTableGUI extends GUI implements Workstation {
    */
   public CraftingTableGUI(@NotNull Player user) {
     super(user);
+    addButtons();
   }
 
   /**
@@ -39,6 +40,13 @@ public class CraftingTableGUI extends GUI implements Workstation {
   @Override
   protected Inventory createInventory() {
     return Bukkit.createInventory(null, 54, "Crafting Table");
+  }
+
+  /**
+   * Currently does nothing.
+   */
+  @Override
+  protected void addButtons() {
   }
 
   /**
