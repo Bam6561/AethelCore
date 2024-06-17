@@ -7,6 +7,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 
 /**
@@ -15,7 +16,7 @@ import org.bukkit.event.inventory.InventoryOpenEvent;
  * {@link GUI} behavior is managed through the {@link GUIManager}.
  *
  * @author Danny Nguyen
- * @version 0.0.25
+ * @version 0.1.3
  * @since 0.0.10
  */
 public class GUIListener implements Listener {
@@ -38,6 +39,16 @@ public class GUIListener implements Listener {
   @EventHandler
   private void onInventoryClick(InventoryClickEvent event) {
     guiManager.handleClick(event);
+  }
+
+  /**
+   * Routes {@link GUI} drag interactions.
+   *
+   * @param event inventory drag event
+   */
+  @EventHandler
+  private void onInventoryDrag(InventoryDragEvent event) {
+    guiManager.handleDrag(event);
   }
 
   /**

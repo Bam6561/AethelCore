@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
@@ -16,7 +17,7 @@ import java.util.Objects;
  * Crafting table {@link GUI}.
  *
  * @author Danny Nguyen
- * @version 0.1.2
+ * @version 0.1.3
  * @since 0.0.11
  */
 public class CraftingTableGUI extends GUI implements Workstation {
@@ -47,6 +48,16 @@ public class CraftingTableGUI extends GUI implements Workstation {
    */
   @Override
   public void onClick(@NotNull InventoryClickEvent event) {
+    Objects.requireNonNull(event, "Null event");
+  }
+
+  /**
+   * Currently does nothing.
+   *
+   * @param event inventory drag event
+   */
+  @Override
+  public void onDrag(@NotNull InventoryDragEvent event) {
     Objects.requireNonNull(event, "Null event");
   }
 

@@ -2,6 +2,7 @@ package me.bam6561.aethelcore.guis;
 
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.jetbrains.annotations.NotNull;
 
@@ -9,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
  * Outlines base interactions for a plugin managed inventory.
  *
  * @author Danny Nguyen
- * @version 0.0.7
+ * @version 0.1.3
  * @since 0.0.7
  */
 public interface InventoryHandler {
@@ -19,6 +20,13 @@ public interface InventoryHandler {
    * @param event inventory click event
    */
   void onClick(@NotNull InventoryClickEvent event);
+
+  /**
+   * What to do when a drag click occurs.
+   *
+   * @param event inventory drag event
+   */
+  void onDrag(@NotNull InventoryDragEvent event);
 
   /**
    * What to do when the inventory is opened.

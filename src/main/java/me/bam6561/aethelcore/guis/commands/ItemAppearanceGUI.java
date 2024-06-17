@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -18,7 +19,7 @@ import java.util.Objects;
  * Item appearance {@link GUI}.
  *
  * @author Danny Nguyen
- * @version 0.1.2
+ * @version 0.1.3
  * @since 0.1.2
  */
 public class ItemAppearanceGUI extends GUI implements Editor {
@@ -56,6 +57,16 @@ public class ItemAppearanceGUI extends GUI implements Editor {
    */
   @Override
   public void onClick(@NotNull InventoryClickEvent event) {
+  }
+
+  /**
+   * Currently does nothing.
+   *
+   * @param event inventory drag event
+   */
+  @Override
+  public void onDrag(@NotNull InventoryDragEvent event) {
+    Objects.requireNonNull(event, "Null event");
   }
 
   /**

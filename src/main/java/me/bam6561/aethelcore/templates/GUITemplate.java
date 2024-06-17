@@ -5,15 +5,18 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
 
 /**
  * {@link me.bam6561.aethelcore.guis.GUI}.
  *
  * @author Danny Nguyen
- * @version 0.1.2
+ * @version 0.1.3
  * @since 0.0.27
  */
 public class GUITemplate extends GUI {
@@ -44,6 +47,16 @@ public class GUITemplate extends GUI {
    */
   @Override
   public void onClick(@NotNull InventoryClickEvent event) {
+  }
+
+  /**
+   * Currently does nothing.
+   *
+   * @param event inventory drag event
+   */
+  @Override
+  public void onDrag(@NotNull InventoryDragEvent event) {
+    Objects.requireNonNull(event, "Null event");
   }
 
   /**

@@ -1,5 +1,6 @@
 package me.bam6561.aethelcore.guis.commands;
 
+import me.bam6561.aethelcore.Plugin;
 import me.bam6561.aethelcore.guis.GUI;
 import me.bam6561.aethelcore.guis.commands.markers.Editor;
 import me.bam6561.aethelcore.utils.ItemUtils;
@@ -7,14 +8,14 @@ import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.inventory.InventoryOpenEvent;
+import org.bukkit.event.inventory.*;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Objects;
 
 /**
  * {@link me.bam6561.aethelcore.commands.ItemEditorCommand} {@link GUI}.
@@ -22,7 +23,7 @@ import org.jetbrains.annotations.Nullable;
  * Collection of item metadata {@link Editor editors}.
  *
  * @author Danny Nguyen
- * @version 0.1.2
+ * @version 0.1.3
  * @since 0.0.27
  */
 public class ItemEditorGUI extends GUI implements Editor {
@@ -67,12 +68,52 @@ public class ItemEditorGUI extends GUI implements Editor {
   }
 
   /**
-   * Currently does nothing.
+   * Either:
+   * <ul>
+   *   <li>sets the interacting item
+   *   <li>sets the item's max stack size
+   *   <li>opens a item metadata {@link Editor}
+   * </ul>
    *
    * @param event inventory click event
    */
   @Override
   public void onClick(@NotNull InventoryClickEvent event) {
+    Inventory clicked = event.getClickedInventory();
+    if (clicked == null) {
+      return;
+    }
+
+    if (clicked.getType() == InventoryType.PLAYER) {
+      if (event.getClick().isShiftClick() || event.getAction() == InventoryAction.COLLECT_TO_CURSOR) {
+        event.setCancelled(true);
+      }
+    } else {
+      event.setCancelled(true);
+    }
+
+    switch (event.getRawSlot()) {
+      case 4 -> {
+        event.setCancelled(false);
+        Bukkit.getScheduler().runTaskLater(Plugin.getInstance(), () -> {
+          this.item = getInventory().getItem(4);
+        }, 1);
+      }
+      case 10 -> {
+        Plugin.getGUIManager().openGUI(user, new ItemAppearanceGUI(user, item));
+      }
+    }
+  }
+
+  /**
+   * Cancels dragging items in the inventory.
+   *
+   * @param event inventory drag event
+   */
+  @Override
+  public void onDrag(@NotNull InventoryDragEvent event) {
+    Objects.requireNonNull(event, "Null event");
+    event.setCancelled(true);
   }
 
   /**
