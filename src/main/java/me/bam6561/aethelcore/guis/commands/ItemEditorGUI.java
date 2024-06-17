@@ -24,7 +24,7 @@ import java.util.Objects;
  * Collection of item metadata {@link Editor editors}.
  *
  * @author Danny Nguyen
- * @version 0.1.6
+ * @version 0.1.7
  * @since 0.0.27
  */
 public class ItemEditorGUI extends GUI implements Editor {
@@ -42,7 +42,6 @@ public class ItemEditorGUI extends GUI implements Editor {
   public ItemEditorGUI(@NotNull Player user, @Nullable ItemStack item) {
     super(user);
     this.item = item;
-    addButtons();
   }
 
   /**
@@ -80,10 +79,12 @@ public class ItemEditorGUI extends GUI implements Editor {
   /**
    * Either:
    * <ul>
-   *   <li>sets the interacting item
-   *   <li>sets the item's max stack size
-   *   <li>opens a item metadata {@link Editor}
+   *   <li>sets the {@link #item} being edited
+   *   <li>opens a {@link ItemAppearanceGUI}
    * </ul>
+   * <p>
+   * For player inventories, collecting to the cursor and shift clicking is prohibited.
+   * Shift clicks are allowed when the {@link #item} slot is empty.
    *
    * @param event inventory click event
    */
@@ -132,7 +133,7 @@ public class ItemEditorGUI extends GUI implements Editor {
   }
 
   /**
-   * Cancels dragging items in the inventory.
+   * Cancels dragging items while the inventory is open.
    *
    * @param event inventory drag event
    */
@@ -143,13 +144,14 @@ public class ItemEditorGUI extends GUI implements Editor {
   }
 
   /**
-   * Currently does nothing.
+   * Adds buttons to the {@link GUI}.
    *
    * @param event inventory open event
    */
   @Override
   public void onOpen(@NotNull InventoryOpenEvent event) {
     Objects.requireNonNull(event, "Null event");
+    addButtons();
   }
 
   /**
@@ -163,7 +165,7 @@ public class ItemEditorGUI extends GUI implements Editor {
   }
 
   /**
-   * Shows or hides an "Add to Database" button.
+   * Shows a "Save to Database" button when an {@link #item} is being edited.
    */
   @Override
   public void refreshDynamicButtons() {

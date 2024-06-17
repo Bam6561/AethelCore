@@ -16,7 +16,7 @@ import java.util.Objects;
  * {@link me.bam6561.aethelcore.guis.GUI}.
  *
  * @author Danny Nguyen
- * @version 0.1.5
+ * @version 0.1.7
  * @since 0.0.27
  */
 public class GUITemplate extends GUI {
@@ -27,14 +27,6 @@ public class GUITemplate extends GUI {
    */
   public GUITemplate(@NotNull Player user) {
     super(user);
-    addButtons();
-  }
-
-  /**
-   * Currently does nothing.
-   */
-  @Override
-  protected void addButtons() {
   }
 
   /**
@@ -50,6 +42,13 @@ public class GUITemplate extends GUI {
 
   /**
    * Currently does nothing.
+   */
+  @Override
+  protected void addButtons() {
+  }
+
+  /**
+   * Currently does nothing.
    *
    * @param event inventory click event
    */
@@ -59,23 +58,25 @@ public class GUITemplate extends GUI {
   }
 
   /**
-   * Currently does nothing.
+   * Cancels dragging items while the inventory is open.
    *
    * @param event inventory drag event
    */
   @Override
   public void onDrag(@NotNull InventoryDragEvent event) {
     Objects.requireNonNull(event, "Null event");
+    event.setCancelled(true);
   }
 
   /**
-   * Currently does nothing.
+   * Adds buttons to the {@link GUI}.
    *
    * @param event inventory open event
    */
   @Override
   public void onOpen(@NotNull InventoryOpenEvent event) {
     Objects.requireNonNull(event, "Null event");
+    addButtons();
   }
 
   /**

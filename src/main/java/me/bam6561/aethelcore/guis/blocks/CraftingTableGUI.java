@@ -17,7 +17,7 @@ import java.util.Objects;
  * Crafting table {@link GUI}.
  *
  * @author Danny Nguyen
- * @version 0.1.5
+ * @version 0.1.7
  * @since 0.0.11
  */
 public class CraftingTableGUI extends GUI implements Workstation {
@@ -28,7 +28,6 @@ public class CraftingTableGUI extends GUI implements Workstation {
    */
   public CraftingTableGUI(@NotNull Player user) {
     super(user);
-    addButtons();
   }
 
   /**
@@ -60,23 +59,25 @@ public class CraftingTableGUI extends GUI implements Workstation {
   }
 
   /**
-   * Currently does nothing.
+   * Cancels dragging items while the inventory is open.
    *
    * @param event inventory drag event
    */
   @Override
   public void onDrag(@NotNull InventoryDragEvent event) {
     Objects.requireNonNull(event, "Null event");
+    event.setCancelled(true);
   }
 
   /**
-   * Currently does nothing.
+   * Adds buttons to the {@link GUI}.
    *
    * @param event inventory open event
    */
   @Override
   public void onOpen(@NotNull InventoryOpenEvent event) {
     Objects.requireNonNull(event, "Null event");
+    addButtons();
   }
 
   /**

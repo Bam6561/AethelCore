@@ -25,7 +25,7 @@ import java.util.Set;
  * Item appearance {@link GUI}.
  *
  * @author Danny Nguyen
- * @version 0.1.6
+ * @version 0.1.7
  * @since 0.1.2
  */
 public class ItemAppearanceGUI extends GUI implements Editor {
@@ -43,18 +43,6 @@ public class ItemAppearanceGUI extends GUI implements Editor {
   public ItemAppearanceGUI(@NotNull Player user, @Nullable ItemStack item) {
     super(user);
     this.item = item;
-    addButtons();
-  }
-
-  /**
-   * Adds item appearance metadata buttons.
-   */
-  @Override
-  protected void addButtons() {
-    Inventory inv = getInventory();
-    inv.setItem(2, ItemUtils.Create.createItem(Material.POTATO, ChatColor.AQUA + "Item Editor"));
-    inv.setItem(4, item);
-    refreshDynamicButtons();
   }
 
   /**
@@ -69,7 +57,25 @@ public class ItemAppearanceGUI extends GUI implements Editor {
   }
 
   /**
-   * Currently does nothing.
+   * Adds item appearance metadata buttons.
+   */
+  @Override
+  protected void addButtons() {
+    Inventory inv = getInventory();
+    inv.setItem(2, ItemUtils.Create.createItem(Material.POTATO, ChatColor.AQUA + "Item Editor"));
+    inv.setItem(4, item);
+    refreshDynamicButtons();
+  }
+
+  /**
+   * Either:
+   * <ul>
+   *   <li>opens a {@link ItemEditorGUI}
+   *   <li>sets the {@link #item} being edited
+   * </ul>
+   * <p>
+   * For player inventories, collecting to the cursor and shift clicking is prohibited.
+   * Shift clicks are allowed when the {@link #item} slot is empty.
    *
    * @param event inventory click event
    */
@@ -118,23 +124,25 @@ public class ItemAppearanceGUI extends GUI implements Editor {
   }
 
   /**
-   * Currently does nothing.
+   * Cancels dragging items while the inventory is open.
    *
    * @param event inventory drag event
    */
   @Override
   public void onDrag(@NotNull InventoryDragEvent event) {
     Objects.requireNonNull(event, "Null event");
+    event.setCancelled(true);
   }
 
   /**
-   * Currently does nothing.
+   * Adds buttons to the {@link GUI}.
    *
    * @param event inventory open event
    */
   @Override
   public void onOpen(@NotNull InventoryOpenEvent event) {
     Objects.requireNonNull(event, "Null event");
+    addButtons();
   }
 
   /**
@@ -148,7 +156,7 @@ public class ItemAppearanceGUI extends GUI implements Editor {
   }
 
   /**
-   * Shows options only when an item is being edited.
+   * Shows appearance metadata buttons when an {@link #item} is being edited.
    */
   @Override
   public void refreshDynamicButtons() {
