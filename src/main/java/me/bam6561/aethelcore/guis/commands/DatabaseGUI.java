@@ -19,7 +19,7 @@ import java.util.Objects;
  * {@link me.bam6561.aethelcore.commands.DatabaseCommand} {@link GUI}.
  *
  * @author Danny Nguyen
- * @version 0.1.7
+ * @version 0.1.8
  * @since 0.0.15
  */
 public class DatabaseGUI extends GUI implements Database, Editor, Paginated {
@@ -58,6 +58,10 @@ public class DatabaseGUI extends GUI implements Database, Editor, Paginated {
   @Override
   public void onClick(@NotNull InventoryClickEvent event) {
     Objects.requireNonNull(event, "Null event");
+    Inventory cInv = event.getClickedInventory();
+    if (cInv == null) {
+      return;
+    }
   }
 
   /**

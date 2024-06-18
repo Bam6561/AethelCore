@@ -3,6 +3,7 @@ package me.bam6561.aethelcore.guis.commands;
 import me.bam6561.aethelcore.Plugin;
 import me.bam6561.aethelcore.guis.GUI;
 import me.bam6561.aethelcore.guis.commands.markers.Editor;
+import me.bam6561.aethelcore.guis.commands.markers.MessageInput;
 import me.bam6561.aethelcore.utils.ItemUtils;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
@@ -25,10 +26,10 @@ import java.util.Set;
  * Item appearance {@link GUI}.
  *
  * @author Danny Nguyen
- * @version 0.1.7
+ * @version 0.1.8
  * @since 0.1.2
  */
-public class ItemAppearanceGUI extends GUI implements Editor {
+public class ItemAppearanceGUI extends GUI implements Editor, MessageInput {
   /**
    * Interacting item.
    */
@@ -180,8 +181,8 @@ public class ItemAppearanceGUI extends GUI implements Editor {
     inv.setItem(20, metaDisplay.iconLore());
     inv.setItem(28, ItemUtils.Create.createItem(Material.WRITABLE_BOOK, ChatColor.AQUA + "Add"));
     inv.setItem(29, ItemUtils.Create.createItem(Material.WRITABLE_BOOK, ChatColor.AQUA + "Insert"));
-    inv.setItem(30, ItemUtils.Create.createItem(Material.WRITABLE_BOOK, ChatColor.AQUA + "Edit"));
-    inv.setItem(37, ItemUtils.Create.createItem(Material.WRITABLE_BOOK, ChatColor.AQUA + "Set"));
+    inv.setItem(30, ItemUtils.Create.createItem(Material.WRITABLE_BOOK, ChatColor.AQUA + "Set"));
+    inv.setItem(37, ItemUtils.Create.createItem(Material.WRITABLE_BOOK, ChatColor.AQUA + "Edit"));
     inv.setItem(38, ItemUtils.Create.createItem(Material.WRITABLE_BOOK, ChatColor.AQUA + "Remove"));
     inv.setItem(39, ItemUtils.Create.createItem(Material.WRITABLE_BOOK, ChatColor.AQUA + "Clear"));
 
@@ -195,6 +196,50 @@ public class ItemAppearanceGUI extends GUI implements Editor {
     inv.setItem(41, metaDisplay.iconItemFlagHidePlacedOn());
     inv.setItem(42, metaDisplay.iconItemFlagHideUnbreakable());
     inv.setItem(43, metaDisplay.iconHideTooltip());
+  }
+
+  /**
+   * User inputs.
+   *
+   * @author Danny Nguyen
+   * @version 0.1.8
+   * @since 0.1.8
+   */
+  public enum Input {
+    /**
+     * Sets the display name.
+     */
+    DISPLAY_NAME,
+
+    /**
+     * Sets the custom model data.
+     */
+    CUSTOM_MODEL_DATA,
+
+    /**
+     * Adds a line of lore.
+     */
+    LORE_ADD,
+
+    /**
+     * Inserts a line of lore.
+     */
+    LORE_INSERT,
+
+    /**
+     * Sets the lore.
+     */
+    LORE_SET,
+
+    /**
+     * Edit a line of lore.
+     */
+    LORE_EDIT,
+
+    /**
+     * Removes a line of lore.
+     */
+    LORE_REMOVE,
   }
 
   /**

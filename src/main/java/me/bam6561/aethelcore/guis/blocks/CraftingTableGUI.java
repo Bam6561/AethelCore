@@ -17,7 +17,7 @@ import java.util.Objects;
  * Crafting table {@link GUI}.
  *
  * @author Danny Nguyen
- * @version 0.1.7
+ * @version 0.1.8
  * @since 0.0.11
  */
 public class CraftingTableGUI extends GUI implements Workstation {
@@ -56,6 +56,10 @@ public class CraftingTableGUI extends GUI implements Workstation {
   @Override
   public void onClick(@NotNull InventoryClickEvent event) {
     Objects.requireNonNull(event, "Null event");
+    Inventory cInv = event.getClickedInventory();
+    if (cInv == null) {
+      return;
+    }
   }
 
   /**
