@@ -26,7 +26,7 @@ import java.util.Set;
  * Item appearance {@link GUI}.
  *
  * @author Danny Nguyen
- * @version 0.1.8
+ * @version 0.1.9
  * @since 0.1.2
  */
 public class ItemAppearanceGUI extends GUI implements Editor, MessageInput {
@@ -69,6 +69,38 @@ public class ItemAppearanceGUI extends GUI implements Editor, MessageInput {
   }
 
   /**
+   * Finishes interactions early if the user clicks
+   * outside any inventories or uses their player inventory.
+   *
+   * @param event inventory click event
+   * @return finished interaction
+   */
+  @Override
+  protected boolean handleInventoryViewInteraction(@NotNull InventoryClickEvent event) {
+    Objects.requireNonNull(event, "Null event");
+    Inventory cInv = event.getClickedInventory();
+    if (cInv == null) {
+      return true;
+    }
+    if (cInv.getType() == InventoryType.PLAYER) {
+      if (event.getClick().isShiftClick()) {
+        event.setCancelled(true);
+        InventoryView view = event.getView();
+        if (ItemUtils.Read.isNullOrAir(view.getItem(4))) {
+          this.item = event.getCurrentItem();
+          view.setItem(4, event.getCurrentItem());
+          view.setItem(event.getRawSlot(), null);
+          refreshDynamicButtons();
+        }
+      } else if (event.getAction() == InventoryAction.COLLECT_TO_CURSOR) {
+        event.setCancelled(true);
+      }
+      return true;
+    }
+    return false;
+  }
+
+  /**
    * Either:
    * <ul>
    *   <li>opens a {@link ItemEditorGUI}
@@ -83,28 +115,11 @@ public class ItemAppearanceGUI extends GUI implements Editor, MessageInput {
   @Override
   public void onClick(@NotNull InventoryClickEvent event) {
     Objects.requireNonNull(event, "Null event");
-    Inventory cInv = event.getClickedInventory();
-    if (cInv == null) {
+    if (handleInventoryViewInteraction(event)) {
       return;
     }
 
-    if (cInv.getType() == InventoryType.PLAYER) {
-      if (event.getClick().isShiftClick()) {
-        event.setCancelled(true);
-        InventoryView view = event.getView();
-        if (ItemUtils.Read.isNullOrAir(view.getItem(4))) {
-          this.item = event.getCurrentItem();
-          view.setItem(4, event.getCurrentItem());
-          view.setItem(event.getRawSlot(), null);
-          refreshDynamicButtons();
-          return;
-        }
-      } else if (event.getAction() == InventoryAction.COLLECT_TO_CURSOR) {
-        event.setCancelled(true);
-      }
-    } else {
-      event.setCancelled(true);
-    }
+    event.setCancelled(true);
 
     switch (event.getRawSlot()) {
       case 2 -> {

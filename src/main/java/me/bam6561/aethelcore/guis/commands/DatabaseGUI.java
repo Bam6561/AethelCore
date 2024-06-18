@@ -6,10 +6,7 @@ import me.bam6561.aethelcore.guis.commands.markers.Editor;
 import me.bam6561.aethelcore.guis.commands.markers.Paginated;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.inventory.InventoryDragEvent;
-import org.bukkit.event.inventory.InventoryOpenEvent;
+import org.bukkit.event.inventory.*;
 import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
 
@@ -19,7 +16,7 @@ import java.util.Objects;
  * {@link me.bam6561.aethelcore.commands.DatabaseCommand} {@link GUI}.
  *
  * @author Danny Nguyen
- * @version 0.1.8
+ * @version 0.1.9
  * @since 0.0.15
  */
 public class DatabaseGUI extends GUI implements Database, Editor, Paginated {
@@ -51,6 +48,26 @@ public class DatabaseGUI extends GUI implements Database, Editor, Paginated {
   }
 
   /**
+   * Finishes interactions early if the user clicks
+   * outside any inventories or uses their player inventory.
+   *
+   * @param event inventory click event
+   * @return finished interaction
+   */
+  @Override
+  protected boolean handleInventoryViewInteraction(@NotNull InventoryClickEvent event) {
+    Objects.requireNonNull(event, "Null event");
+    Inventory cInv = event.getClickedInventory();
+    if (cInv == null) {
+      return true;
+    }
+    if (cInv.getType() == InventoryType.PLAYER) {
+      return true;
+    }
+    return false;
+  }
+
+  /**
    * Currently does nothing.
    *
    * @param event inventory click event
@@ -58,10 +75,11 @@ public class DatabaseGUI extends GUI implements Database, Editor, Paginated {
   @Override
   public void onClick(@NotNull InventoryClickEvent event) {
     Objects.requireNonNull(event, "Null event");
-    Inventory cInv = event.getClickedInventory();
-    if (cInv == null) {
+    if (handleInventoryViewInteraction(event)) {
       return;
     }
+
+    event.setCancelled(true);
   }
 
   /**
