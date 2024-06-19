@@ -1,10 +1,13 @@
 package me.bam6561.aethelcore.references;
 
+import me.bam6561.aethelcore.guis.commands.ItemAppearanceGUI;
+import me.bam6561.aethelcore.guis.markers.ChatInput;
+import me.bam6561.aethelcore.references.markers.StringValue;
 import net.md_5.bungee.api.ChatColor;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Plugin messages.
+ * Plugin managed messages.
  *
  * @author Danny Nguyen
  * @version 0.1.10
@@ -21,10 +24,10 @@ public class Message {
    * Error messages.
    *
    * @author Danny Nguyen
-   * @version 0.0.14
+   * @version 0.1.11
    * @since 0.0.14
    */
-  public enum Error {
+  public enum Error implements StringValue {
     /**
      * Insufficient permission.
      */
@@ -55,21 +58,21 @@ public class Message {
      * @return error message
      */
     @NotNull
-    public String getMessage() {
+    public String asString() {
       return this.message;
     }
   }
 
   /**
-   * Message inputs.
+   * {@link ChatInput} inputs.
    *
    * @author Danny Nguyen
    * @version 0.1.10
    * @since 0.1.10
    */
-  public class Input {
+  public static class Input {
     /**
-     * {@link me.bam6561.aethelcore.guis.commands.ItemAppearanceGUI}
+     * {@link ItemAppearanceGUI} inputs.
      *
      * @author Danny Nguyen
      * @version 0.1.8

@@ -29,14 +29,14 @@ public class PlayerListener implements Listener {
   }
 
   /**
-   * Routes player messages sent.
+   * Routes messages sent.
    *
    * @param event async player chat event
    */
   @EventHandler
   private void onAsyncMessageSent(AsyncPlayerChatEvent event) {
     String message = event.getMessage();
-    if (message.startsWith("-c") && event.getPlayer().hasPermission(Permission.ChatFlag.COLOR.getValue())) {
+    if (message.startsWith("-c") && event.getPlayer().hasPermission(Permission.ChatFlag.COLOR.asString())) {
       event.setMessage(TextUtils.Color.translate(message.substring(3), '&'));
     }
   }

@@ -1,6 +1,7 @@
 package me.bam6561.aethelcore.guis.commands;
 
 import me.bam6561.aethelcore.Plugin;
+import me.bam6561.aethelcore.commands.ItemEditorCommand;
 import me.bam6561.aethelcore.guis.GUI;
 import me.bam6561.aethelcore.guis.commands.markers.Editor;
 import me.bam6561.aethelcore.utils.ItemUtils;
@@ -19,7 +20,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 
 /**
- * {@link me.bam6561.aethelcore.commands.ItemEditorCommand} {@link GUI}.
+ * {@link ItemEditorCommand} {@link GUI}.
  * <p>
  * Collection of item metadata {@link Editor editors}.
  *

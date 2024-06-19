@@ -1,8 +1,9 @@
 package me.bam6561.aethelcore.guis.commands.markers;
 
+import me.bam6561.aethelcore.guis.GUI;
+
 /**
- * {@link me.bam6561.aethelcore.guis.GUI} associated
- * with a command that interacts with the file system.
+ * {@link GUI} associated with a command that interacts with the file system.
  *
  * @author Danny Nguyen
  * @version 0.0.25

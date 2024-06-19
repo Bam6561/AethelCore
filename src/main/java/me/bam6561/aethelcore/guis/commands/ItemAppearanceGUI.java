@@ -3,7 +3,7 @@ package me.bam6561.aethelcore.guis.commands;
 import me.bam6561.aethelcore.Plugin;
 import me.bam6561.aethelcore.guis.GUI;
 import me.bam6561.aethelcore.guis.commands.markers.Editor;
-import me.bam6561.aethelcore.guis.markers.MessageInput;
+import me.bam6561.aethelcore.guis.markers.ChatInput;
 import me.bam6561.aethelcore.utils.ItemUtils;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
@@ -29,7 +29,7 @@ import java.util.Set;
  * @version 0.1.10
  * @since 0.1.2
  */
-public class ItemAppearanceGUI extends GUI implements Editor, MessageInput {
+public class ItemAppearanceGUI extends GUI implements Editor, ChatInput {
   /**
    * Interacting item.
    */

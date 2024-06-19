@@ -29,11 +29,11 @@ public class CommandUtils {
    */
   public static boolean isPlayerWithPermission(@NotNull CommandSender sender, @NotNull Permission.Command permission) {
     if (!(sender instanceof Player player)) {
-      sender.sendMessage(Message.Error.PLAYER_ONLY_COMMAND.getMessage());
+      sender.sendMessage(Message.Error.PLAYER_ONLY_COMMAND.asString());
       return false;
     }
-    if (!player.hasPermission(Permission.Command.DATABASE.getValue())) {
-      player.sendMessage(Message.Error.INSUFFICIENT_PERMISSION.getMessage());
+    if (!player.hasPermission(Permission.Command.DATABASE.asString())) {
+      player.sendMessage(Message.Error.INSUFFICIENT_PERMISSION.asString());
       return false;
     }
     return true;

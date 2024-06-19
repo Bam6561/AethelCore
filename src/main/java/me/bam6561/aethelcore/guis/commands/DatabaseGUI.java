@@ -1,5 +1,6 @@
 package me.bam6561.aethelcore.guis.commands;
 
+import me.bam6561.aethelcore.commands.DatabaseCommand;
 import me.bam6561.aethelcore.guis.GUI;
 import me.bam6561.aethelcore.guis.commands.markers.Database;
 import me.bam6561.aethelcore.guis.commands.markers.Editor;
@@ -13,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /**
- * {@link me.bam6561.aethelcore.commands.DatabaseCommand} {@link GUI}.
+ * {@link DatabaseCommand} {@link GUI}.
  *
  * @author Danny Nguyen
  * @version 0.1.9

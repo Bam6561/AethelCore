@@ -1,8 +1,9 @@
 package me.bam6561.aethelcore.guis.blocks.markers;
 
+import me.bam6561.aethelcore.guis.GUI;
+
 /**
- * {@link me.bam6561.aethelcore.guis.GUI} associated
- * with a block-type that creates and/or modifies items.
+ * {@link GUI} associated with a block-type that creates and/or modifies items.
  *
  * @author Danny Nguyen
  * @version 0.0.19

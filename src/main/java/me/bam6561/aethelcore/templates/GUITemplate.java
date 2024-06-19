@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /**
- * {@link me.bam6561.aethelcore.guis.GUI}.
+ * {@link GUI}.
  *
  * @author Danny Nguyen
  * @version 0.1.9
