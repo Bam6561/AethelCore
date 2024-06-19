@@ -2,7 +2,7 @@ package me.bam6561.aethelcore.listeners;
 
 import me.bam6561.aethelcore.Plugin;
 import me.bam6561.aethelcore.guis.GUI;
-import me.bam6561.aethelcore.guis.GUIManager;
+import me.bam6561.aethelcore.managers.GUIManager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;

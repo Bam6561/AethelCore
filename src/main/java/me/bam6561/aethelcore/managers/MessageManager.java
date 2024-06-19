@@ -1,4 +1,4 @@
-package me.bam6561.aethelcore.guis;
+package me.bam6561.aethelcore.managers;
 
 import me.bam6561.aethelcore.guis.markers.MessageInputReceiver;
 import me.bam6561.aethelcore.references.Message;

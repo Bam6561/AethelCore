@@ -1,6 +1,8 @@
-package me.bam6561.aethelcore.guis;
+package me.bam6561.aethelcore.managers;
 
 import me.bam6561.aethelcore.Plugin;
+import me.bam6561.aethelcore.guis.GUI;
+import me.bam6561.aethelcore.guis.InventoryHandler;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;

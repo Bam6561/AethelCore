@@ -3,7 +3,7 @@ package me.bam6561.aethelcore.listeners;
 import me.bam6561.aethelcore.Plugin;
 import me.bam6561.aethelcore.events.player.SneakingInteractEntityEvent;
 import me.bam6561.aethelcore.events.player.SneakingInteractEvent;
-import me.bam6561.aethelcore.guis.MessageManager;
+import me.bam6561.aethelcore.managers.MessageManager;
 import me.bam6561.aethelcore.listeners.interactions.SneakingEntityInteraction;
 import me.bam6561.aethelcore.listeners.interactions.SneakingInteraction;
 import org.bukkit.Bukkit;

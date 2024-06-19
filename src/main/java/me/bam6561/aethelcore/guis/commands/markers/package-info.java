@@ -1,5 +1,5 @@
 /**
- * Marker interfaces related to
+ * Marker interfaces relevant to
  * {@link me.bam6561.aethelcore.guis.GUI} associated with commands.
  */
 package me.bam6561.aethelcore.guis.commands.markers;

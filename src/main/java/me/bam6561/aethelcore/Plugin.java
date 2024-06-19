@@ -2,10 +2,10 @@ package me.bam6561.aethelcore;
 
 import me.bam6561.aethelcore.commands.DatabaseCommand;
 import me.bam6561.aethelcore.commands.ItemEditorCommand;
-import me.bam6561.aethelcore.guis.GUIManager;
-import me.bam6561.aethelcore.guis.MessageManager;
 import me.bam6561.aethelcore.listeners.GUIListener;
 import me.bam6561.aethelcore.listeners.PlayerListener;
+import me.bam6561.aethelcore.managers.GUIManager;
+import me.bam6561.aethelcore.managers.MessageManager;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
