@@ -10,7 +10,13 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /**
- * Called before a {@link GUI} opens.
+ * Called before opening a {@link GUI} from a neutral state.
+ * <p>
+ * Will not be called when a player:
+ * <ul>
+ *   <li>navigates between {@link GUI GUIs} through buttons
+ *   <li>reopens a {@link GUI} through message inputs
+ * </ul>
  * <p>
  * Cancellation prevents the {@link GUI} from opening.
  *

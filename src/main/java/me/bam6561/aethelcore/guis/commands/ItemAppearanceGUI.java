@@ -3,7 +3,7 @@ package me.bam6561.aethelcore.guis.commands;
 import me.bam6561.aethelcore.Plugin;
 import me.bam6561.aethelcore.guis.GUI;
 import me.bam6561.aethelcore.guis.commands.markers.Editor;
-import me.bam6561.aethelcore.guis.commands.markers.MessageInput;
+import me.bam6561.aethelcore.guis.markers.MessageInput;
 import me.bam6561.aethelcore.utils.ItemUtils;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
@@ -26,7 +26,7 @@ import java.util.Set;
  * Item appearance {@link GUI}.
  *
  * @author Danny Nguyen
- * @version 0.1.9
+ * @version 0.1.10
  * @since 0.1.2
  */
 public class ItemAppearanceGUI extends GUI implements Editor, MessageInput {
@@ -211,50 +211,6 @@ public class ItemAppearanceGUI extends GUI implements Editor, MessageInput {
     inv.setItem(41, metaDisplay.iconItemFlagHidePlacedOn());
     inv.setItem(42, metaDisplay.iconItemFlagHideUnbreakable());
     inv.setItem(43, metaDisplay.iconHideTooltip());
-  }
-
-  /**
-   * User inputs.
-   *
-   * @author Danny Nguyen
-   * @version 0.1.8
-   * @since 0.1.8
-   */
-  public enum Input {
-    /**
-     * Sets the display name.
-     */
-    DISPLAY_NAME,
-
-    /**
-     * Sets the custom model data.
-     */
-    CUSTOM_MODEL_DATA,
-
-    /**
-     * Adds a line of lore.
-     */
-    LORE_ADD,
-
-    /**
-     * Inserts a line of lore.
-     */
-    LORE_INSERT,
-
-    /**
-     * Sets the lore.
-     */
-    LORE_SET,
-
-    /**
-     * Edit a line of lore.
-     */
-    LORE_EDIT,
-
-    /**
-     * Removes a line of lore.
-     */
-    LORE_REMOVE,
   }
 
   /**
