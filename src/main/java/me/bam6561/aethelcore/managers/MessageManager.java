@@ -23,7 +23,7 @@ import java.util.UUID;
  * </ul>
  *
  * @author Danny Nguyen
- * @version 0.1.19
+ * @version 0.1.20
  * @since 0.1.10
  */
 public class MessageManager {
@@ -50,7 +50,8 @@ public class MessageManager {
 
     MessageInput.Request request = activeInputRequests.get(player.getUniqueId());
     if (request != null) {
-      MessageInput.Response response = new MessageInput.Response(player, message);
+      MessageInput.Response response = new MessageInput.Response(request, player, message);
+      response.interpretInput();
       event.setCancelled(true);
       return;
     }
@@ -79,10 +80,10 @@ public class MessageManager {
    * Message input {@link Request} and {@link Response}.
    *
    * @author Danny Nguyen
-   * @version 0.1.19
+   * @version 0.1.20
    * @since 0.1.19
    */
-  public static class MessageInput {
+  private static class MessageInput {
     /**
      * Nested classes only.
      */
@@ -95,7 +96,7 @@ public class MessageManager {
      * @param receiver {@link MessageInputReceiver}
      * @param input    {@link Message.Input}
      * @author Danny Nguyen
-     * @version 0.1.17
+     * @version 0.1.20
      * @since 0.1.17
      */
     private record Request(@NotNull MessageInputReceiver receiver, @NotNull Message.Input input) {
@@ -104,22 +105,60 @@ public class MessageManager {
        */
       private Request {
       }
+
+      /**
+       * Gets the {@link MessageInputReceiver}.
+       *
+       * @return {@link MessageInputReceiver}
+       */
+      private MessageInputReceiver getReceiver() {
+        return this.receiver;
+      }
+
+      /**
+       * Gets the {@link Message.Input}.
+       *
+       * @return {@link Message.Input}
+       */
+      private Message.Input getInput() {
+        return this.input;
+      }
     }
 
     /**
      * Response to a {@link Request}.
      *
+     * @param request {@link Request}
      * @param player  interacting player
      * @param message interacting message
      * @author Danny Nguyen
-     * @version 0.1.18
+     * @version 0.1.20
      * @since 0.1.13
      */
-    private record Response(Player player, String message) {
+    private record Response(Request request, Player player, String message) {
       /**
-       * Associates the message with its author.
+       * Associates the {@link Request} with its player and message.
        */
       private Response {
+      }
+
+      private void interpretInput() {
+        switch (request.getInput()) {
+          case CUSTOM_MODEL_DATA -> {
+          }
+          case DISPLAY_NAME -> {
+          }
+          case LORE_ADD -> {
+          }
+          case LORE_EDIT -> {
+          }
+          case LORE_INSERT -> {
+          }
+          case LORE_REMOVE -> {
+          }
+          case LORE_SET -> {
+          }
+        }
       }
     }
   }
@@ -128,7 +167,7 @@ public class MessageManager {
    * Message flags.
    *
    * @author Danny Nguyen
-   * @version 0.1.18
+   * @version 0.1.20
    * @since 0.1.14
    */
   private static class MessageFlag {
@@ -163,7 +202,7 @@ public class MessageManager {
       this.event = event;
       this.player = player;
       this.message = message.substring(3);
-      this.flag = message.charAt(2);
+      this.flag = message.charAt(1);
     }
 
     /**
