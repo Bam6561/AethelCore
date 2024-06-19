@@ -53,6 +53,7 @@ public abstract class GUI implements InventoryHandler {
    * What to do when a click occurs outside the inventory
    * view and clicks inside the player's inventory.
    *
+   * @param event inventory click event
    * @return finished interaction
    */
   protected abstract boolean isNullOrPlayerInventoryClick(@NotNull InventoryClickEvent event);

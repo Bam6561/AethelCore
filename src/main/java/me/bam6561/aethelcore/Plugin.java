@@ -99,8 +99,8 @@ public class Plugin extends JavaPlugin {
 
   /**
    * Gets the {@link MessageManager}.
-   * <p>
-   * return {@link MessageManager}
+   *
+   * @return {@link MessageManager}
    */
   @NotNull
   public static MessageManager getMessageManager() {

@@ -72,14 +72,14 @@ public class Message {
    */
   public enum Input {
     /**
-     * Sets the display name.
-     */
-    DISPLAY_NAME,
-
-    /**
      * Sets the custom model data.
      */
     CUSTOM_MODEL_DATA,
+
+    /**
+     * Sets the display name.
+     */
+    DISPLAY_NAME,
 
     /**
      * Adds a line of lore.
@@ -87,23 +87,23 @@ public class Message {
     LORE_ADD,
 
     /**
-     * Inserts a line of lore.
-     */
-    LORE_INSERT,
-
-    /**
-     * Sets the lore.
-     */
-    LORE_SET,
-
-    /**
      * Edit a line of lore.
      */
     LORE_EDIT,
 
     /**
+     * Inserts a line of lore.
+     */
+    LORE_INSERT,
+
+    /**
      * Removes a line of lore.
      */
     LORE_REMOVE,
+
+    /**
+     * Sets the lore.
+     */
+    LORE_SET,
   }
 }

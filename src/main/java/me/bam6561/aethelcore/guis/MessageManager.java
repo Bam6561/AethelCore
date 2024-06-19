@@ -23,7 +23,7 @@ import java.util.UUID;
  * </ul>
  *
  * @author Danny Nguyen
- * @version 0.1.13
+ * @version 0.1.14
  * @since 0.1.10
  */
 public class MessageManager {
@@ -45,47 +45,44 @@ public class MessageManager {
    */
   public void handleMessage(@NotNull AsyncPlayerChatEvent event) {
     Objects.requireNonNull(event, "Null event");
-    Message.Input input = inputs.get(event.getPlayer().getUniqueId());
+    Player player = event.getPlayer();
+    String message = event.getMessage();
+
+    Message.Input input = inputs.get(player.getUniqueId());
     if (input != null) {
+      ChatResponse response = new ChatResponse(player, message);
       event.setCancelled(true);
       return;
     }
 
-    String message = event.getMessage();
     if (message.startsWith("-c") && event.getPlayer().hasPermission(Permission.ChatFlag.COLOR.asString())) {
       event.setMessage(TextUtils.Color.translate(message.substring(3), '&'));
     }
   }
 
   /**
+   * Chat flags.
+   *
+   * @param player  interacting player
+   * @param message interacting message
+   * @author Danny Nguyen
+   * @version 0.1.14
+   * @since 0.1.14
+   */
+  private record ChatFlag(Player player, String message) {
+
+  }
+
+  /**
    * {@link ChatInput} responses.
    *
+   * @param player  interacting player
+   * @param message interacting message
    * @author Danny Nguyen
-   * @version 0.1.13
+   * @version 0.1.14
    * @since 0.1.13
    */
-  public class ChatResponse {
-    /**
-     * Message source.
-     */
-    private final Player player;
+  private record ChatResponse(Player player, String message) {
 
-    /**
-     * Message contents.
-     */
-    private final String response;
-
-    /**
-     * Associates a message with its source.
-     *
-     * @param player  interacting player
-     * @param message interacting message
-     */
-    public ChatResponse(@NotNull Player player, @NotNull String message) {
-      Objects.requireNonNull(player, "Null player");
-      Objects.requireNonNull(message, "Null message");
-      this.player = player;
-      this.response = message;
-    }
   }
 }
