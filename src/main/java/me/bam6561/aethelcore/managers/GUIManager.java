@@ -18,7 +18,7 @@ import java.util.Objects;
 /**
  * Manages inventories created by the {@link Plugin}, also known as {@link GUI GUIs}.
  * <p>
- * Each {@link GUI} is managed by its {@link InventoryHandler}.
+ * Each {@link GUI} is managed by its {@link InventoryHandler} methods.
  *
  * @author Danny Nguyen
  * @version 0.1.3
@@ -26,9 +26,9 @@ import java.util.Objects;
  */
 public class GUIManager {
   /**
-   * Managed inventories.
+   * Active {@link GUI GUIs}.
    */
-  private final Map<Inventory, InventoryHandler> guis = new HashMap<>();
+  private final Map<Inventory, InventoryHandler> activeGUIs = new HashMap<>();
 
   /**
    * No parameter constructor.
@@ -57,7 +57,7 @@ public class GUIManager {
    */
   public void handleClick(@NotNull InventoryClickEvent event) {
     Objects.requireNonNull(event, "Null event");
-    InventoryHandler handler = guis.get(event.getInventory());
+    InventoryHandler handler = activeGUIs.get(event.getInventory());
     if (handler != null) {
       handler.onClick(event);
     }
@@ -70,7 +70,7 @@ public class GUIManager {
    */
   public void handleDrag(@NotNull InventoryDragEvent event) {
     Objects.requireNonNull(event, "Null event");
-    InventoryHandler handler = guis.get(event.getInventory());
+    InventoryHandler handler = activeGUIs.get(event.getInventory());
     if (handler != null) {
       handler.onDrag(event);
     }
@@ -83,7 +83,7 @@ public class GUIManager {
    */
   public void handleOpen(@NotNull InventoryOpenEvent event) {
     Objects.requireNonNull(event, "Null event");
-    InventoryHandler handler = guis.get(event.getInventory());
+    InventoryHandler handler = activeGUIs.get(event.getInventory());
     if (handler != null) {
       handler.onOpen(event);
     }
@@ -97,7 +97,7 @@ public class GUIManager {
   public void handleClose(@NotNull InventoryCloseEvent event) {
     Objects.requireNonNull(event, "Null event");
     Inventory inventory = event.getInventory();
-    InventoryHandler handler = guis.get(inventory);
+    InventoryHandler handler = activeGUIs.get(inventory);
     if (handler != null) {
       handler.onClose(event);
       unregisterGUI(inventory);
@@ -111,7 +111,7 @@ public class GUIManager {
    * @param handler   {@link InventoryHandler}
    */
   private void registerGUI(Inventory inventory, InventoryHandler handler) {
-    guis.put(inventory, handler);
+    activeGUIs.put(inventory, handler);
   }
 
   /**
@@ -120,6 +120,6 @@ public class GUIManager {
    * @param inventory interacting inventory
    */
   private void unregisterGUI(Inventory inventory) {
-    guis.remove(inventory);
+    activeGUIs.remove(inventory);
   }
 }

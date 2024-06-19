@@ -1,7 +1,7 @@
 package me.bam6561.aethelcore.events.gui;
 
 import me.bam6561.aethelcore.guis.GUI;
-import me.bam6561.aethelcore.guis.markers.MessageInputReceiver;
+import me.bam6561.aethelcore.managers.MessageManager.MessageInputRequest;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
@@ -16,7 +16,7 @@ import java.util.Objects;
  * Will not be called when a player:
  * <ul>
  *   <li>navigates between {@link GUI GUIs} through buttons
- *   <li>responds to a {@link MessageInputReceiver}
+ *   <li>reopens a {@link GUI} by responding to a {@link MessageInputRequest}
  * </ul>
  * <p>
  * Cancellation prevents the {@link GUI} from opening.

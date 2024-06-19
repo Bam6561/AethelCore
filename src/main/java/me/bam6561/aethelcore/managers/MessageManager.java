@@ -19,18 +19,18 @@ import java.util.UUID;
  * Messages may:
  * <ul>
  *   <li>contain {@link MessageFlag message flags}
- *   <li>respond to a {@link MessageInputReceiver}
+ *   <li>respond to a {@link MessageInputRequest}
  * </ul>
  *
  * @author Danny Nguyen
- * @version 0.1.14
+ * @version 0.1.17
  * @since 0.1.10
  */
 public class MessageManager {
   /**
-   * Users prompted for a {@link Response}.
+   * Active {@link MessageInputRequest message input requests}.
    */
-  private final Map<UUID, Message.Input> inputs = new HashMap<>();
+  private final Map<UUID, MessageInputRequest> activeInputRequests = new HashMap<>();
 
   /**
    * No parameter constructor.
@@ -48,9 +48,9 @@ public class MessageManager {
     Player player = event.getPlayer();
     String message = event.getMessage();
 
-    Message.Input input = inputs.get(player.getUniqueId());
-    if (input != null) {
-      Response response = new Response(player, message);
+    MessageInputRequest request = activeInputRequests.get(player.getUniqueId());
+    if (request != null) {
+      MessageInputResponse response = new MessageInputResponse(player, message);
       event.setCancelled(true);
       return;
     }
@@ -61,7 +61,42 @@ public class MessageManager {
   }
 
   /**
-   * Non-command action flags.
+   * {@link Message.Input} requested by a {@link MessageInputReceiver}.
+   *
+   * @param receiver {@link MessageInputReceiver}
+   * @param input    {@link Message.Input}
+   * @author Danny Nguyen
+   * @version 0.1.17
+   * @since 0.1.17
+   */
+  public record MessageInputRequest(@NotNull MessageInputReceiver receiver, @NotNull Message.Input input) {
+    /**
+     * Associates the {@link MessageInputReceiver} with its requested {@link Message.Input}.
+     *
+     * @param receiver {@link MessageInputReceiver}
+     * @param input    {@link Message.Input}
+     */
+    public MessageInputRequest {
+      Objects.requireNonNull(receiver, "Null receiver");
+      Objects.requireNonNull(input, "Null input");
+    }
+  }
+
+  /**
+   * Response to a {@link MessageInputRequest}.
+   *
+   * @param player  interacting player
+   * @param message interacting message
+   * @author Danny Nguyen
+   * @version 0.1.14
+   * @since 0.1.13
+   */
+  private record MessageInputResponse(Player player, String message) {
+
+  }
+
+  /**
+   * Message action flags.
    *
    * @param player  interacting player
    * @param message interacting message
@@ -70,19 +105,6 @@ public class MessageManager {
    * @since 0.1.14
    */
   private record MessageFlag(Player player, String message) {
-
-  }
-
-  /**
-   * Response to a {@link MessageInputReceiver}.
-   *
-   * @param player  interacting player
-   * @param message interacting message
-   * @author Danny Nguyen
-   * @version 0.1.14
-   * @since 0.1.13
-   */
-  private record Response(Player player, String message) {
 
   }
 }

@@ -225,12 +225,20 @@ public class ItemAppearanceGUI extends GUI implements Editor, MessageInputReceiv
   /**
    * Reads item appearance metadata and returns representative display icons.
    *
-   * @param meta metadata
+   * @param meta item metadata
    * @author Danny Nguyen
-   * @version 0.1.5
+   * @version 0.1.17
    * @since 0.1.5
    */
   private record MetaDisplay(ItemMeta meta) {
+    /**
+     * Sets the item metadata to be read.
+     *
+     * @param meta item metadata
+     */
+    private MetaDisplay {
+    }
+
     /**
      * Creates an icon for the item's display name.
      *
