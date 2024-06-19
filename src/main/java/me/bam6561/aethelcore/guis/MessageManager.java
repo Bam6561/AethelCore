@@ -1,6 +1,6 @@
 package me.bam6561.aethelcore.guis;
 
-import me.bam6561.aethelcore.guis.markers.ChatInput;
+import me.bam6561.aethelcore.guis.markers.MessageInputReceiver;
 import me.bam6561.aethelcore.references.Message;
 import me.bam6561.aethelcore.references.Permission;
 import me.bam6561.aethelcore.utils.TextUtils;
@@ -16,10 +16,10 @@ import java.util.UUID;
 /**
  * Manages messages sent by players.
  * <p>
- * Messages may contain:
+ * Messages may:
  * <ul>
- *   <li>chat flags
- *   <li>responses for {@link ChatInput}
+ *   <li>contain {@link MessageFlag message flags}
+ *   <li>respond to a {@link MessageInputReceiver}
  * </ul>
  *
  * @author Danny Nguyen
@@ -28,7 +28,7 @@ import java.util.UUID;
  */
 public class MessageManager {
   /**
-   * Users prompted for a {@link ChatResponse}.
+   * Users prompted for a {@link Response}.
    */
   private final Map<UUID, Message.Input> inputs = new HashMap<>();
 
@@ -50,18 +50,18 @@ public class MessageManager {
 
     Message.Input input = inputs.get(player.getUniqueId());
     if (input != null) {
-      ChatResponse response = new ChatResponse(player, message);
+      Response response = new Response(player, message);
       event.setCancelled(true);
       return;
     }
 
-    if (message.startsWith("-c") && event.getPlayer().hasPermission(Permission.ChatFlag.COLOR.asString())) {
+    if (message.startsWith("-c") && event.getPlayer().hasPermission(Permission.Message.COLOR.asString())) {
       event.setMessage(TextUtils.Color.translate(message.substring(3), '&'));
     }
   }
 
   /**
-   * Chat flags.
+   * Non-command action flags.
    *
    * @param player  interacting player
    * @param message interacting message
@@ -69,12 +69,12 @@ public class MessageManager {
    * @version 0.1.14
    * @since 0.1.14
    */
-  private record ChatFlag(Player player, String message) {
+  private record MessageFlag(Player player, String message) {
 
   }
 
   /**
-   * {@link ChatInput} responses.
+   * Response to a {@link MessageInputReceiver}.
    *
    * @param player  interacting player
    * @param message interacting message
@@ -82,7 +82,7 @@ public class MessageManager {
    * @version 0.1.14
    * @since 0.1.13
    */
-  private record ChatResponse(Player player, String message) {
+  private record Response(Player player, String message) {
 
   }
 }

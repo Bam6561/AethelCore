@@ -1,7 +1,7 @@
 package me.bam6561.aethelcore.references;
 
 import me.bam6561.aethelcore.Plugin;
-import me.bam6561.aethelcore.guis.markers.ChatInput;
+import me.bam6561.aethelcore.guis.markers.MessageInputReceiver;
 import me.bam6561.aethelcore.references.markers.StringValue;
 import net.md_5.bungee.api.ChatColor;
 import org.jetbrains.annotations.NotNull;
@@ -24,19 +24,19 @@ public class Message {
    * Error messages.
    *
    * @author Danny Nguyen
-   * @version 0.1.11
+   * @version 0.1.15
    * @since 0.0.14
    */
   public enum Error implements StringValue {
     /**
      * Insufficient permission.
      */
-    INSUFFICIENT_PERMISSION(ChatColor.RED + "Insufficient permission."),
+    INSUFFICIENT_PERMISSION("Insufficient permission."),
 
     /**
      * Player-only command.
      */
-    PLAYER_ONLY_COMMAND(ChatColor.RED + "Player-only command.");
+    PLAYER_ONLY_COMMAND("Player-only command.");
 
     /**
      * Error message.
@@ -49,7 +49,7 @@ public class Message {
      * @param message message
      */
     Error(String message) {
-      this.message = message;
+      this.message = ChatColor.RED + message;
     }
 
     /**
@@ -64,7 +64,7 @@ public class Message {
   }
 
   /**
-   * {@link ChatInput} inputs.
+   * {@link MessageInputReceiver} inputs.
    *
    * @author Danny Nguyen
    * @version 0.1.13

@@ -30,7 +30,7 @@ public class TextUtils {
    */
   public static class Color {
     /**
-     * Spigot chat color characters.
+     * Spigot color characters.
      */
     private static final Set<Character> CHAT_COLOR_CHARS = Set.of(
         '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
@@ -75,7 +75,7 @@ public class TextUtils {
     /**
      * Translates color codes in text with a provided color code symbol.
      * <p>
-     * Supports Spigot chat color and hex color codes.
+     * Supports Spigot color and hex color codes.
      *
      * @param text   text
      * @param symbol color code symbol

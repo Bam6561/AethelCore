@@ -21,17 +21,22 @@ public class Permission {
   }
 
   /**
-   * Chat flag permissions.
+   * Commands.
    *
    * @author Danny Nguyen
-   * @version 0.1.11
-   * @since 0.0.22
+   * @version 0.1.15
+   * @since 0.0.21
    */
-  public enum ChatFlag implements StringValue {
+  public enum Command implements StringValue {
     /**
-     * Ability to color chat messages.
+     * {@link DatabaseCommand}
      */
-    COLOR(Header.CHATFLAG.getValue() + "color");
+    DATABASE("database"),
+
+    /**
+     * {@link ItemEditorCommand}
+     */
+    ITEMEDITOR("itemeditor");
 
     /**
      * Permission value.
@@ -43,8 +48,8 @@ public class Permission {
      *
      * @param value value
      */
-    ChatFlag(String value) {
-      this.value = value;
+    Command(String value) {
+      this.value = Header.COMMAND.getValue() + value;
     }
 
     /**
@@ -59,22 +64,17 @@ public class Permission {
   }
 
   /**
-   * Command permissions.
+   * Message flags.
    *
    * @author Danny Nguyen
-   * @version 0.1.11
-   * @since 0.0.21
+   * @version 0.1.15
+   * @since 0.0.22
    */
-  public enum Command implements StringValue {
+  public enum Message implements StringValue {
     /**
-     * {@link DatabaseCommand}
+     * Colored chat messages.
      */
-    DATABASE(Header.COMMAND.getValue() + "database"),
-
-    /**
-     * {@link ItemEditorCommand}
-     */
-    ITEMEDITOR(Header.COMMAND.getValue() + "itemeditor");
+    COLOR("color");
 
     /**
      * Permission value.
@@ -86,8 +86,8 @@ public class Permission {
      *
      * @param value value
      */
-    Command(String value) {
-      this.value = value;
+    Message(String value) {
+      this.value = Header.MESSAGE.getValue() + value;
     }
 
     /**
@@ -105,19 +105,19 @@ public class Permission {
    * Permission headers.
    *
    * @author Danny Nguyen
-   * @version 0.0.27
+   * @version 0.1.15
    * @since 0.0.27
    */
   private enum Header {
     /**
-     * {@link ChatFlag}
-     */
-    CHATFLAG("aethel.chatflag."),
-
-    /**
      * {@link Command}
      */
-    COMMAND("aethel.command.");
+    COMMAND("command."),
+
+    /**
+     * {@link Message}
+     */
+    MESSAGE("message.");
 
     /**
      * Permission header value.
@@ -130,7 +130,7 @@ public class Permission {
      * @param value value
      */
     Header(String value) {
-      this.value = value;
+      this.value = "aethel." + value;
     }
 
     /**
