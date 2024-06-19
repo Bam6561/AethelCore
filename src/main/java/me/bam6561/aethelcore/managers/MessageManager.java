@@ -19,18 +19,18 @@ import java.util.UUID;
  * Messages may:
  * <ul>
  *   <li>contain {@link MessageFlag message flags}
- *   <li>respond to a {@link MessageInputRequest}
+ *   <li>respond to a {@link MessageInput.Request}
  * </ul>
  *
  * @author Danny Nguyen
- * @version 0.1.18
+ * @version 0.1.19
  * @since 0.1.10
  */
 public class MessageManager {
   /**
-   * Active {@link MessageInputRequest message input requests}.
+   * Active {@link MessageInput.Request message input requests}.
    */
-  private final Map<UUID, MessageInputRequest> activeInputRequests = new HashMap<>();
+  private final Map<UUID, MessageInput.Request> activeInputRequests = new HashMap<>();
 
   /**
    * No parameter constructor.
@@ -48,15 +48,16 @@ public class MessageManager {
     Player player = event.getPlayer();
     String message = event.getMessage();
 
-    MessageInputRequest request = activeInputRequests.get(player.getUniqueId());
+    MessageInput.Request request = activeInputRequests.get(player.getUniqueId());
     if (request != null) {
-      MessageInputResponse response = new MessageInputResponse(player, message);
+      MessageInput.Response response = new MessageInput.Response(player, message);
       event.setCancelled(true);
       return;
     }
 
-    if (message.startsWith("-c") && event.getPlayer().hasPermission(Permission.Message.COLOR.asString())) {
-      event.setMessage(TextUtils.Color.translate(message.substring(3), '&'));
+    if (MessageFlag.hasMessageFlag(message)) {
+      MessageFlag flag = new MessageFlag(event, player, message);
+      flag.interpretAction();
     }
   }
 
@@ -71,57 +72,127 @@ public class MessageManager {
     Objects.requireNonNull(player, "Null player");
     Objects.requireNonNull(receiver, "Null receiver");
     Objects.requireNonNull(input, "Null input");
-    activeInputRequests.put(player.getUniqueId(), new MessageInputRequest(receiver, input));
+    activeInputRequests.put(player.getUniqueId(), new MessageInput.Request(receiver, input));
   }
 
   /**
-   * {@link Message.Input} requested by a {@link MessageInputReceiver}.
+   * Message input {@link Request} and {@link Response}.
    *
-   * @param receiver {@link MessageInputReceiver}
-   * @param input    {@link Message.Input}
    * @author Danny Nguyen
-   * @version 0.1.17
-   * @since 0.1.17
+   * @version 0.1.19
+   * @since 0.1.19
    */
-  private record MessageInputRequest(@NotNull MessageInputReceiver receiver, @NotNull Message.Input input) {
+  public static class MessageInput {
     /**
-     * Associates the {@link MessageInputReceiver} with its requested {@link Message.Input}.
+     * Nested classes only.
      */
-    private MessageInputRequest {
+    private MessageInput() {
+    }
+
+    /**
+     * {@link Message.Input} requested by a {@link MessageInputReceiver}.
+     *
+     * @param receiver {@link MessageInputReceiver}
+     * @param input    {@link Message.Input}
+     * @author Danny Nguyen
+     * @version 0.1.17
+     * @since 0.1.17
+     */
+    private record Request(@NotNull MessageInputReceiver receiver, @NotNull Message.Input input) {
+      /**
+       * Associates the {@link MessageInputReceiver} with its requested {@link Message.Input}.
+       */
+      private Request {
+      }
+    }
+
+    /**
+     * Response to a {@link Request}.
+     *
+     * @param player  interacting player
+     * @param message interacting message
+     * @author Danny Nguyen
+     * @version 0.1.18
+     * @since 0.1.13
+     */
+    private record Response(Player player, String message) {
+      /**
+       * Associates the message with its author.
+       */
+      private Response {
+      }
     }
   }
 
   /**
-   * Response to a {@link MessageInputRequest}.
+   * Message flags.
    *
-   * @param player  interacting player
-   * @param message interacting message
-   * @author Danny Nguyen
-   * @version 0.1.18
-   * @since 0.1.13
-   */
-  private record MessageInputResponse(Player player, String message) {
-    /**
-     * Associates the message with its author.
-     */
-    private MessageInputResponse {
-    }
-  }
-
-  /**
-   * Message action flags.
-   *
-   * @param player  interacting player
-   * @param message interacting message
    * @author Danny Nguyen
    * @version 0.1.18
    * @since 0.1.14
    */
-  private record MessageFlag(Player player, String message) {
+  private static class MessageFlag {
     /**
-     * Associates the message with its author.
+     * Message event.
      */
-    private MessageFlag {
+    private final AsyncPlayerChatEvent event;
+
+    /**
+     * Interacting player.
+     */
+    private final Player player;
+
+    /**
+     * Interacting message.
+     */
+    private final String message;
+
+    /**
+     * Message flag.
+     */
+    private final Character flag;
+
+    /**
+     * Associates the event with its player, message, and message flag to be used.
+     *
+     * @param event   async player chat event
+     * @param player  interacting player
+     * @param message interacting message
+     */
+    private MessageFlag(AsyncPlayerChatEvent event, Player player, String message) {
+      this.event = event;
+      this.player = player;
+      this.message = message.substring(3);
+      this.flag = message.charAt(2);
+    }
+
+    /**
+     * Either:
+     * <ul>
+     *   <li>color codes messages
+     * </ul>
+     */
+    private void interpretAction() {
+      switch (flag) {
+        case 'c' -> {
+          if (player.hasPermission(Permission.Message.COLOR.asString())) {
+            event.setMessage(TextUtils.Color.translate(message, '&'));
+          } else {
+            player.sendMessage(Message.Error.INSUFFICIENT_PERMISSION.asString());
+            event.setCancelled(true);
+          }
+        }
+      }
+    }
+
+    /**
+     * If the message contains a {@link MessageFlag}.
+     *
+     * @param message interacting message
+     * @return if the message contains a {@link MessageFlag}
+     */
+    private static boolean hasMessageFlag(String message) {
+      return message.startsWith("-") && message.length() > 3 && message.charAt(2) == ' ';
     }
   }
 }
