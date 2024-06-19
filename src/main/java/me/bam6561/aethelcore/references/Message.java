@@ -1,7 +1,6 @@
 package me.bam6561.aethelcore.references;
 
 import me.bam6561.aethelcore.Plugin;
-import me.bam6561.aethelcore.guis.commands.ItemAppearanceGUI;
 import me.bam6561.aethelcore.guis.markers.ChatInput;
 import me.bam6561.aethelcore.references.markers.StringValue;
 import net.md_5.bungee.api.ChatColor;
@@ -68,52 +67,43 @@ public class Message {
    * {@link ChatInput} inputs.
    *
    * @author Danny Nguyen
-   * @version 0.1.10
+   * @version 0.1.13
    * @since 0.1.10
    */
-  public static class Input {
+  public enum Input {
     /**
-     * {@link ItemAppearanceGUI} inputs.
-     *
-     * @author Danny Nguyen
-     * @version 0.1.8
-     * @since 0.1.8
+     * Sets the display name.
      */
-    public enum ItemAppearance {
-      /**
-       * Sets the display name.
-       */
-      DISPLAY_NAME,
+    DISPLAY_NAME,
 
-      /**
-       * Sets the custom model data.
-       */
-      CUSTOM_MODEL_DATA,
+    /**
+     * Sets the custom model data.
+     */
+    CUSTOM_MODEL_DATA,
 
-      /**
-       * Adds a line of lore.
-       */
-      LORE_ADD,
+    /**
+     * Adds a line of lore.
+     */
+    LORE_ADD,
 
-      /**
-       * Inserts a line of lore.
-       */
-      LORE_INSERT,
+    /**
+     * Inserts a line of lore.
+     */
+    LORE_INSERT,
 
-      /**
-       * Sets the lore.
-       */
-      LORE_SET,
+    /**
+     * Sets the lore.
+     */
+    LORE_SET,
 
-      /**
-       * Edit a line of lore.
-       */
-      LORE_EDIT,
+    /**
+     * Edit a line of lore.
+     */
+    LORE_EDIT,
 
-      /**
-       * Removes a line of lore.
-       */
-      LORE_REMOVE,
-    }
+    /**
+     * Removes a line of lore.
+     */
+    LORE_REMOVE,
   }
 }

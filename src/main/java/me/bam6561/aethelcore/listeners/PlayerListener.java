@@ -1,11 +1,11 @@
 package me.bam6561.aethelcore.listeners;
 
+import me.bam6561.aethelcore.Plugin;
 import me.bam6561.aethelcore.events.player.SneakingInteractEntityEvent;
 import me.bam6561.aethelcore.events.player.SneakingInteractEvent;
+import me.bam6561.aethelcore.guis.MessageManager;
 import me.bam6561.aethelcore.listeners.interactions.SneakingEntityInteraction;
 import me.bam6561.aethelcore.listeners.interactions.SneakingInteraction;
-import me.bam6561.aethelcore.references.Permission;
-import me.bam6561.aethelcore.utils.TextUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -18,10 +18,15 @@ import org.bukkit.event.player.PlayerInteractEvent;
  * Collection of player interaction listeners.
  *
  * @author Danny Nguyen
- * @version 0.0.24
+ * @version 0.1.13
  * @since 0.0.8
  */
 public class PlayerListener implements Listener {
+  /**
+   * {@link MessageManager}
+   */
+  private final MessageManager messageManager = Plugin.getMessageManager();
+
   /**
    * No parameter constructor.
    */
@@ -34,11 +39,8 @@ public class PlayerListener implements Listener {
    * @param event async player chat event
    */
   @EventHandler
-  private void onAsyncMessageSent(AsyncPlayerChatEvent event) {
-    String message = event.getMessage();
-    if (message.startsWith("-c") && event.getPlayer().hasPermission(Permission.ChatFlag.COLOR.asString())) {
-      event.setMessage(TextUtils.Color.translate(message.substring(3), '&'));
-    }
+  private void onAsyncPlayerChat(AsyncPlayerChatEvent event) {
+    messageManager.handleMessage(event);
   }
 
   /**

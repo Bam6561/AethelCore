@@ -1,5 +1,7 @@
 package me.bam6561.aethelcore.references.markers;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * References used primarily as Strings.
  *
@@ -13,5 +15,6 @@ public interface StringValue {
    *
    * @return enum's String value
    */
+  @NotNull
   String asString();
 }
