@@ -1,4 +1,4 @@
-package me.bam6561.aethelcore.templates;
+package me.bam6561.aethelcore.events;
 
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;

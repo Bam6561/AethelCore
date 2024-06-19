@@ -1,12 +1,13 @@
 package me.bam6561.aethelcore.references;
 
+import me.bam6561.aethelcore.Plugin;
 import me.bam6561.aethelcore.commands.DatabaseCommand;
 import me.bam6561.aethelcore.commands.ItemEditorCommand;
 import me.bam6561.aethelcore.references.markers.StringValue;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Plugin permissions.
+ * {@link Plugin} permissions.
  *
  * @author Danny Nguyen
  * @version 0.0.27

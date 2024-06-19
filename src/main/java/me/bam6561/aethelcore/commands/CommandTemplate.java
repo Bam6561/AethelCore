@@ -1,4 +1,4 @@
-package me.bam6561.aethelcore.templates;
+package me.bam6561.aethelcore.commands;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

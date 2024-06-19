@@ -1,5 +1,6 @@
 package me.bam6561.aethelcore.guis;
 
+import me.bam6561.aethelcore.Plugin;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
@@ -8,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /**
- * Plugin managed inventory.
+ * {@link Plugin} managed inventory.
  *
  * @author Danny Nguyen
  * @version 0.1.9
@@ -49,14 +50,12 @@ public abstract class GUI implements InventoryHandler {
   protected abstract void addButtons();
 
   /**
-   * Handles what to do with interactions in the inventory view.
-   * <p>
-   * Should only define clicks outside the inventory
+   * What to do when a click occurs outside the inventory
    * view and clicks inside the player's inventory.
    *
    * @return finished interaction
    */
-  protected abstract boolean handleInventoryViewInteraction(@NotNull InventoryClickEvent event);
+  protected abstract boolean isNullOrPlayerInventoryClick(@NotNull InventoryClickEvent event);
 
   /**
    * Gets the inventory.

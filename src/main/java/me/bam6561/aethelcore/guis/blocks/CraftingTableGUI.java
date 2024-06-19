@@ -1,5 +1,6 @@
 package me.bam6561.aethelcore.guis.blocks;
 
+import me.bam6561.aethelcore.Plugin;
 import me.bam6561.aethelcore.guis.GUI;
 import me.bam6561.aethelcore.guis.blocks.markers.Workstation;
 import org.bukkit.Bukkit;
@@ -46,14 +47,14 @@ public class CraftingTableGUI extends GUI implements Workstation {
   }
 
   /**
-   * Finishes interactions early if the user clicks
+   * Finishes {@link Plugin} interactions early if the user clicks
    * outside any inventories or uses their player inventory.
    *
    * @param event inventory click event
    * @return finished interaction
    */
   @Override
-  protected boolean handleInventoryViewInteraction(@NotNull InventoryClickEvent event) {
+  protected boolean isNullOrPlayerInventoryClick(@NotNull InventoryClickEvent event) {
     Objects.requireNonNull(event, "Null event");
     Inventory cInv = event.getClickedInventory();
     if (cInv == null) {
@@ -73,7 +74,7 @@ public class CraftingTableGUI extends GUI implements Workstation {
   @Override
   public void onClick(@NotNull InventoryClickEvent event) {
     Objects.requireNonNull(event, "Null event");
-    if (handleInventoryViewInteraction(event)) {
+    if (isNullOrPlayerInventoryClick(event)) {
       return;
     }
 

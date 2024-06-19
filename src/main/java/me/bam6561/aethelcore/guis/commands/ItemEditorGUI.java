@@ -78,14 +78,23 @@ public class ItemEditorGUI extends GUI implements Editor {
   }
 
   /**
-   * Finishes interactions early if the user clicks
+   * Finishes {@link Plugin} interactions early if the user clicks
    * outside any inventories or uses their player inventory.
+   * <p>
+   * For shift-clicks inside the player inventory, the
+   * {@link #item} will be set if no current {@link #item} exists.
+   * <p>
+   * Disabled player inventory interactions:
+   * <ul>
+   *   <li>shift click
+   *   <li>collect to cursor
+   * </ul>
    *
    * @param event inventory click event
    * @return finished interaction
    */
   @Override
-  protected boolean handleInventoryViewInteraction(@NotNull InventoryClickEvent event) {
+  protected boolean isNullOrPlayerInventoryClick(@NotNull InventoryClickEvent event) {
     Objects.requireNonNull(event, "Null event");
     Inventory cInv = event.getClickedInventory();
     if (cInv == null) {
@@ -124,7 +133,7 @@ public class ItemEditorGUI extends GUI implements Editor {
   @Override
   public void onClick(@NotNull InventoryClickEvent event) {
     Objects.requireNonNull(event, "Null event");
-    if (handleInventoryViewInteraction(event)) {
+    if (isNullOrPlayerInventoryClick(event)) {
       return;
     }
 

@@ -1,5 +1,6 @@
 package me.bam6561.aethelcore.references;
 
+import me.bam6561.aethelcore.Plugin;
 import me.bam6561.aethelcore.guis.commands.ItemAppearanceGUI;
 import me.bam6561.aethelcore.guis.markers.ChatInput;
 import me.bam6561.aethelcore.references.markers.StringValue;
@@ -7,7 +8,7 @@ import net.md_5.bungee.api.ChatColor;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Plugin managed messages.
+ * {@link Plugin} managed messages.
  *
  * @author Danny Nguyen
  * @version 0.1.10

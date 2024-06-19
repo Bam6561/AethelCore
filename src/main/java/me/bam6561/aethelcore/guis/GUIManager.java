@@ -1,5 +1,6 @@
 package me.bam6561.aethelcore.guis;
 
+import me.bam6561.aethelcore.Plugin;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
@@ -13,7 +14,7 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * Manages inventories created by the plugin, also known as {@link GUI GUIs}.
+ * Manages inventories created by the {@link Plugin}, also known as {@link GUI GUIs}.
  * <p>
  * Each {@link GUI} is managed by its {@link InventoryHandler}.
  *
