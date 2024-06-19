@@ -128,37 +128,101 @@ public class MessageManager {
     /**
      * Response to a {@link Request}.
      *
-     * @param request {@link Request}
-     * @param player  interacting player
-     * @param message interacting message
      * @author Danny Nguyen
-     * @version 0.1.20
+     * @version 0.1.21
      * @since 0.1.13
      */
-    private record Response(Request request, Player player, String message) {
+    private static class Response {
       /**
-       * Associates the {@link Request} with its player and message.
+       * {@link MessageInputReceiver}
        */
-      private Response {
+      private final MessageInputReceiver receiver;
+
+      /**
+       * {@link Message.Input}
+       */
+      private final Message.Input input;
+
+      /**
+       * Interacting player.
+       */
+      private final Player player;
+
+      /**
+       * Interacting message.
+       */
+      private final String message;
+
+      /**
+       * Unboxes the {@link Request} into its {@link MessageInputReceiver},
+       * {@link Message.Input}, player, and message.
+       *
+       * @param request {@link Request}
+       * @param player  interacting player
+       * @param message interacting message
+       */
+      private Response(Request request, Player player, String message) {
+        this.receiver = request.getReceiver();
+        this.input = request.getInput();
+        this.player = player;
+        this.message = message;
       }
 
+      /**
+       * Interprets the {@link Message.Input}.
+       */
       private void interpretInput() {
-        switch (request.getInput()) {
-          case CUSTOM_MODEL_DATA -> {
-          }
-          case DISPLAY_NAME -> {
-          }
-          case LORE_ADD -> {
-          }
-          case LORE_EDIT -> {
-          }
-          case LORE_INSERT -> {
-          }
-          case LORE_REMOVE -> {
-          }
-          case LORE_SET -> {
-          }
+        switch (input) {
+          case CUSTOM_MODEL_DATA -> inputCustomModelData();
+          case DISPLAY_NAME -> inputDisplayName();
+          case LORE_ADD -> inputLoreAdd();
+          case LORE_EDIT -> inputLoreEdit();
+          case LORE_INSERT -> inputLoreInsert();
+          case LORE_REMOVE -> inputLoreRemove();
+          case LORE_SET -> inputLoreSet();
         }
+      }
+
+      /**
+       * {@link Message.Input#CUSTOM_MODEL_DATA}
+       */
+      private void inputCustomModelData() {
+      }
+
+      /**
+       * {@link Message.Input#DISPLAY_NAME}
+       */
+      private void inputDisplayName() {
+      }
+
+      /**
+       * {@link Message.Input#LORE_ADD}
+       */
+      private void inputLoreAdd() {
+      }
+
+      /**
+       * {@link Message.Input#LORE_EDIT}
+       */
+      private void inputLoreEdit() {
+      }
+
+      /**
+       * {@link Message.Input#LORE_INSERT}
+       */
+      private void inputLoreInsert() {
+      }
+
+      /**
+       * {@link Message.Input#LORE_REMOVE}
+       */
+      private void inputLoreRemove() {
+      }
+
+      /**
+       * {@link Message.Input#LORE_SET}
+       */
+      private void inputLoreSet() {
       }
     }
   }
