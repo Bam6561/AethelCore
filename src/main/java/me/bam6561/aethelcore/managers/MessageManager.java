@@ -1,5 +1,6 @@
 package me.bam6561.aethelcore.managers;
 
+import me.bam6561.aethelcore.guis.commands.ItemAppearanceGUI;
 import me.bam6561.aethelcore.guis.markers.MessageInputReceiver;
 import me.bam6561.aethelcore.references.Message;
 import me.bam6561.aethelcore.references.Permission;
@@ -96,14 +97,21 @@ public class MessageManager {
      * @param receiver {@link MessageInputReceiver}
      * @param input    {@link Message.Input}
      * @author Danny Nguyen
-     * @version 0.1.20
+     * @version 0.1.22
      * @since 0.1.17
      */
-    private record Request(@NotNull MessageInputReceiver receiver, @NotNull Message.Input input) {
+    private record Request(MessageInputReceiver receiver, Message.Input input) {
       /**
        * Associates the {@link MessageInputReceiver} with its requested {@link Message.Input}.
        */
       private Request {
+        switch (input) {
+          case CUSTOM_MODEL_DATA, DISPLAY_NAME, LORE_ADD, LORE_EDIT, LORE_INSERT, LORE_REMOVE, LORE_SET -> {
+            if (!(receiver instanceof ItemAppearanceGUI)) {
+              throw new IllegalArgumentException("Item Appearance GUI input only");
+            }
+          }
+        }
       }
 
       /**
@@ -111,7 +119,8 @@ public class MessageManager {
        *
        * @return {@link MessageInputReceiver}
        */
-      private MessageInputReceiver getReceiver() {
+      @Override
+      public MessageInputReceiver receiver() {
         return this.receiver;
       }
 
@@ -120,7 +129,8 @@ public class MessageManager {
        *
        * @return {@link Message.Input}
        */
-      private Message.Input getInput() {
+      @Override
+      public Message.Input input() {
         return this.input;
       }
     }
@@ -162,8 +172,8 @@ public class MessageManager {
        * @param message interacting message
        */
       private Response(Request request, Player player, String message) {
-        this.receiver = request.getReceiver();
-        this.input = request.getInput();
+        this.receiver = request.receiver();
+        this.input = request.input();
         this.player = player;
         this.message = message;
       }

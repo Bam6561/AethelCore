@@ -82,7 +82,7 @@ public class ItemEditorGUI extends GUI implements Editor {
    * outside any inventories or uses their player inventory.
    * <p>
    * For shift-clicks inside the player inventory, the
-   * {@link #item} will be set if no current {@link #item} exists.
+   * item will be set if no current item exists.
    * <p>
    * Disabled player inventory interactions:
    * <ul>
@@ -121,12 +121,12 @@ public class ItemEditorGUI extends GUI implements Editor {
   /**
    * Either:
    * <ul>
-   *   <li>sets the {@link #item} being edited
+   *   <li>sets the item being edited
    *   <li>opens a {@link ItemAppearanceGUI}
    * </ul>
    * <p>
    * For player inventories, collecting to the cursor and shift clicking is prohibited.
-   * Shift clicks are allowed when the {@link #item} slot is empty.
+   * Shift clicks are allowed when the item slot is empty.
    *
    * @param event inventory click event
    */
@@ -190,7 +190,7 @@ public class ItemEditorGUI extends GUI implements Editor {
   }
 
   /**
-   * Shows a "Save to Database" button when an {@link #item} is being edited.
+   * Shows a "Save to Database" button when an item is being edited.
    */
   @Override
   public void refreshDynamicButtons() {
