@@ -23,7 +23,7 @@ import java.util.UUID;
  * </ul>
  *
  * @author Danny Nguyen
- * @version 0.1.17
+ * @version 0.1.18
  * @since 0.1.10
  */
 public class MessageManager {
@@ -61,6 +61,20 @@ public class MessageManager {
   }
 
   /**
+   * Queries a message input from the interacting player.
+   *
+   * @param player   interacting player
+   * @param receiver {@link MessageInputReceiver}
+   * @param input    {@link Message.Input}
+   */
+  public void queryMessageInput(@NotNull Player player, @NotNull MessageInputReceiver receiver, @NotNull Message.Input input) {
+    Objects.requireNonNull(player, "Null player");
+    Objects.requireNonNull(receiver, "Null receiver");
+    Objects.requireNonNull(input, "Null input");
+    activeInputRequests.put(player.getUniqueId(), new MessageInputRequest(receiver, input));
+  }
+
+  /**
    * {@link Message.Input} requested by a {@link MessageInputReceiver}.
    *
    * @param receiver {@link MessageInputReceiver}
@@ -69,16 +83,11 @@ public class MessageManager {
    * @version 0.1.17
    * @since 0.1.17
    */
-  public record MessageInputRequest(@NotNull MessageInputReceiver receiver, @NotNull Message.Input input) {
+  private record MessageInputRequest(@NotNull MessageInputReceiver receiver, @NotNull Message.Input input) {
     /**
      * Associates the {@link MessageInputReceiver} with its requested {@link Message.Input}.
-     *
-     * @param receiver {@link MessageInputReceiver}
-     * @param input    {@link Message.Input}
      */
-    public MessageInputRequest {
-      Objects.requireNonNull(receiver, "Null receiver");
-      Objects.requireNonNull(input, "Null input");
+    private MessageInputRequest {
     }
   }
 
@@ -88,11 +97,15 @@ public class MessageManager {
    * @param player  interacting player
    * @param message interacting message
    * @author Danny Nguyen
-   * @version 0.1.14
+   * @version 0.1.18
    * @since 0.1.13
    */
   private record MessageInputResponse(Player player, String message) {
-
+    /**
+     * Associates the message with its author.
+     */
+    private MessageInputResponse {
+    }
   }
 
   /**
@@ -101,10 +114,14 @@ public class MessageManager {
    * @param player  interacting player
    * @param message interacting message
    * @author Danny Nguyen
-   * @version 0.1.14
+   * @version 0.1.18
    * @since 0.1.14
    */
   private record MessageFlag(Player player, String message) {
-
+    /**
+     * Associates the message with its author.
+     */
+    private MessageFlag {
+    }
   }
 }

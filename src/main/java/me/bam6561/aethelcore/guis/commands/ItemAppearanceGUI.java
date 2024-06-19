@@ -233,8 +233,6 @@ public class ItemAppearanceGUI extends GUI implements Editor, MessageInputReceiv
   private record MetaDisplay(ItemMeta meta) {
     /**
      * Sets the item metadata to be read.
-     *
-     * @param meta item metadata
      */
     private MetaDisplay {
     }

@@ -21,7 +21,7 @@ import java.util.Objects;
  * Each {@link GUI} is managed by its {@link InventoryHandler} methods.
  *
  * @author Danny Nguyen
- * @version 0.1.3
+ * @version 0.1.18
  * @since 0.0.7
  */
 public class GUIManager {
@@ -34,20 +34,6 @@ public class GUIManager {
    * No parameter constructor.
    */
   public GUIManager() {
-  }
-
-  /**
-   * Opens a {@link GUI} for the interacting player.
-   *
-   * @param player interacting player
-   * @param gui    {@link GUI}
-   */
-  public void openGUI(@NotNull Player player, @NotNull GUI gui) {
-    Objects.requireNonNull(player, "Null player");
-    Objects.requireNonNull(gui, "Null GUI");
-    Inventory inventory = gui.getInventory();
-    registerGUI(inventory, gui);
-    player.openInventory(inventory);
   }
 
   /**
@@ -100,26 +86,21 @@ public class GUIManager {
     InventoryHandler handler = activeGUIs.get(inventory);
     if (handler != null) {
       handler.onClose(event);
-      unregisterGUI(inventory);
+      activeGUIs.remove(inventory);
     }
   }
 
   /**
-   * Associates an inventory with an {@link InventoryHandler}.
+   * Opens a {@link GUI} for the interacting player.
    *
-   * @param inventory interacting inventory
-   * @param handler   {@link InventoryHandler}
+   * @param player interacting player
+   * @param gui    {@link GUI}
    */
-  private void registerGUI(Inventory inventory, InventoryHandler handler) {
-    activeGUIs.put(inventory, handler);
-  }
-
-  /**
-   * Disassociates an inventory from the manager.
-   *
-   * @param inventory interacting inventory
-   */
-  private void unregisterGUI(Inventory inventory) {
-    activeGUIs.remove(inventory);
+  public void openGUI(@NotNull Player player, @NotNull GUI gui) {
+    Objects.requireNonNull(player, "Null player");
+    Objects.requireNonNull(gui, "Null GUI");
+    Inventory inventory = gui.getInventory();
+    activeGUIs.put(inventory, gui);
+    player.openInventory(inventory);
   }
 }
