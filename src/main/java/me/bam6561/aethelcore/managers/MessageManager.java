@@ -1,20 +1,20 @@
 package me.bam6561.aethelcore.managers;
 
+import me.bam6561.aethelcore.Plugin;
 import me.bam6561.aethelcore.guis.commands.ItemAppearanceGUI;
 import me.bam6561.aethelcore.guis.markers.MessageInputReceiver;
 import me.bam6561.aethelcore.references.Message;
 import me.bam6561.aethelcore.references.Permission;
 import me.bam6561.aethelcore.utils.TextUtils;
+import net.md_5.bungee.api.ChatColor;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Manages messages sent by players.
@@ -197,7 +197,7 @@ public class MessageManager {
        * {@link Response Responses} that affect an {@link ItemAppearanceGUI}.
        *
        * @author Danny Nguyen
-       * @version 0.1.23
+       * @version 0.1.24
        * @since 0.1.23
        */
       private class ItemAppearance {
@@ -216,42 +216,172 @@ public class MessageManager {
          * {@link Message.Input#CUSTOM_MODEL_DATA}
          */
         private void inputCustomModelData() {
+          ItemStack item = gui.getItem();
+          ItemMeta meta = item.getItemMeta();
+          if (message.equals("-")) {
+            meta.setCustomModelData(null);
+            item.setItemMeta(meta);
+            player.sendMessage(ChatColor.RED + "[Removed Custom Model Data]");
+            gui.new DynamicButtons().updateCustomModelData();
+            Bukkit.getScheduler().runTask(Plugin.getInstance(), () -> {
+              Plugin.getGUIManager().openGUI(player, gui);
+            });
+            return;
+          }
+          try {
+            meta.setCustomModelData(Integer.parseInt(message));
+            item.setItemMeta(meta);
+            player.sendMessage(ChatColor.GREEN + "[Set Custom Model Data] " + ChatColor.WHITE + message);
+            gui.new DynamicButtons().updateCustomModelData();
+            Bukkit.getScheduler().runTask(Plugin.getInstance(), () -> {
+              Plugin.getGUIManager().openGUI(player, gui);
+            });
+          } catch (NumberFormatException ex) {
+            player.sendMessage(Message.Error.NON_INTEGER_INPUT.asString());
+          }
         }
 
         /**
          * {@link Message.Input#DISPLAY_NAME}
          */
         private void inputDisplayName() {
+          ItemStack item = gui.getItem();
+          ItemMeta meta = item.getItemMeta();
+          if (message.equals("-")) {
+            meta.setDisplayName(null);
+            player.sendMessage(ChatColor.RED + "[Removed Display Name]");
+          } else {
+            meta.setDisplayName(TextUtils.Color.translate(message, '&'));
+            player.sendMessage(ChatColor.GREEN + "[Set Display Name]" + ChatColor.WHITE + message);
+          }
+          item.setItemMeta(meta);
+          gui.new DynamicButtons().updateDisplayName();
+          Plugin.getGUIManager().openGUI(player, gui);
         }
 
         /**
          * {@link Message.Input#LORE_ADD}
          */
         private void inputLoreAdd() {
+          ItemStack item = gui.getItem();
+          ItemMeta meta = item.getItemMeta();
+          if (meta.hasLore()) {
+            List<String> lore = meta.getLore();
+            lore.add(TextUtils.Color.translate(message, '&'));
+            meta.setLore(lore);
+          } else {
+            meta.setLore(List.of(TextUtils.Color.translate(message, '&')));
+          }
+          item.setItemMeta(meta);
+          player.sendMessage(ChatColor.GREEN + "[Added Lore] " + message);
+          gui.new DynamicButtons().updateLore();
+          Plugin.getGUIManager().openGUI(player, gui);
         }
 
         /**
          * {@link Message.Input#LORE_EDIT}
          */
         private void inputLoreEdit() {
+          ItemStack item = gui.getItem();
+          ItemMeta meta = item.getItemMeta();
+          String[] messageInput = message.split(" ", 2);
+          if (messageInput.length != 2) {
+            player.sendMessage(Message.Error.UNRECOGNIZED_PARAMETERS.asString());
+            return;
+          }
+          int line;
+          try {
+            line = Integer.parseInt(messageInput[0]) - 1;
+          } catch (NumberFormatException ex) {
+            player.sendMessage(Message.Error.INVALID_LINE.asString());
+            return;
+          }
+          try {
+            List<String> lore = meta.getLore();
+            lore.set(line, TextUtils.Color.translate(messageInput[1], '&'));
+            meta.setLore(lore);
+            item.setItemMeta(meta);
+            player.sendMessage(ChatColor.GREEN + "[Edited Lore] " + message);
+            gui.new DynamicButtons().updateLore();
+            Plugin.getGUIManager().openGUI(player, gui);
+          } catch (IndexOutOfBoundsException ex) {
+            player.sendMessage(Message.Error.INVALID_LINE.asString());
+          }
         }
 
         /**
          * {@link Message.Input#LORE_INSERT}
          */
         private void inputLoreInsert() {
+          ItemStack item = gui.getItem();
+          ItemMeta meta = item.getItemMeta();
+          String[] messageInput = message.split(" ", 2);
+          if (messageInput.length != 2) {
+            player.sendMessage(Message.Error.UNRECOGNIZED_PARAMETERS.asString());
+            return;
+          }
+          int line;
+          try {
+            line = Integer.parseInt(messageInput[0]) - 1;
+          } catch (NumberFormatException ex) {
+            player.sendMessage(Message.Error.INVALID_LINE.asString());
+            return;
+          }
+          if (line < 0) {
+            player.sendMessage(Message.Error.INVALID_LINE.asString());
+            return;
+          }
+          if (meta.hasLore()) {
+            List<String> lore = meta.getLore();
+            lore.add(line, TextUtils.Color.translate(message, '&'));
+            meta.setLore(lore);
+          } else {
+            List<String> lore = new ArrayList<>();
+            lore.add(line, TextUtils.Color.translate(message, '&'));
+            meta.setLore(lore);
+          }
+          item.setItemMeta(meta);
+          gui.new DynamicButtons().updateLore();
+          Plugin.getGUIManager().openGUI(player, gui);
         }
 
         /**
          * {@link Message.Input#LORE_REMOVE}
          */
         private void inputLoreRemove() {
+          ItemStack item = gui.getItem();
+          ItemMeta meta = item.getItemMeta();
+          int line;
+          try {
+            line = Integer.parseInt(message) - 1;
+          } catch (NumberFormatException ex) {
+            player.sendMessage(Message.Error.INVALID_LINE.asString());
+            return;
+          }
+          try {
+            List<String> lore = meta.getLore();
+            lore.remove(line);
+            meta.setLore(lore);
+            item.setItemMeta(meta);
+            player.sendMessage(ChatColor.RED + "[Removed Lore] " + message);
+            gui.new DynamicButtons().updateLore();
+            Plugin.getGUIManager().openGUI(player, gui);
+          } catch (NumberFormatException ex) {
+            player.sendMessage(Message.Error.INVALID_LINE.asString());
+          }
         }
 
         /**
          * {@link Message.Input#LORE_SET}
          */
         private void inputLoreSet() {
+          ItemStack item = gui.getItem();
+          ItemMeta meta = item.getItemMeta();
+          meta.setLore(List.of(TextUtils.Color.translate(message, '&').split("; ")));
+          item.setItemMeta(meta);
+          player.sendMessage(ChatColor.GREEN + "[Set Lore] " + message);
+          gui.new DynamicButtons().updateLore();
+          Plugin.getGUIManager().openGUI(player, gui);
         }
       }
     }

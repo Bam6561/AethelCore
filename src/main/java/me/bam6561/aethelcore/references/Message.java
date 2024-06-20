@@ -24,7 +24,7 @@ public class Message {
    * Error messages.
    *
    * @author Danny Nguyen
-   * @version 0.1.15
+   * @version 0.1.24
    * @since 0.0.14
    */
   public enum Error implements StringValue {
@@ -36,7 +36,22 @@ public class Message {
     /**
      * Player-only command.
      */
-    PLAYER_ONLY_COMMAND("Player-only command.");
+    PLAYER_ONLY_COMMAND("Player-only command."),
+
+    /**
+     * Unrecognized parameters.
+     */
+    UNRECOGNIZED_PARAMETERS("Unrecognized parameters"),
+
+    /**
+     * Non-integer input.
+     */
+    NON_INTEGER_INPUT("Non-integer input."),
+
+    /**
+     * Invalid line number.
+     */
+    INVALID_LINE("Invalid line number.");
 
     /**
      * Error message.
