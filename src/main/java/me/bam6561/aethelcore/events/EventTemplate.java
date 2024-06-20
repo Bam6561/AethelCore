@@ -16,7 +16,7 @@ public class EventTemplate extends Event implements Cancellable {
   /**
    * Event handlers.
    */
-  private static final HandlerList handlers = new HandlerList();
+  private static final HandlerList HANDLERS = new HandlerList();
 
   /**
    * Cancellation state.
@@ -57,7 +57,7 @@ public class EventTemplate extends Event implements Cancellable {
   @NotNull
   @Override
   public HandlerList getHandlers() {
-    return handlers;
+    return HANDLERS;
   }
 
   /**
@@ -67,6 +67,6 @@ public class EventTemplate extends Event implements Cancellable {
    */
   @NotNull
   public static HandlerList getHandlerList() {
-    return handlers;
+    return HANDLERS;
   }
 }

@@ -25,7 +25,7 @@ import java.util.Objects;
  * Collection of item metadata {@link Editor editors}.
  *
  * @author Danny Nguyen
- * @version 0.1.23
+ * @version 0.1.25
  * @since 0.0.27
  */
 public class ItemEditorGUI extends GUI implements Editor {
@@ -74,7 +74,7 @@ public class ItemEditorGUI extends GUI implements Editor {
     inv.setItem(23, ItemUtils.Create.createItem(Material.POTION, ChatColor.AQUA + "Potion Effects", ItemFlag.HIDE_ADDITIONAL_TOOLTIP));
     inv.setItem(24, ItemUtils.Create.createItem(Material.GOLDEN_APPLE, ChatColor.AQUA + "Food"));
     inv.setItem(25, ItemUtils.Create.createItem(Material.IRON_PICKAXE, ChatColor.AQUA + "Tool", ItemFlag.HIDE_ATTRIBUTES));
-    refreshDynamicButtons();
+    updateDynamicButtons();
   }
 
   /**
@@ -108,7 +108,7 @@ public class ItemEditorGUI extends GUI implements Editor {
           this.item = event.getCurrentItem();
           view.setItem(4, event.getCurrentItem());
           view.setItem(event.getRawSlot(), null);
-          refreshDynamicButtons();
+          updateDynamicButtons();
         }
       } else if (event.getAction() == InventoryAction.COLLECT_TO_CURSOR) {
         event.setCancelled(true);
@@ -144,7 +144,7 @@ public class ItemEditorGUI extends GUI implements Editor {
         event.setCancelled(false);
         Bukkit.getScheduler().runTaskLater(Plugin.getInstance(), () -> {
           this.item = getInventory().getItem(4);
-          refreshDynamicButtons();
+          updateDynamicButtons();
         }, 1);
       }
       case 10 -> {
@@ -193,12 +193,23 @@ public class ItemEditorGUI extends GUI implements Editor {
    * Shows a "Save to Database" button when an item is being edited.
    */
   @Override
-  public void refreshDynamicButtons() {
+  public void updateDynamicButtons() {
     Inventory inv = getInventory();
     if (ItemUtils.Read.isNotNullOrAir(item)) {
       inv.setItem(40, ItemUtils.Create.createItem(Material.BOOKSHELF, ChatColor.AQUA + "Save to Database"));
     } else {
       inv.setItem(40, null);
     }
+  }
+
+  /**
+   * Gets the item being edited.
+   *
+   * @return item being edited
+   */
+  @Nullable
+  @Override
+  public ItemStack getItem() {
+    return this.item;
   }
 }

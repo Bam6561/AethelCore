@@ -26,7 +26,7 @@ import java.util.Set;
  * Item appearance {@link GUI}.
  *
  * @author Danny Nguyen
- * @version 0.1.23
+ * @version 0.1.25
  * @since 0.1.2
  */
 public class ItemAppearanceGUI extends GUI implements Editor, MessageInputReceiver {
@@ -65,7 +65,7 @@ public class ItemAppearanceGUI extends GUI implements Editor, MessageInputReceiv
     Inventory inv = getInventory();
     inv.setItem(2, ItemUtils.Create.createItem(Material.POTATO, ChatColor.AQUA + "Item Editor"));
     inv.setItem(4, item);
-    refreshDynamicButtons();
+    updateDynamicButtons();
   }
 
   /**
@@ -99,7 +99,7 @@ public class ItemAppearanceGUI extends GUI implements Editor, MessageInputReceiv
           this.item = event.getCurrentItem();
           view.setItem(4, event.getCurrentItem());
           view.setItem(event.getRawSlot(), null);
-          refreshDynamicButtons();
+          updateDynamicButtons();
         }
       } else if (event.getAction() == InventoryAction.COLLECT_TO_CURSOR) {
         event.setCancelled(true);
@@ -142,7 +142,7 @@ public class ItemAppearanceGUI extends GUI implements Editor, MessageInputReceiv
         event.setCancelled(false);
         Bukkit.getScheduler().runTaskLater(Plugin.getInstance(), () -> {
           this.item = getInventory().getItem(4);
-          refreshDynamicButtons();
+          updateDynamicButtons();
         }, 1);
       }
     }
@@ -184,12 +184,12 @@ public class ItemAppearanceGUI extends GUI implements Editor, MessageInputReceiv
    * Shows appearance metadata buttons when an item is being edited.
    */
   @Override
-  public void refreshDynamicButtons() {
-    DynamicButtons dynamicButtons = new DynamicButtons();
-    if (ItemUtils.Read.isNullOrAir(item)) {
-      dynamicButtons.clearAll();
+  public void updateDynamicButtons() {
+    DynamicButtons buttons = new DynamicButtons();
+    if (ItemUtils.Read.isNotNullOrAir(item)) {
+      buttons.updateAll();
     } else {
-      dynamicButtons.updateAll();
+      buttons.clearAll();
     }
   }
 
@@ -209,10 +209,18 @@ public class ItemAppearanceGUI extends GUI implements Editor, MessageInputReceiv
    * Check if an item exists first before updating any dynamic buttons.
    *
    * @author Danny Nguyen
-   * @version 0.1.23
+   * @version 0.1.25
    * @since 0.1.22
    */
   public class DynamicButtons {
+    /**
+     * {@link Button} positions.
+     */
+    private static final Set<Integer> POSITIONS = Set.of(
+        10, 11, 12,
+        20, 28, 29, 30, 37, 38, 39,
+        15, 23, 24, 25, 32, 33, 34, 41, 42, 43);
+
     /**
      * {@link GUI} inventory.
      */
@@ -225,106 +233,39 @@ public class ItemAppearanceGUI extends GUI implements Editor, MessageInputReceiv
     }
 
     /**
-     * Updates the {@link MetaDisplay} for the item's display name.
+     * Updates the {@link Button button's} {@link Display}.
+     *
+     * @param button {@link Button}
      */
-    public void updateDisplayName() {
-      inv.setItem(10, new MetaDisplay(item.getItemMeta()).iconDisplayName());
+    public void update(DynamicButtons.Button button) {
+      Display display = new Display(item.getItemMeta());
+      switch (button) {
+        case DISPLAY_NAME -> inv.setItem(10, display.iconDisplayName());
+        case CUSTOM_MODEL_DATA -> inv.setItem(11, display.iconCustomModelData());
+        case LORE -> inv.setItem(20, display.iconLore());
+        case ENCHANTMENT_GLINT_OVERRIDE -> inv.setItem(12, display.iconEnchantmentGlintOverride());
+        case ITEM_FLAG_HIDE_ADDITIONAL_TOOLTIP -> inv.setItem(23, display.iconItemFlagHideAdditionalTooltip());
+        case ITEM_FLAG_HIDE_ARMOR_TRIM -> inv.setItem(24, display.iconItemFlagHideArmorTrim());
+        case ITEM_FLAG_HIDE_ATTRIBUTES -> inv.setItem(25, display.iconItemFlagHideAttributes());
+        case ITEM_FLAG_HIDE_DESTROYS -> inv.setItem(32, display.iconItemFlagHideDestroys());
+        case ITEM_FLAG_HIDE_DYE -> inv.setItem(33, display.iconItemFlagHideDye());
+        case ITEM_FLAG_HIDE_ENCHANTS -> inv.setItem(34, display.iconItemFlagHideEnchants());
+        case ITEM_FLAG_HIDE_PLACED_ON -> inv.setItem(41, display.iconItemFlagHidePlacedOn());
+        case ITEM_FLAG_HIDE_UNBREAKABLE -> inv.setItem(42, display.iconItemFlagHideUnbreakable());
+        case HIDE_TOOLTIP -> inv.setItem(43, display.iconHideTooltip());
+      }
     }
 
     /**
-     * Updates the {@link MetaDisplay} for the item's custom model data.
-     */
-    public void updateCustomModelData() {
-      inv.setItem(11, new MetaDisplay(item.getItemMeta()).iconCustomModelData());
-    }
-
-    /**
-     * Updates the {@link MetaDisplay} for the item's lore.
-     */
-    public void updateLore() {
-      inv.setItem(20, new MetaDisplay(item.getItemMeta()).iconLore());
-    }
-
-    /**
-     * Updates the {@link MetaDisplay} for the item's enchantment glint override.
-     */
-    private void updateEnchantmentGlintOverride() {
-      inv.setItem(12, new MetaDisplay(item.getItemMeta()).iconEnchantmentGlintOverride());
-    }
-
-    /**
-     * Updates the {@link MetaDisplay} for the item's hide additional tooltip item flag.
-     */
-    private void updateItemFlagHideAdditionalTooltip() {
-      inv.setItem(23, new MetaDisplay(item.getItemMeta()).iconItemFlagHideAdditionalTooltip());
-    }
-
-    /**
-     * Updates the {@link MetaDisplay} for the item's hide armor trim item flag.
-     */
-    private void updateItemFlagHideArmorTrim() {
-      inv.setItem(24, new MetaDisplay(item.getItemMeta()).iconItemFlagHideArmorTrim());
-    }
-
-    /**
-     * Updates the {@link MetaDisplay} for the item's hide attributes item flag.
-     */
-    private void updateItemFlagHideAttributes() {
-      inv.setItem(25, new MetaDisplay(item.getItemMeta()).iconItemFlagHideAttributes());
-    }
-
-    /**
-     * Updates the {@link MetaDisplay} for the item's hide destroys item flag.
-     */
-    private void updateItemFlagHideDestroys() {
-      inv.setItem(32, new MetaDisplay(item.getItemMeta()).iconItemFlagHideDestroys());
-    }
-
-    /**
-     * Updates the {@link MetaDisplay} for the item's hide dye item flag.
-     */
-    private void updateItemFlagHideDye() {
-      inv.setItem(33, new MetaDisplay(item.getItemMeta()).iconItemFlagHideDye());
-    }
-
-    /**
-     * Updates the {@link MetaDisplay} for the item's hide enchants item flag.
-     */
-    private void updateItemFlagHideEnchants() {
-      inv.setItem(34, new MetaDisplay(item.getItemMeta()).iconItemFlagHideEnchants());
-    }
-
-    /**
-     * Updates the {@link MetaDisplay} for the item's hide placed on item flag.
-     */
-    private void updateItemFlagHidePlacedOn() {
-      inv.setItem(41, new MetaDisplay(item.getItemMeta()).iconItemFlagHidePlacedOn());
-    }
-
-    /**
-     * Updates the {@link MetaDisplay} for the item's hide unbreakable item flag.
-     */
-    private void updateItemFlagHideUnbreakable() {
-      inv.setItem(42, new MetaDisplay(item.getItemMeta()).iconItemFlagHideUnbreakable());
-    }
-
-    /**
-     * Updates the {@link MetaDisplay} for the item's hide tooltip.
-     */
-    private void updateHideToolTip() {
-      inv.setItem(43, new MetaDisplay(item.getItemMeta()).iconHideTooltip());
-    }
-
-    /**
-     * Updates all dynamic buttons.
+     * Updates all {@link Button} {@link Display displays}.
      */
     private void updateAll() {
-      MetaDisplay metaDisplay = new MetaDisplay(item.getItemMeta());
-      inv.setItem(10, metaDisplay.iconDisplayName());
-      inv.setItem(11, metaDisplay.iconCustomModelData());
-      inv.setItem(12, metaDisplay.iconEnchantmentGlintOverride());
+      Display display = new Display(item.getItemMeta());
+      inv.setItem(10, display.iconDisplayName());
+      inv.setItem(11, display.iconCustomModelData());
+      inv.setItem(12, display.iconEnchantmentGlintOverride());
 
-      inv.setItem(20, metaDisplay.iconLore());
+      inv.setItem(20, display.iconLore());
       inv.setItem(28, ItemUtils.Create.createItem(Material.WRITABLE_BOOK, ChatColor.AQUA + "Add"));
       inv.setItem(29, ItemUtils.Create.createItem(Material.WRITABLE_BOOK, ChatColor.AQUA + "Insert"));
       inv.setItem(30, ItemUtils.Create.createItem(Material.WRITABLE_BOOK, ChatColor.AQUA + "Set"));
@@ -333,26 +274,22 @@ public class ItemAppearanceGUI extends GUI implements Editor, MessageInputReceiv
       inv.setItem(39, ItemUtils.Create.createItem(Material.WRITABLE_BOOK, ChatColor.AQUA + "Clear"));
 
       inv.setItem(15, ItemUtils.Create.createItem(Material.WHITE_BANNER, ChatColor.AQUA + "Item Flags"));
-      inv.setItem(23, metaDisplay.iconItemFlagHideAdditionalTooltip());
-      inv.setItem(24, metaDisplay.iconItemFlagHideArmorTrim());
-      inv.setItem(25, metaDisplay.iconItemFlagHideAttributes());
-      inv.setItem(32, metaDisplay.iconItemFlagHideDestroys());
-      inv.setItem(33, metaDisplay.iconItemFlagHideDye());
-      inv.setItem(34, metaDisplay.iconItemFlagHideEnchants());
-      inv.setItem(41, metaDisplay.iconItemFlagHidePlacedOn());
-      inv.setItem(42, metaDisplay.iconItemFlagHideUnbreakable());
-      inv.setItem(43, metaDisplay.iconHideTooltip());
+      inv.setItem(23, display.iconItemFlagHideAdditionalTooltip());
+      inv.setItem(24, display.iconItemFlagHideArmorTrim());
+      inv.setItem(25, display.iconItemFlagHideAttributes());
+      inv.setItem(32, display.iconItemFlagHideDestroys());
+      inv.setItem(33, display.iconItemFlagHideDye());
+      inv.setItem(34, display.iconItemFlagHideEnchants());
+      inv.setItem(41, display.iconItemFlagHidePlacedOn());
+      inv.setItem(42, display.iconItemFlagHideUnbreakable());
+      inv.setItem(43, display.iconHideTooltip());
     }
 
     /**
-     * Clears all dynamic buttons.
+     * Clears all {@link Button buttons}.
      */
     private void clearAll() {
-      Set<Integer> empty = Set.of(
-          10, 11, 12,
-          20, 28, 29, 30, 37, 38, 39,
-          15, 23, 24, 25, 32, 33, 34, 41, 42, 43);
-      for (int slot : empty) {
+      for (int slot : POSITIONS) {
         inv.setItem(slot, null);
       }
     }
@@ -365,11 +302,11 @@ public class ItemAppearanceGUI extends GUI implements Editor, MessageInputReceiv
      * @version 0.1.17
      * @since 0.1.5
      */
-    private record MetaDisplay(ItemMeta meta) {
+    private record Display(ItemMeta meta) {
       /**
        * Sets the item metadata to be read.
        */
-      private MetaDisplay {
+      private Display {
       }
 
       /**
@@ -544,6 +481,80 @@ public class ItemAppearanceGUI extends GUI implements Editor, MessageInputReceiv
           return ItemUtils.Create.createItem(Material.INK_SAC, ChatColor.AQUA + "Hide Tooltip", List.of(ChatColor.RED + "False"));
         }
       }
+    }
+
+    /**
+     * Item appearance metadata.
+     *
+     * @author Danny Nguyen
+     * @version 0.1.25
+     * @since 0.1.25
+     */
+    public enum Button {
+      /**
+       * Display name.
+       */
+      DISPLAY_NAME,
+
+      /**
+       * Custom model data.
+       */
+      CUSTOM_MODEL_DATA,
+
+      /**
+       * Lore.
+       */
+      LORE,
+
+      /**
+       * Enchantment glint override.
+       */
+      ENCHANTMENT_GLINT_OVERRIDE,
+
+      /**
+       * Hide additional tooltip item flag.
+       */
+      ITEM_FLAG_HIDE_ADDITIONAL_TOOLTIP,
+
+      /**
+       * Hide armor trim item flag.
+       */
+      ITEM_FLAG_HIDE_ARMOR_TRIM,
+
+      /**
+       * Hide attributes item flag.
+       */
+      ITEM_FLAG_HIDE_ATTRIBUTES,
+
+      /**
+       * Hide destroys item flag.
+       */
+      ITEM_FLAG_HIDE_DESTROYS,
+
+      /**
+       * Hide dye item flag.
+       */
+      ITEM_FLAG_HIDE_DYE,
+
+      /**
+       * Hide enchants item flag.
+       */
+      ITEM_FLAG_HIDE_ENCHANTS,
+
+      /**
+       * Hide placed on item flag.
+       */
+      ITEM_FLAG_HIDE_PLACED_ON,
+
+      /**
+       * Hide unbreakable item flag.
+       */
+      ITEM_FLAG_HIDE_UNBREAKABLE,
+
+      /**
+       * Hide tooltip.
+       */
+      HIDE_TOOLTIP;
     }
   }
 }

@@ -24,12 +24,12 @@ public class Plugin extends JavaPlugin {
   /**
    * {@link GUIManager}
    */
-  private static final GUIManager guiManager = new GUIManager();
+  private static final GUIManager GUI_MANAGER = new GUIManager();
 
   /**
    * {@link MessageManager}
    */
-  private static final MessageManager messageManager = new MessageManager();
+  private static final MessageManager MESSAGE_MANAGER = new MessageManager();
 
   /**
    * No parameter constructor.
@@ -94,7 +94,7 @@ public class Plugin extends JavaPlugin {
    */
   @NotNull
   public static GUIManager getGUIManager() {
-    return guiManager;
+    return GUI_MANAGER;
   }
 
   /**
@@ -104,6 +104,6 @@ public class Plugin extends JavaPlugin {
    */
   @NotNull
   public static MessageManager getMessageManager() {
-    return messageManager;
+    return MESSAGE_MANAGER;
   }
 }

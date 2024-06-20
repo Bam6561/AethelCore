@@ -4,7 +4,6 @@ import me.bam6561.aethelcore.Plugin;
 import me.bam6561.aethelcore.commands.DatabaseCommand;
 import me.bam6561.aethelcore.guis.GUI;
 import me.bam6561.aethelcore.guis.commands.markers.Database;
-import me.bam6561.aethelcore.guis.commands.markers.Editor;
 import me.bam6561.aethelcore.guis.commands.markers.Paginated;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -18,10 +17,10 @@ import java.util.Objects;
  * {@link DatabaseCommand} {@link GUI}.
  *
  * @author Danny Nguyen
- * @version 0.1.9
+ * @version 0.1.25
  * @since 0.0.15
  */
-public class DatabaseGUI extends GUI implements Database, Editor, Paginated {
+public class DatabaseGUI extends GUI implements Database, Paginated {
   /**
    * Associates the {@link GUI} with its user.
    *
@@ -114,12 +113,5 @@ public class DatabaseGUI extends GUI implements Database, Editor, Paginated {
   @Override
   public void onClose(@NotNull InventoryCloseEvent event) {
     Objects.requireNonNull(event, "Null event");
-  }
-
-  /**
-   * Currently does nothing.
-   */
-  @Override
-  public void refreshDynamicButtons() {
   }
 }
