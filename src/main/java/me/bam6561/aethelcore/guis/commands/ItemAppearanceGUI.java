@@ -6,6 +6,7 @@ import me.bam6561.aethelcore.guis.commands.markers.Editor;
 import me.bam6561.aethelcore.guis.markers.MessageInputReceiver;
 import me.bam6561.aethelcore.references.Message;
 import me.bam6561.aethelcore.utils.ItemUtils;
+import me.bam6561.aethelcore.utils.TextUtils;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -27,24 +28,32 @@ import java.util.Set;
  * Item appearance {@link GUI}.
  *
  * @author Danny Nguyen
- * @version 0.1.26
+ * @version 0.2.0
  * @since 0.1.2
  */
 public class ItemAppearanceGUI extends GUI implements Editor, MessageInputReceiver {
   /**
    * Interacting item.
+   * <p>
+   * To prevent editor desync, update the item object to refer to
+   * the new item in the inventory whenever the item slot is updated.
    */
   private ItemStack item;
 
   /**
    * Associates the {@link GUI} with its user and interacting item.
+   * <p>
+   * The inventory creates a new item object from the constructor's item parameter,
+   * and all future references to the item refer to the inventory's copy.
    *
    * @param user {@link GUI} user
    * @param item interacting item
    */
   public ItemAppearanceGUI(@NotNull Player user, @Nullable ItemStack item) {
     super(user);
-    this.item = item;
+    Inventory inv = getInventory();
+    inv.setItem(4, item);
+    this.item = inv.getItem(4);
   }
 
   /**
@@ -65,7 +74,6 @@ public class ItemAppearanceGUI extends GUI implements Editor, MessageInputReceiv
   protected void addButtons() {
     Inventory inv = getInventory();
     inv.setItem(2, ItemUtils.Create.createItem(Material.POTATO, ChatColor.AQUA + "Item Editor"));
-    inv.setItem(4, item);
     updateDynamicButtons();
   }
 
@@ -94,12 +102,16 @@ public class ItemAppearanceGUI extends GUI implements Editor, MessageInputReceiv
     }
     if (cInv.getType() == InventoryType.PLAYER) {
       if (event.getClick().isShiftClick()) {
+        ItemStack clickedItem = event.getCurrentItem();
+        if (ItemUtils.Read.isNullOrAir(clickedItem)) {
+          return true;
+        }
         event.setCancelled(true);
         InventoryView view = event.getView();
         if (ItemUtils.Read.isNullOrAir(view.getItem(4))) {
-          this.item = event.getCurrentItem();
-          view.setItem(4, event.getCurrentItem());
+          view.setItem(4, clickedItem.clone());
           view.setItem(event.getRawSlot(), null);
+          this.item = view.getItem(4);
           updateDynamicButtons();
         }
       } else if (event.getAction() == InventoryAction.COLLECT_TO_CURSOR) {
@@ -128,8 +140,14 @@ public class ItemAppearanceGUI extends GUI implements Editor, MessageInputReceiv
     if (isNullOrPlayerInventoryClick(event)) {
       return;
     }
-
     event.setCancelled(true);
+    int rawSlot = event.getRawSlot();
+    if (ItemUtils.Read.isNullOrAir(event.getCurrentItem())) {
+      if (rawSlot == 4) {
+        new Interaction().setItemByClickedSlot(event);
+      }
+      return;
+    }
 
     switch (event.getRawSlot()) {
       case 2 -> new Interaction().openItemAppearanceGUI();
@@ -385,7 +403,7 @@ public class ItemAppearanceGUI extends GUI implements Editor, MessageInputReceiv
      *
      * @param meta item metadata
      * @author Danny Nguyen
-     * @version 0.1.26
+     * @version 0.2.0
      * @since 0.1.5
      */
     private record Display(ItemMeta meta) {
@@ -428,10 +446,13 @@ public class ItemAppearanceGUI extends GUI implements Editor, MessageInputReceiv
        */
       private ItemStack iconEnchantmentGlintOverride() {
         if (meta.hasEnchantmentGlintOverride()) {
-          return ItemUtils.Create.createItem(Material.ENCHANTED_BOOK, ChatColor.AQUA + "Enchantment Glint Override", List.of(ChatColor.GREEN + "True"));
-        } else {
-          return ItemUtils.Create.createItem(Material.ENCHANTED_BOOK, ChatColor.AQUA + "Enchantment Glint Override", List.of(ChatColor.RED + "False"));
+          if (meta.getEnchantmentGlintOverride()) {
+            return ItemUtils.Create.createItem(Material.ENCHANTED_BOOK, ChatColor.AQUA + "Enchantment Glint Override", List.of(ChatColor.GREEN + Message.ASCII.CHECKMARK.asString()));
+          } else {
+            return ItemUtils.Create.createItem(Material.ENCHANTED_BOOK, ChatColor.AQUA + "Enchantment Glint Override", List.of(ChatColor.RED + Message.ASCII.CROSS_MARK.asString()));
+          }
         }
+        return ItemUtils.Create.createItem(Material.ENCHANTED_BOOK, ChatColor.AQUA + "Enchantment Glint Override");
       }
 
       /**
@@ -443,7 +464,7 @@ public class ItemAppearanceGUI extends GUI implements Editor, MessageInputReceiv
         if (meta.hasLore()) {
           List<String> lore = meta.getLore();
           for (int i = 0; i < lore.size(); i++) {
-            lore.set(i, ChatColor.WHITE + "" + i + 1 + " " + lore.get(i));
+            lore.set(i, ChatColor.LIGHT_PURPLE + "" + (i + 1) + " " + ChatColor.WHITE + lore.get(i));
           }
           return ItemUtils.Create.createItem(Material.BOOK, ChatColor.WHITE + "Lore", lore);
         } else {
@@ -458,9 +479,9 @@ public class ItemAppearanceGUI extends GUI implements Editor, MessageInputReceiv
        */
       private ItemStack iconItemFlagHideAdditionalTooltip() {
         if (meta.hasItemFlag(ItemFlag.HIDE_ADDITIONAL_TOOLTIP)) {
-          return ItemUtils.Create.createItem(Material.POTION, ChatColor.AQUA + "Hide Additional Tooltip", List.of(ChatColor.GREEN + "True"), ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
+          return ItemUtils.Create.createItem(Material.POTION, ChatColor.AQUA + "Hide Additional Tooltip", List.of(ChatColor.GREEN + Message.ASCII.CHECKMARK.asString()), ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
         } else {
-          return ItemUtils.Create.createItem(Material.POTION, ChatColor.AQUA + "Hide Additional Tooltip", List.of(ChatColor.RED + "False"), ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
+          return ItemUtils.Create.createItem(Material.POTION, ChatColor.AQUA + "Hide Additional Tooltip", ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
         }
       }
 
@@ -471,9 +492,9 @@ public class ItemAppearanceGUI extends GUI implements Editor, MessageInputReceiv
        */
       private ItemStack iconItemFlagHideArmorTrim() {
         if (meta.hasItemFlag(ItemFlag.HIDE_ARMOR_TRIM)) {
-          return ItemUtils.Create.createItem(Material.WILD_ARMOR_TRIM_SMITHING_TEMPLATE, ChatColor.AQUA + "Hide Armor Trim", List.of(ChatColor.GREEN + "True"), ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
+          return ItemUtils.Create.createItem(Material.WILD_ARMOR_TRIM_SMITHING_TEMPLATE, ChatColor.AQUA + "Hide Armor Trim", List.of(ChatColor.GREEN + Message.ASCII.CHECKMARK.asString()), ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
         } else {
-          return ItemUtils.Create.createItem(Material.WILD_ARMOR_TRIM_SMITHING_TEMPLATE, ChatColor.AQUA + "Hide Armor Trim", List.of(ChatColor.RED + "False"), ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
+          return ItemUtils.Create.createItem(Material.WILD_ARMOR_TRIM_SMITHING_TEMPLATE, ChatColor.AQUA + "Hide Armor Trim", ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
         }
       }
 
@@ -484,9 +505,9 @@ public class ItemAppearanceGUI extends GUI implements Editor, MessageInputReceiv
        */
       private ItemStack iconItemFlagHideAttributes() {
         if (meta.hasItemFlag(ItemFlag.HIDE_ATTRIBUTES)) {
-          return ItemUtils.Create.createItem(Material.IRON_SWORD, ChatColor.AQUA + "Hide Attributes", List.of(ChatColor.GREEN + "True"), ItemFlag.HIDE_ATTRIBUTES);
+          return ItemUtils.Create.createItem(Material.IRON_SWORD, ChatColor.AQUA + "Hide Attributes", List.of(ChatColor.GREEN + Message.ASCII.CHECKMARK.asString()), ItemFlag.HIDE_ATTRIBUTES);
         } else {
-          return ItemUtils.Create.createItem(Material.IRON_SWORD, ChatColor.AQUA + "Hide Attributes", List.of(ChatColor.RED + "False"), ItemFlag.HIDE_ATTRIBUTES);
+          return ItemUtils.Create.createItem(Material.IRON_SWORD, ChatColor.AQUA + "Hide Attributes", ItemFlag.HIDE_ATTRIBUTES);
         }
       }
 
@@ -497,9 +518,9 @@ public class ItemAppearanceGUI extends GUI implements Editor, MessageInputReceiv
        */
       private ItemStack iconItemFlagHideDestroys() {
         if (meta.hasItemFlag(ItemFlag.HIDE_DESTROYS)) {
-          return ItemUtils.Create.createItem(Material.IRON_PICKAXE, ChatColor.AQUA + "Hide Destroys", List.of(ChatColor.GREEN + "True"), ItemFlag.HIDE_ATTRIBUTES);
+          return ItemUtils.Create.createItem(Material.IRON_PICKAXE, ChatColor.AQUA + "Hide Destroys", List.of(ChatColor.GREEN + Message.ASCII.CHECKMARK.asString()), ItemFlag.HIDE_ATTRIBUTES);
         } else {
-          return ItemUtils.Create.createItem(Material.IRON_PICKAXE, ChatColor.AQUA + "Hide Destroys", List.of(ChatColor.RED + "False"), ItemFlag.HIDE_ATTRIBUTES);
+          return ItemUtils.Create.createItem(Material.IRON_PICKAXE, ChatColor.AQUA + "Hide Destroys", ItemFlag.HIDE_ATTRIBUTES);
         }
       }
 
@@ -510,9 +531,9 @@ public class ItemAppearanceGUI extends GUI implements Editor, MessageInputReceiv
        */
       private ItemStack iconItemFlagHideDye() {
         if (meta.hasItemFlag(ItemFlag.HIDE_DYE)) {
-          return ItemUtils.Create.createItem(Material.RED_DYE, ChatColor.AQUA + "Hide Dye", List.of(ChatColor.GREEN + "True"));
+          return ItemUtils.Create.createItem(Material.RED_DYE, ChatColor.AQUA + "Hide Dye", List.of(ChatColor.GREEN + Message.ASCII.CHECKMARK.asString()));
         } else {
-          return ItemUtils.Create.createItem(Material.RED_DYE, ChatColor.AQUA + "Hide Dye", List.of(ChatColor.RED + "False"));
+          return ItemUtils.Create.createItem(Material.RED_DYE, ChatColor.AQUA + "Hide Dye");
         }
       }
 
@@ -522,10 +543,10 @@ public class ItemAppearanceGUI extends GUI implements Editor, MessageInputReceiv
        * @return hide enchants item flag icon
        */
       private ItemStack iconItemFlagHideEnchants() {
-        if (meta.hasItemFlag(ItemFlag.HIDE_ADDITIONAL_TOOLTIP)) {
-          return ItemUtils.Create.createItem(Material.ENCHANTED_BOOK, ChatColor.AQUA + "Enchants", List.of(ChatColor.GREEN + "True"));
+        if (meta.hasItemFlag(ItemFlag.HIDE_ENCHANTS)) {
+          return ItemUtils.Create.createItem(Material.ENCHANTED_BOOK, ChatColor.AQUA + "Hide Enchants", List.of(ChatColor.GREEN + Message.ASCII.CHECKMARK.asString()));
         } else {
-          return ItemUtils.Create.createItem(Material.ENCHANTED_BOOK, ChatColor.AQUA + "Enchants", List.of(ChatColor.RED + "False"));
+          return ItemUtils.Create.createItem(Material.ENCHANTED_BOOK, ChatColor.AQUA + "Hide Enchants");
         }
       }
 
@@ -535,10 +556,10 @@ public class ItemAppearanceGUI extends GUI implements Editor, MessageInputReceiv
        * @return hide placed on flag icon
        */
       private ItemStack iconItemFlagHidePlacedOn() {
-        if (meta.hasItemFlag(ItemFlag.HIDE_ADDITIONAL_TOOLTIP)) {
-          return ItemUtils.Create.createItem(Material.GRASS_BLOCK, ChatColor.AQUA + "Placed On", List.of(ChatColor.GREEN + "True"));
+        if (meta.hasItemFlag(ItemFlag.HIDE_PLACED_ON)) {
+          return ItemUtils.Create.createItem(Material.GRASS_BLOCK, ChatColor.AQUA + "Hide Placed On", List.of(ChatColor.GREEN + Message.ASCII.CHECKMARK.asString()));
         } else {
-          return ItemUtils.Create.createItem(Material.GRASS_BLOCK, ChatColor.AQUA + "Placed On", List.of(ChatColor.RED + "False"));
+          return ItemUtils.Create.createItem(Material.GRASS_BLOCK, ChatColor.AQUA + "Hide Placed On");
         }
       }
 
@@ -548,10 +569,10 @@ public class ItemAppearanceGUI extends GUI implements Editor, MessageInputReceiv
        * @return hide unbreakable item flag icon
        */
       private ItemStack iconItemFlagHideUnbreakable() {
-        if (meta.hasItemFlag(ItemFlag.HIDE_ADDITIONAL_TOOLTIP)) {
-          return ItemUtils.Create.createItem(Material.BEDROCK, ChatColor.AQUA + "Unbreakable", List.of(ChatColor.GREEN + "True"));
+        if (meta.hasItemFlag(ItemFlag.HIDE_UNBREAKABLE)) {
+          return ItemUtils.Create.createItem(Material.BEDROCK, ChatColor.AQUA + "Hide Unbreakable", List.of(ChatColor.GREEN + Message.ASCII.CHECKMARK.asString()));
         } else {
-          return ItemUtils.Create.createItem(Material.BEDROCK, ChatColor.AQUA + "Unbreakable", List.of(ChatColor.RED + "False"));
+          return ItemUtils.Create.createItem(Material.BEDROCK, ChatColor.AQUA + "Hide Unbreakable");
         }
       }
 
@@ -562,9 +583,9 @@ public class ItemAppearanceGUI extends GUI implements Editor, MessageInputReceiv
        */
       private ItemStack iconHideTooltip() {
         if (meta.isHideTooltip()) {
-          return ItemUtils.Create.createItem(Material.INK_SAC, ChatColor.AQUA + "Hide Tooltip", List.of(ChatColor.GREEN + "True"));
+          return ItemUtils.Create.createItem(Material.INK_SAC, ChatColor.AQUA + "Hide Tooltip", List.of(ChatColor.GREEN + Message.ASCII.CHECKMARK.asString()));
         } else {
-          return ItemUtils.Create.createItem(Material.INK_SAC, ChatColor.AQUA + "Hide Tooltip", List.of(ChatColor.RED + "False"));
+          return ItemUtils.Create.createItem(Material.INK_SAC, ChatColor.AQUA + "Hide Tooltip");
         }
       }
     }
@@ -574,7 +595,7 @@ public class ItemAppearanceGUI extends GUI implements Editor, MessageInputReceiv
    * {@link GUI} interaction.
    *
    * @author Danny Nguyen
-   * @version 0.1.26
+   * @version 0.2.0
    * @since 0.1.26
    */
   private class Interaction {
@@ -627,12 +648,23 @@ public class ItemAppearanceGUI extends GUI implements Editor, MessageInputReceiv
      */
     private void toggleItemFlag(ItemFlag itemFlag, DynamicButtons.Button button) {
       ItemMeta meta = item.getItemMeta();
-      if (meta.hasItemFlag(itemFlag)) {
+      boolean hasFlagBefore = meta.hasItemFlag(itemFlag);
+      if (hasFlagBefore) {
         meta.removeItemFlags(itemFlag);
       } else {
         meta.addItemFlags(itemFlag);
       }
       item.setItemMeta(meta);
+      boolean hasFlagAfter = item.getItemMeta().hasItemFlag(itemFlag);
+      if (hasFlagBefore != hasFlagAfter) {
+        if (hasFlagAfter) {
+          user.sendMessage(ChatColor.GREEN + Message.ASCII.CHECKMARK.asString() + " " + TextUtils.Format.asTitle(itemFlag.name()) + ChatColor.GRAY + " Always");
+        } else {
+          user.sendMessage(ChatColor.GREEN + Message.ASCII.CHECKMARK.asString() + " " + TextUtils.Format.asTitle(itemFlag.name()) + ChatColor.GRAY + " Never");
+        }
+      } else {
+        user.sendMessage(ChatColor.RED + Message.ASCII.CROSS_MARK.asString() + " " + TextUtils.Format.asTitle(itemFlag.name()) + " Not Applicable");
+      }
       new DynamicButtons().update(button);
     }
 
@@ -641,7 +673,18 @@ public class ItemAppearanceGUI extends GUI implements Editor, MessageInputReceiv
      */
     private void toggleEnchantmentGlintOverride() {
       ItemMeta meta = item.getItemMeta();
-      meta.setEnchantmentGlintOverride(!meta.hasEnchantmentGlintOverride());
+      if (meta.hasEnchantmentGlintOverride()) {
+        if (meta.getEnchantmentGlintOverride()) {
+          meta.setEnchantmentGlintOverride(false);
+          user.sendMessage(ChatColor.GREEN + Message.ASCII.CHECKMARK.asString() + " Enchantment Glint" + ChatColor.GRAY + " Never");
+        } else {
+          meta.setEnchantmentGlintOverride(null);
+          user.sendMessage(ChatColor.GREEN + Message.ASCII.CHECKMARK.asString() + " Enchantment Glint" + ChatColor.GRAY + " Default");
+        }
+      } else {
+        meta.setEnchantmentGlintOverride(true);
+        user.sendMessage(ChatColor.GREEN + Message.ASCII.CHECKMARK.asString() + " Enchantment Glint" + ChatColor.GRAY + " Always");
+      }
       item.setItemMeta(meta);
       new DynamicButtons().update(DynamicButtons.Button.ENCHANTMENT_GLINT_OVERRIDE);
     }
@@ -653,6 +696,7 @@ public class ItemAppearanceGUI extends GUI implements Editor, MessageInputReceiv
       ItemMeta meta = item.getItemMeta();
       meta.setLore(null);
       item.setItemMeta(meta);
+      user.sendMessage(ChatColor.GREEN + Message.ASCII.CHECKMARK.asString() + " Cleared Lore");
       new DynamicButtons().update(DynamicButtons.Button.LORE);
     }
 
@@ -661,7 +705,13 @@ public class ItemAppearanceGUI extends GUI implements Editor, MessageInputReceiv
      */
     private void toggleHideTooltip() {
       ItemMeta meta = item.getItemMeta();
-      meta.setHideTooltip(!meta.isHideTooltip());
+      if (meta.isHideTooltip()) {
+        meta.setHideTooltip(false);
+        user.sendMessage(ChatColor.GREEN + Message.ASCII.CHECKMARK.asString() + " Hide Tooltip" + ChatColor.GRAY + " Never");
+      } else {
+        meta.setHideTooltip(true);
+        user.sendMessage(ChatColor.GREEN + Message.ASCII.CHECKMARK.asString() + " Hide Tooltip" + ChatColor.GRAY + " Always");
+      }
       item.setItemMeta(meta);
       new DynamicButtons().update(DynamicButtons.Button.HIDE_TOOLTIP);
     }

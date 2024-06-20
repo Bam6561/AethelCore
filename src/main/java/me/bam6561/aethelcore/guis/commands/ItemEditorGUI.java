@@ -25,24 +25,32 @@ import java.util.Objects;
  * Collection of item metadata {@link Editor editors}.
  *
  * @author Danny Nguyen
- * @version 0.1.26
+ * @version 0.2.0
  * @since 0.0.27
  */
 public class ItemEditorGUI extends GUI implements Editor {
   /**
    * Interacting item.
+   * <p>
+   * To prevent editor desync, update the item object to refer to
+   * the new item in the inventory whenever the item slot is updated.
    */
   private ItemStack item;
 
   /**
    * Associates the {@link GUI} with its user and interacting item.
+   * <p>
+   * The inventory creates a new item object from the constructor's item parameter,
+   * and all future references to the item refer to the inventory's copy.
    *
    * @param user {@link GUI} user
    * @param item interacting item
    */
   public ItemEditorGUI(@NotNull Player user, @Nullable ItemStack item) {
     super(user);
-    this.item = item;
+    Inventory inv = getInventory();
+    inv.setItem(4, item);
+    this.item = inv.getItem(4);
   }
 
   /**
@@ -62,8 +70,6 @@ public class ItemEditorGUI extends GUI implements Editor {
   @Override
   protected void addButtons() {
     Inventory inv = getInventory();
-    inv.setItem(4, item);
-
     inv.setItem(10, ItemUtils.Create.createItem(Material.NAME_TAG, ChatColor.AQUA + "Appearance"));
     inv.setItem(11, ItemUtils.Create.createItem(Material.ANVIL, ChatColor.AQUA + "Durability"));
     inv.setItem(19, ItemUtils.Create.createItem(Material.IRON_SWORD, ChatColor.AQUA + "Attributes", ItemFlag.HIDE_ATTRIBUTES));
@@ -102,12 +108,16 @@ public class ItemEditorGUI extends GUI implements Editor {
     }
     if (cInv.getType() == InventoryType.PLAYER) {
       if (event.getClick().isShiftClick()) {
+        ItemStack clickedItem = event.getCurrentItem();
+        if (ItemUtils.Read.isNullOrAir(clickedItem)) {
+          return true;
+        }
         event.setCancelled(true);
         InventoryView view = event.getView();
         if (ItemUtils.Read.isNullOrAir(view.getItem(4))) {
-          this.item = event.getCurrentItem();
-          view.setItem(4, event.getCurrentItem());
+          view.setItem(4, clickedItem.clone());
           view.setItem(event.getRawSlot(), null);
+          this.item = view.getItem(4);
           updateDynamicButtons();
         }
       } else if (event.getAction() == InventoryAction.COLLECT_TO_CURSOR) {

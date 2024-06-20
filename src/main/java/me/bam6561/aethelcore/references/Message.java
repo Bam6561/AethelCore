@@ -24,7 +24,7 @@ public class Message {
    * ASCII characters.
    *
    * @author Danny Nguyen
-   * @version 0.1.26
+   * @version 0.2.0
    * @since 0.1.26
    */
   public enum ASCII implements StringValue {
@@ -41,7 +41,7 @@ public class Message {
     /**
      * Hand holding a pencil.
      */
-    WRITING("✍");
+    WRITING_HAND("✍");
 
     /**
      * ASCII character.
@@ -73,7 +73,7 @@ public class Message {
    * Error messages.
    *
    * @author Danny Nguyen
-   * @version 0.1.26
+   * @version 0.2.0
    * @since 0.0.14
    */
   public enum Error implements StringValue {
@@ -113,7 +113,7 @@ public class Message {
      * @param message message
      */
     Error(String message) {
-      this.message = ChatColor.RED + ASCII.CROSS_MARK.asString() + " " + ChatColor.WHITE + message;
+      this.message = ChatColor.RED + ASCII.CROSS_MARK.asString() + " " + message;
     }
 
     /**
@@ -132,44 +132,44 @@ public class Message {
    * {@link MessageInputReceiver} inputs.
    *
    * @author Danny Nguyen
-   * @version 0.1.26
+   * @version 0.2.0
    * @since 0.1.10
    */
   public enum Input {
     /**
      * Sets the custom model data.
      */
-    CUSTOM_MODEL_DATA("Custom Model Data " + ChatColor.WHITE + "#"),
+    CUSTOM_MODEL_DATA("Custom Model Data " + ChatColor.GRAY + "#"),
 
     /**
      * Sets the display name.
      */
-    DISPLAY_NAME("Display Name " + ChatColor.WHITE + "Text"),
+    DISPLAY_NAME("Display Name " + ChatColor.GRAY + "Text"),
 
     /**
      * Adds a line of lore.
      */
-    LORE_ADD("Add Lore " + ChatColor.WHITE + "Text"),
+    LORE_ADD("Add Lore " + ChatColor.GRAY + "Text"),
 
     /**
      * Edit a line of lore.
      */
-    LORE_EDIT("Edit Lore " + ChatColor.WHITE + "#, Text"),
+    LORE_EDIT("Edit Lore " + ChatColor.GRAY + "#, Text"),
 
     /**
      * Inserts a line of lore.
      */
-    LORE_INSERT("Insert Lore " + ChatColor.WHITE + "#, Text"),
+    LORE_INSERT("Insert Lore " + ChatColor.GRAY + "#, Text"),
 
     /**
      * Removes a line of lore.
      */
-    LORE_REMOVE("Remove Lore " + ChatColor.WHITE + "#"),
+    LORE_REMOVE("Remove Lore " + ChatColor.GRAY + "#"),
 
     /**
      * Sets the lore.
      */
-    LORE_SET("Set Lore " + ChatColor.WHITE + "Text (Use \" ; \" for new lines.)");
+    LORE_SET("Set Lore " + ChatColor.GRAY + "Text (Use \" ; \" for new lines.)");
 
     /**
      * Input message.
@@ -184,7 +184,7 @@ public class Message {
      * @param notificationMessage notification message
      */
     Input(String notificationMessage) {
-      this.notificationMessage = ChatColor.GOLD + ASCII.WRITING.asString() + " " + ChatColor.AQUA + notificationMessage;
+      this.notificationMessage = ChatColor.GOLD + ASCII.WRITING_HAND.asString() + " " + notificationMessage;
     }
 
     /**
