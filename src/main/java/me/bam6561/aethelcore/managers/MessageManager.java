@@ -26,7 +26,7 @@ import java.util.*;
  * </ul>
  *
  * @author Danny Nguyen
- * @version 0.1.23
+ * @version 0.1.26
  * @since 0.1.10
  */
 public class MessageManager {
@@ -75,6 +75,17 @@ public class MessageManager {
     Objects.requireNonNull(receiver, "Null receiver");
     Objects.requireNonNull(input, "Null input");
     activeInputRequests.put(player.getUniqueId(), new MessageInput.Request(receiver, input));
+    player.sendMessage(input.getNotificationMessage());
+  }
+
+  /**
+   * Removes a message input from the {@link #activeInputRequests}.
+   *
+   * @param player interacting player
+   */
+  public void removeMessageInput(@NotNull Player player) {
+    Objects.requireNonNull(player, "Null player");
+    activeInputRequests.remove(player.getUniqueId());
   }
 
   /**
@@ -197,7 +208,7 @@ public class MessageManager {
        * {@link Response Responses} that affect an {@link ItemAppearanceGUI}.
        *
        * @author Danny Nguyen
-       * @version 0.1.24
+       * @version 0.1.26
        * @since 0.1.23
        */
       private class ItemAppearance {
@@ -205,6 +216,16 @@ public class MessageManager {
          * {@link ItemAppearanceGUI}
          */
         private final ItemAppearanceGUI gui = (ItemAppearanceGUI) receiver;
+
+        /**
+         * Item being edited.
+         */
+        private final ItemStack item = gui.getItem();
+
+        /**
+         * Item metadata.
+         */
+        private final ItemMeta meta = item.getItemMeta();
 
         /**
          * No parameter constructor.
@@ -216,26 +237,19 @@ public class MessageManager {
          * {@link Message.Input#CUSTOM_MODEL_DATA}
          */
         private void inputCustomModelData() {
-          ItemStack item = gui.getItem();
-          ItemMeta meta = item.getItemMeta();
+          ItemAppearanceGUI.DynamicButtons.Button button = ItemAppearanceGUI.DynamicButtons.Button.CUSTOM_MODEL_DATA;
           if (message.equals("-")) {
             meta.setCustomModelData(null);
             item.setItemMeta(meta);
-            player.sendMessage(ChatColor.RED + "[Removed Custom Model Data]");
-            gui.new DynamicButtons().updateCustomModelData();
-            Bukkit.getScheduler().runTask(Plugin.getInstance(), () -> {
-              Plugin.getGUIManager().openGUI(player, gui);
-            });
+            player.sendMessage(ChatColor.RED + Message.ASCII.CHECKMARK.asString() + " Custom Model Data");
+            reopenUpdatedGUI(button);
             return;
           }
           try {
             meta.setCustomModelData(Integer.parseInt(message));
             item.setItemMeta(meta);
-            player.sendMessage(ChatColor.GREEN + "[Set Custom Model Data] " + ChatColor.WHITE + message);
-            gui.new DynamicButtons().updateCustomModelData();
-            Bukkit.getScheduler().runTask(Plugin.getInstance(), () -> {
-              Plugin.getGUIManager().openGUI(player, gui);
-            });
+            player.sendMessage(ChatColor.GREEN + Message.ASCII.CHECKMARK.asString() + " Custom Model Data " + ChatColor.WHITE + message);
+            reopenUpdatedGUI(button);
           } catch (NumberFormatException ex) {
             player.sendMessage(Message.Error.NON_INTEGER_INPUT.asString());
           }
@@ -245,26 +259,23 @@ public class MessageManager {
          * {@link Message.Input#DISPLAY_NAME}
          */
         private void inputDisplayName() {
-          ItemStack item = gui.getItem();
-          ItemMeta meta = item.getItemMeta();
+          ItemAppearanceGUI.DynamicButtons.Button button = ItemAppearanceGUI.DynamicButtons.Button.DISPLAY_NAME;
           if (message.equals("-")) {
             meta.setDisplayName(null);
-            player.sendMessage(ChatColor.RED + "[Removed Display Name]");
+            player.sendMessage(ChatColor.RED + Message.ASCII.CHECKMARK.asString() + " Display Name");
           } else {
             meta.setDisplayName(TextUtils.Color.translate(message, '&'));
-            player.sendMessage(ChatColor.GREEN + "[Set Display Name]" + ChatColor.WHITE + message);
+            player.sendMessage(ChatColor.GREEN + Message.ASCII.CHECKMARK.asString() + " Set Display Name " + ChatColor.WHITE + message);
           }
           item.setItemMeta(meta);
-          gui.new DynamicButtons().updateDisplayName();
-          Plugin.getGUIManager().openGUI(player, gui);
+          reopenUpdatedGUI(button);
         }
 
         /**
          * {@link Message.Input#LORE_ADD}
          */
         private void inputLoreAdd() {
-          ItemStack item = gui.getItem();
-          ItemMeta meta = item.getItemMeta();
+          ItemAppearanceGUI.DynamicButtons.Button button = ItemAppearanceGUI.DynamicButtons.Button.LORE;
           if (meta.hasLore()) {
             List<String> lore = meta.getLore();
             lore.add(TextUtils.Color.translate(message, '&'));
@@ -273,17 +284,15 @@ public class MessageManager {
             meta.setLore(List.of(TextUtils.Color.translate(message, '&')));
           }
           item.setItemMeta(meta);
-          player.sendMessage(ChatColor.GREEN + "[Added Lore] " + message);
-          gui.new DynamicButtons().updateLore();
-          Plugin.getGUIManager().openGUI(player, gui);
+          player.sendMessage(ChatColor.GREEN + Message.ASCII.CHECKMARK.asString() + " Added Lore " + ChatColor.WHITE + message);
+          reopenUpdatedGUI(button);
         }
 
         /**
          * {@link Message.Input#LORE_EDIT}
          */
         private void inputLoreEdit() {
-          ItemStack item = gui.getItem();
-          ItemMeta meta = item.getItemMeta();
+          ItemAppearanceGUI.DynamicButtons.Button button = ItemAppearanceGUI.DynamicButtons.Button.LORE;
           String[] messageInput = message.split(" ", 2);
           if (messageInput.length != 2) {
             player.sendMessage(Message.Error.UNRECOGNIZED_PARAMETERS.asString());
@@ -301,9 +310,8 @@ public class MessageManager {
             lore.set(line, TextUtils.Color.translate(messageInput[1], '&'));
             meta.setLore(lore);
             item.setItemMeta(meta);
-            player.sendMessage(ChatColor.GREEN + "[Edited Lore] " + message);
-            gui.new DynamicButtons().updateLore();
-            Plugin.getGUIManager().openGUI(player, gui);
+            player.sendMessage(ChatColor.GREEN + Message.ASCII.CHECKMARK.asString() + " Edited Lore " + ChatColor.WHITE + message);
+            reopenUpdatedGUI(button);
           } catch (IndexOutOfBoundsException ex) {
             player.sendMessage(Message.Error.INVALID_LINE.asString());
           }
@@ -313,8 +321,7 @@ public class MessageManager {
          * {@link Message.Input#LORE_INSERT}
          */
         private void inputLoreInsert() {
-          ItemStack item = gui.getItem();
-          ItemMeta meta = item.getItemMeta();
+          ItemAppearanceGUI.DynamicButtons.Button button = ItemAppearanceGUI.DynamicButtons.Button.LORE;
           String[] messageInput = message.split(" ", 2);
           if (messageInput.length != 2) {
             player.sendMessage(Message.Error.UNRECOGNIZED_PARAMETERS.asString());
@@ -331,26 +338,26 @@ public class MessageManager {
             player.sendMessage(Message.Error.INVALID_LINE.asString());
             return;
           }
+          List<String> lore;
           if (meta.hasLore()) {
-            List<String> lore = meta.getLore();
+            lore = meta.getLore();
             lore.add(line, TextUtils.Color.translate(message, '&'));
             meta.setLore(lore);
           } else {
-            List<String> lore = new ArrayList<>();
+            lore = new ArrayList<>();
             lore.add(line, TextUtils.Color.translate(message, '&'));
             meta.setLore(lore);
           }
           item.setItemMeta(meta);
-          gui.new DynamicButtons().updateLore();
-          Plugin.getGUIManager().openGUI(player, gui);
+          player.sendMessage(ChatColor.GREEN + Message.ASCII.CHECKMARK.asString() + " Insert Lore " + ChatColor.WHITE + message);
+          reopenUpdatedGUI(button);
         }
 
         /**
          * {@link Message.Input#LORE_REMOVE}
          */
         private void inputLoreRemove() {
-          ItemStack item = gui.getItem();
-          ItemMeta meta = item.getItemMeta();
+          ItemAppearanceGUI.DynamicButtons.Button button = ItemAppearanceGUI.DynamicButtons.Button.LORE;
           int line;
           try {
             line = Integer.parseInt(message) - 1;
@@ -363,9 +370,8 @@ public class MessageManager {
             lore.remove(line);
             meta.setLore(lore);
             item.setItemMeta(meta);
-            player.sendMessage(ChatColor.RED + "[Removed Lore] " + message);
-            gui.new DynamicButtons().updateLore();
-            Plugin.getGUIManager().openGUI(player, gui);
+            player.sendMessage(ChatColor.RED + Message.ASCII.CHECKMARK.asString() + " Removed Lore " + ChatColor.WHITE + message);
+            reopenUpdatedGUI(button);
           } catch (NumberFormatException ex) {
             player.sendMessage(Message.Error.INVALID_LINE.asString());
           }
@@ -375,13 +381,24 @@ public class MessageManager {
          * {@link Message.Input#LORE_SET}
          */
         private void inputLoreSet() {
-          ItemStack item = gui.getItem();
-          ItemMeta meta = item.getItemMeta();
+          ItemAppearanceGUI.DynamicButtons.Button button = ItemAppearanceGUI.DynamicButtons.Button.LORE;
           meta.setLore(List.of(TextUtils.Color.translate(message, '&').split("; ")));
           item.setItemMeta(meta);
-          player.sendMessage(ChatColor.GREEN + "[Set Lore] " + message);
-          gui.new DynamicButtons().updateLore();
-          Plugin.getGUIManager().openGUI(player, gui);
+          player.sendMessage(ChatColor.GREEN + Message.ASCII.CHECKMARK.asString() + " Set Lore " + ChatColor.WHITE + message);
+          reopenUpdatedGUI(button);
+        }
+
+        /**
+         * Opens the updated {@link ItemAppearanceGUI} synchronously.
+         *
+         * @param button {@link me.bam6561.aethelcore.guis.commands.ItemAppearanceGUI.DynamicButtons.Button}
+         */
+        private void reopenUpdatedGUI(ItemAppearanceGUI.DynamicButtons.Button button) {
+          Plugin.getMessageManager().removeMessageInput(player);
+          gui.new DynamicButtons().update(button);
+          Bukkit.getScheduler().runTask(Plugin.getInstance(), () -> {
+            Plugin.getGUIManager().openGUI(player, gui);
+          });
         }
       }
     }

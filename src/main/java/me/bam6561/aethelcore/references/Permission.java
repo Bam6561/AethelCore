@@ -58,6 +58,7 @@ public class Permission {
      * @return permission value
      */
     @NotNull
+    @Override
     public String asString() {
       return this.value;
     }
@@ -96,6 +97,7 @@ public class Permission {
      * @return permission value
      */
     @NotNull
+    @Override
     public String asString() {
       return this.value;
     }

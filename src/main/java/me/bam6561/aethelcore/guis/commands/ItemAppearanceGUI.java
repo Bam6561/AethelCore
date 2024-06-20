@@ -4,6 +4,7 @@ import me.bam6561.aethelcore.Plugin;
 import me.bam6561.aethelcore.guis.GUI;
 import me.bam6561.aethelcore.guis.commands.markers.Editor;
 import me.bam6561.aethelcore.guis.markers.MessageInputReceiver;
+import me.bam6561.aethelcore.references.Message;
 import me.bam6561.aethelcore.utils.ItemUtils;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
@@ -26,7 +27,7 @@ import java.util.Set;
  * Item appearance {@link GUI}.
  *
  * @author Danny Nguyen
- * @version 0.1.25
+ * @version 0.1.26
  * @since 0.1.2
  */
 public class ItemAppearanceGUI extends GUI implements Editor, MessageInputReceiver {
@@ -131,20 +132,33 @@ public class ItemAppearanceGUI extends GUI implements Editor, MessageInputReceiv
     event.setCancelled(true);
 
     switch (event.getRawSlot()) {
-      case 2 -> {
-        if (ItemUtils.Read.isNotNullOrAir(item)) {
-          Plugin.getGUIManager().openGUI(user, new ItemEditorGUI(user, item.clone()));
-        } else {
-          Plugin.getGUIManager().openGUI(user, new ItemEditorGUI(user, null));
-        }
-      }
-      case 4 -> {
-        event.setCancelled(false);
-        Bukkit.getScheduler().runTaskLater(Plugin.getInstance(), () -> {
-          this.item = getInventory().getItem(4);
-          updateDynamicButtons();
-        }, 1);
-      }
+      case 2 -> new Interaction().openItemAppearanceGUI();
+      case 4 -> new Interaction().setItemByClickedSlot(event);
+      case 10 -> new Interaction().queryMessageInput(this, Message.Input.DISPLAY_NAME);
+      case 11 -> new Interaction().queryMessageInput(this, Message.Input.CUSTOM_MODEL_DATA);
+      case 12 -> new Interaction().toggleEnchantmentGlintOverride();
+      case 28 -> new Interaction().queryMessageInput(this, Message.Input.LORE_ADD);
+      case 29 -> new Interaction().queryMessageInput(this, Message.Input.LORE_INSERT);
+      case 30 -> new Interaction().queryMessageInput(this, Message.Input.LORE_SET);
+      case 37 -> new Interaction().queryMessageInput(this, Message.Input.LORE_EDIT);
+      case 38 -> new Interaction().queryMessageInput(this, Message.Input.LORE_REMOVE);
+      case 39 -> new Interaction().clearLore();
+      case 23 ->
+          new Interaction().toggleItemFlag(ItemFlag.HIDE_ADDITIONAL_TOOLTIP, DynamicButtons.Button.ITEM_FLAG_HIDE_ADDITIONAL_TOOLTIP);
+      case 24 ->
+          new Interaction().toggleItemFlag(ItemFlag.HIDE_ARMOR_TRIM, DynamicButtons.Button.ITEM_FLAG_HIDE_ARMOR_TRIM);
+      case 25 ->
+          new Interaction().toggleItemFlag(ItemFlag.HIDE_ATTRIBUTES, DynamicButtons.Button.ITEM_FLAG_HIDE_ATTRIBUTES);
+      case 32 ->
+          new Interaction().toggleItemFlag(ItemFlag.HIDE_DESTROYS, DynamicButtons.Button.ITEM_FLAG_HIDE_DESTROYS);
+      case 33 -> new Interaction().toggleItemFlag(ItemFlag.HIDE_DYE, DynamicButtons.Button.ITEM_FLAG_HIDE_DYE);
+      case 34 ->
+          new Interaction().toggleItemFlag(ItemFlag.HIDE_ENCHANTS, DynamicButtons.Button.ITEM_FLAG_HIDE_ENCHANTS);
+      case 41 ->
+          new Interaction().toggleItemFlag(ItemFlag.HIDE_PLACED_ON, DynamicButtons.Button.ITEM_FLAG_HIDE_PLACED_ON);
+      case 42 ->
+          new Interaction().toggleItemFlag(ItemFlag.HIDE_UNBREAKABLE, DynamicButtons.Button.ITEM_FLAG_HIDE_UNBREAKABLE);
+      case 43 -> new Interaction().toggleHideTooltip();
     }
   }
 
@@ -199,14 +213,15 @@ public class ItemAppearanceGUI extends GUI implements Editor, MessageInputReceiv
    * @return item being edited
    */
   @Nullable
+  @Override
   public ItemStack getItem() {
     return this.item;
   }
 
   /**
-   * Represents dynamic buttons related to the item's metadata.
+   * Represents dynamic {@link Button buttons}.
    * <p>
-   * Check if an item exists first before updating any dynamic buttons.
+   * Check if an item exists first before updating any {@link Button buttons}.
    *
    * @author Danny Nguyen
    * @version 0.1.25
@@ -216,10 +231,7 @@ public class ItemAppearanceGUI extends GUI implements Editor, MessageInputReceiv
     /**
      * {@link Button} positions.
      */
-    private static final Set<Integer> POSITIONS = Set.of(
-        10, 11, 12,
-        20, 28, 29, 30, 37, 38, 39,
-        15, 23, 24, 25, 32, 33, 34, 41, 42, 43);
+    private static final Set<Integer> POSITIONS = Set.of(10, 11, 12, 20, 28, 29, 30, 37, 38, 39, 15, 23, 24, 25, 32, 33, 34, 41, 42, 43);
 
     /**
      * {@link GUI} inventory.
@@ -295,11 +307,85 @@ public class ItemAppearanceGUI extends GUI implements Editor, MessageInputReceiv
     }
 
     /**
+     * Item appearance metadata.
+     *
+     * @author Danny Nguyen
+     * @version 0.1.25
+     * @since 0.1.25
+     */
+    public enum Button {
+      /**
+       * Display name.
+       */
+      DISPLAY_NAME,
+
+      /**
+       * Custom model data.
+       */
+      CUSTOM_MODEL_DATA,
+
+      /**
+       * Lore.
+       */
+      LORE,
+
+      /**
+       * Enchantment glint override.
+       */
+      ENCHANTMENT_GLINT_OVERRIDE,
+
+      /**
+       * Hide additional tooltip item flag.
+       */
+      ITEM_FLAG_HIDE_ADDITIONAL_TOOLTIP,
+
+      /**
+       * Hide armor trim item flag.
+       */
+      ITEM_FLAG_HIDE_ARMOR_TRIM,
+
+      /**
+       * Hide attributes item flag.
+       */
+      ITEM_FLAG_HIDE_ATTRIBUTES,
+
+      /**
+       * Hide destroys item flag.
+       */
+      ITEM_FLAG_HIDE_DESTROYS,
+
+      /**
+       * Hide dye item flag.
+       */
+      ITEM_FLAG_HIDE_DYE,
+
+      /**
+       * Hide enchants item flag.
+       */
+      ITEM_FLAG_HIDE_ENCHANTS,
+
+      /**
+       * Hide placed on item flag.
+       */
+      ITEM_FLAG_HIDE_PLACED_ON,
+
+      /**
+       * Hide unbreakable item flag.
+       */
+      ITEM_FLAG_HIDE_UNBREAKABLE,
+
+      /**
+       * Hide tooltip.
+       */
+      HIDE_TOOLTIP;
+    }
+
+    /**
      * Reads item appearance metadata and returns representative display icons.
      *
      * @param meta item metadata
      * @author Danny Nguyen
-     * @version 0.1.17
+     * @version 0.1.26
      * @since 0.1.5
      */
     private record Display(ItemMeta meta) {
@@ -329,7 +415,7 @@ public class ItemAppearanceGUI extends GUI implements Editor, MessageInputReceiv
        */
       private ItemStack iconCustomModelData() {
         if (meta.hasCustomModelData()) {
-          return ItemUtils.Create.createItem(Material.SPYGLASS, ChatColor.AQUA + "Custom Model Data", List.of(String.valueOf(meta.getCustomModelData())));
+          return ItemUtils.Create.createItem(Material.SPYGLASS, ChatColor.AQUA + "Custom Model Data", List.of(ChatColor.WHITE + String.valueOf(meta.getCustomModelData())));
         } else {
           return ItemUtils.Create.createItem(Material.SPYGLASS, ChatColor.AQUA + "Custom Model Data");
         }
@@ -357,7 +443,7 @@ public class ItemAppearanceGUI extends GUI implements Editor, MessageInputReceiv
         if (meta.hasLore()) {
           List<String> lore = meta.getLore();
           for (int i = 0; i < lore.size(); i++) {
-            lore.set(i, ChatColor.WHITE + "" + i + " " + lore.get(i));
+            lore.set(i, ChatColor.WHITE + "" + i + 1 + " " + lore.get(i));
           }
           return ItemUtils.Create.createItem(Material.BOOK, ChatColor.WHITE + "Lore", lore);
         } else {
@@ -482,79 +568,102 @@ public class ItemAppearanceGUI extends GUI implements Editor, MessageInputReceiv
         }
       }
     }
+  }
+
+  /**
+   * {@link GUI} interaction.
+   *
+   * @author Danny Nguyen
+   * @version 0.1.26
+   * @since 0.1.26
+   */
+  private class Interaction {
+    /**
+     * No parameter constructor.
+     */
+    private Interaction() {
+    }
 
     /**
-     * Item appearance metadata.
-     *
-     * @author Danny Nguyen
-     * @version 0.1.25
-     * @since 0.1.25
+     * Opens an {@link ItemEditorGUI} with the item currently being edited.
      */
-    public enum Button {
-      /**
-       * Display name.
-       */
-      DISPLAY_NAME,
+    private void openItemAppearanceGUI() {
+      if (ItemUtils.Read.isNotNullOrAir(item)) {
+        Plugin.getGUIManager().openGUI(user, new ItemEditorGUI(user, item.clone()));
+      } else {
+        Plugin.getGUIManager().openGUI(user, new ItemEditorGUI(user, null));
+      }
+    }
 
-      /**
-       * Custom model data.
-       */
-      CUSTOM_MODEL_DATA,
+    /**
+     * Sets the item currently being edited.
+     *
+     * @param event inventory click event
+     */
+    private void setItemByClickedSlot(InventoryClickEvent event) {
+      event.setCancelled(false);
+      Bukkit.getScheduler().runTaskLater(Plugin.getInstance(), () -> {
+        item = getInventory().getItem(4);
+        updateDynamicButtons();
+      }, 1);
+    }
 
-      /**
-       * Lore.
-       */
-      LORE,
+    /**
+     * Queries a message input and closes the inventory so the user can respond.
+     *
+     * @param receiver {@link MessageInputReceiver}
+     * @param input    {@link Message.Input}
+     */
+    private void queryMessageInput(MessageInputReceiver receiver, Message.Input input) {
+      Plugin.getMessageManager().queryMessageInput(user, receiver, input);
+      user.closeInventory();
+    }
 
-      /**
-       * Enchantment glint override.
-       */
-      ENCHANTMENT_GLINT_OVERRIDE,
+    /**
+     * Toggles the item's item flag and updates its display.
+     *
+     * @param itemFlag item flag
+     * @param button   {@link DynamicButtons.Button}
+     */
+    private void toggleItemFlag(ItemFlag itemFlag, DynamicButtons.Button button) {
+      ItemMeta meta = item.getItemMeta();
+      if (meta.hasItemFlag(itemFlag)) {
+        meta.removeItemFlags(itemFlag);
+      } else {
+        meta.addItemFlags(itemFlag);
+      }
+      item.setItemMeta(meta);
+      new DynamicButtons().update(button);
+    }
 
-      /**
-       * Hide additional tooltip item flag.
-       */
-      ITEM_FLAG_HIDE_ADDITIONAL_TOOLTIP,
+    /**
+     * Toggles the item's enchantment glint override.
+     */
+    private void toggleEnchantmentGlintOverride() {
+      ItemMeta meta = item.getItemMeta();
+      meta.setEnchantmentGlintOverride(!meta.hasEnchantmentGlintOverride());
+      item.setItemMeta(meta);
+      new DynamicButtons().update(DynamicButtons.Button.ENCHANTMENT_GLINT_OVERRIDE);
+    }
 
-      /**
-       * Hide armor trim item flag.
-       */
-      ITEM_FLAG_HIDE_ARMOR_TRIM,
+    /**
+     * Clears the item's lore.
+     */
+    private void clearLore() {
+      ItemMeta meta = item.getItemMeta();
+      meta.setLore(null);
+      item.setItemMeta(meta);
+      new DynamicButtons().update(DynamicButtons.Button.LORE);
+    }
 
-      /**
-       * Hide attributes item flag.
-       */
-      ITEM_FLAG_HIDE_ATTRIBUTES,
-
-      /**
-       * Hide destroys item flag.
-       */
-      ITEM_FLAG_HIDE_DESTROYS,
-
-      /**
-       * Hide dye item flag.
-       */
-      ITEM_FLAG_HIDE_DYE,
-
-      /**
-       * Hide enchants item flag.
-       */
-      ITEM_FLAG_HIDE_ENCHANTS,
-
-      /**
-       * Hide placed on item flag.
-       */
-      ITEM_FLAG_HIDE_PLACED_ON,
-
-      /**
-       * Hide unbreakable item flag.
-       */
-      ITEM_FLAG_HIDE_UNBREAKABLE,
-
-      /**
-       * Hide tooltip.
-       */
-      HIDE_TOOLTIP;
+    /**
+     * Toggles the item's tooltip.
+     */
+    private void toggleHideTooltip() {
+      ItemMeta meta = item.getItemMeta();
+      meta.setHideTooltip(!meta.isHideTooltip());
+      item.setItemMeta(meta);
+      new DynamicButtons().update(DynamicButtons.Button.HIDE_TOOLTIP);
     }
   }
 }

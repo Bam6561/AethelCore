@@ -25,7 +25,7 @@ import java.util.Objects;
  * Collection of item metadata {@link Editor editors}.
  *
  * @author Danny Nguyen
- * @version 0.1.25
+ * @version 0.1.26
  * @since 0.0.27
  */
 public class ItemEditorGUI extends GUI implements Editor {
@@ -140,20 +140,8 @@ public class ItemEditorGUI extends GUI implements Editor {
     event.setCancelled(true);
 
     switch (event.getRawSlot()) {
-      case 4 -> {
-        event.setCancelled(false);
-        Bukkit.getScheduler().runTaskLater(Plugin.getInstance(), () -> {
-          this.item = getInventory().getItem(4);
-          updateDynamicButtons();
-        }, 1);
-      }
-      case 10 -> {
-        if (ItemUtils.Read.isNotNullOrAir(item)) {
-          Plugin.getGUIManager().openGUI(user, new ItemAppearanceGUI(user, item.clone()));
-        } else {
-          Plugin.getGUIManager().openGUI(user, new ItemAppearanceGUI(user, null));
-        }
-      }
+      case 4 -> new Interaction().setItemByClickedSlot(event);
+      case 10 -> new Interaction().openItemAppearanceGUI();
     }
   }
 
@@ -211,5 +199,44 @@ public class ItemEditorGUI extends GUI implements Editor {
   @Override
   public ItemStack getItem() {
     return this.item;
+  }
+
+  /**
+   * {@link GUI} interaction.
+   *
+   * @author Danny Nguyen
+   * @version 0.1.26
+   * @since 0.1.26
+   */
+  private class Interaction {
+    /**
+     * No parameter constructor.
+     */
+    private Interaction() {
+    }
+
+    /**
+     * Sets the item currently being edited.
+     *
+     * @param event inventory click event
+     */
+    private void setItemByClickedSlot(InventoryClickEvent event) {
+      event.setCancelled(false);
+      Bukkit.getScheduler().runTaskLater(Plugin.getInstance(), () -> {
+        item = getInventory().getItem(4);
+        updateDynamicButtons();
+      }, 1);
+    }
+
+    /**
+     * Opens an {@link ItemAppearanceGUI} with the item currently being edited.
+     */
+    private void openItemAppearanceGUI() {
+      if (ItemUtils.Read.isNotNullOrAir(item)) {
+        Plugin.getGUIManager().openGUI(user, new ItemAppearanceGUI(user, item.clone()));
+      } else {
+        Plugin.getGUIManager().openGUI(user, new ItemAppearanceGUI(user, null));
+      }
+    }
   }
 }
