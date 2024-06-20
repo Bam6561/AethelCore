@@ -25,7 +25,7 @@ import java.util.Objects;
  * Collection of item metadata {@link Editor editors}.
  *
  * @author Danny Nguyen
- * @version 0.1.9
+ * @version 0.1.23
  * @since 0.0.27
  */
 public class ItemEditorGUI extends GUI implements Editor {
@@ -151,7 +151,7 @@ public class ItemEditorGUI extends GUI implements Editor {
         if (ItemUtils.Read.isNotNullOrAir(item)) {
           Plugin.getGUIManager().openGUI(user, new ItemAppearanceGUI(user, item.clone()));
         } else {
-          Plugin.getGUIManager().openGUI(user, new ItemAppearanceGUI(user, item));
+          Plugin.getGUIManager().openGUI(user, new ItemAppearanceGUI(user, null));
         }
       }
     }

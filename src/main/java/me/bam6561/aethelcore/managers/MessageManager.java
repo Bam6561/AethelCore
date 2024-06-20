@@ -7,6 +7,8 @@ import me.bam6561.aethelcore.references.Permission;
 import me.bam6561.aethelcore.utils.TextUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -24,7 +26,7 @@ import java.util.UUID;
  * </ul>
  *
  * @author Danny Nguyen
- * @version 0.1.20
+ * @version 0.1.23
  * @since 0.1.10
  */
 public class MessageManager {
@@ -51,15 +53,13 @@ public class MessageManager {
 
     MessageInput.Request request = activeInputRequests.get(player.getUniqueId());
     if (request != null) {
-      MessageInput.Response response = new MessageInput.Response(request, player, message);
-      response.interpretInput();
+      new MessageInput.Response(request, player, message).interpretInput();
       event.setCancelled(true);
       return;
     }
 
     if (MessageFlag.hasMessageFlag(message)) {
-      MessageFlag flag = new MessageFlag(event, player, message);
-      flag.interpretAction();
+      new MessageFlag(event, player, message).interpretAction();
     }
   }
 
@@ -183,56 +183,76 @@ public class MessageManager {
        */
       private void interpretInput() {
         switch (input) {
-          case CUSTOM_MODEL_DATA -> inputCustomModelData();
-          case DISPLAY_NAME -> inputDisplayName();
-          case LORE_ADD -> inputLoreAdd();
-          case LORE_EDIT -> inputLoreEdit();
-          case LORE_INSERT -> inputLoreInsert();
-          case LORE_REMOVE -> inputLoreRemove();
-          case LORE_SET -> inputLoreSet();
+          case CUSTOM_MODEL_DATA -> new ItemAppearance().inputCustomModelData();
+          case DISPLAY_NAME -> new ItemAppearance().inputDisplayName();
+          case LORE_ADD -> new ItemAppearance().inputLoreAdd();
+          case LORE_EDIT -> new ItemAppearance().inputLoreEdit();
+          case LORE_INSERT -> new ItemAppearance().inputLoreInsert();
+          case LORE_REMOVE -> new ItemAppearance().inputLoreRemove();
+          case LORE_SET -> new ItemAppearance().inputLoreSet();
         }
       }
 
       /**
-       * {@link Message.Input#CUSTOM_MODEL_DATA}
+       * {@link Response Responses} that affect an {@link ItemAppearanceGUI}.
+       *
+       * @author Danny Nguyen
+       * @version 0.1.23
+       * @since 0.1.23
        */
-      private void inputCustomModelData() {
-      }
+      private class ItemAppearance {
+        /**
+         * {@link ItemAppearanceGUI}
+         */
+        private final ItemAppearanceGUI gui = (ItemAppearanceGUI) receiver;
 
-      /**
-       * {@link Message.Input#DISPLAY_NAME}
-       */
-      private void inputDisplayName() {
-      }
+        /**
+         * No parameter constructor.
+         */
+        private ItemAppearance() {
+        }
 
-      /**
-       * {@link Message.Input#LORE_ADD}
-       */
-      private void inputLoreAdd() {
-      }
+        /**
+         * {@link Message.Input#CUSTOM_MODEL_DATA}
+         */
+        private void inputCustomModelData() {
+        }
 
-      /**
-       * {@link Message.Input#LORE_EDIT}
-       */
-      private void inputLoreEdit() {
-      }
+        /**
+         * {@link Message.Input#DISPLAY_NAME}
+         */
+        private void inputDisplayName() {
+        }
 
-      /**
-       * {@link Message.Input#LORE_INSERT}
-       */
-      private void inputLoreInsert() {
-      }
+        /**
+         * {@link Message.Input#LORE_ADD}
+         */
+        private void inputLoreAdd() {
+        }
 
-      /**
-       * {@link Message.Input#LORE_REMOVE}
-       */
-      private void inputLoreRemove() {
-      }
+        /**
+         * {@link Message.Input#LORE_EDIT}
+         */
+        private void inputLoreEdit() {
+        }
 
-      /**
-       * {@link Message.Input#LORE_SET}
-       */
-      private void inputLoreSet() {
+        /**
+         * {@link Message.Input#LORE_INSERT}
+         */
+        private void inputLoreInsert() {
+        }
+
+        /**
+         * {@link Message.Input#LORE_REMOVE}
+         */
+        private void inputLoreRemove() {
+        }
+
+        /**
+         * {@link Message.Input#LORE_SET}
+         */
+        private void inputLoreSet() {
+        }
       }
     }
   }

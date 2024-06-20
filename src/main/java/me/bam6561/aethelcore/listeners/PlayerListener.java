@@ -18,7 +18,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
  * Collection of player interaction listeners.
  *
  * @author Danny Nguyen
- * @version 0.1.13
+ * @version 0.1.23
  * @since 0.0.8
  */
 public class PlayerListener implements Listener {
@@ -58,8 +58,7 @@ public class PlayerListener implements Listener {
         return;
       }
 
-      SneakingInteraction interaction = new SneakingInteraction(event);
-      interaction.interpretAction();
+      new SneakingInteraction(event).interpretAction();
     }
   }
 
@@ -78,8 +77,7 @@ public class PlayerListener implements Listener {
         return;
       }
 
-      SneakingEntityInteraction interaction = new SneakingEntityInteraction(event);
-      interaction.interpretAction();
+      new SneakingEntityInteraction(event).interpretAction();
     }
   }
 }
