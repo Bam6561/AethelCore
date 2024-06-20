@@ -17,17 +17,14 @@ import java.util.Objects;
  * {@link DatabaseCommand} {@link GUI}.
  *
  * @author Danny Nguyen
- * @version 0.1.25
+ * @version 0.2.1
  * @since 0.0.15
  */
 public class DatabaseGUI extends GUI implements Database, Paginated {
   /**
-   * Associates the {@link GUI} with its user.
-   *
-   * @param user {@link GUI} user
+   * No parameter constructor.
    */
-  public DatabaseGUI(@NotNull Player user) {
-    super(user);
+  public DatabaseGUI() {
   }
 
   /**

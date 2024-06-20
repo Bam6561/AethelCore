@@ -25,7 +25,7 @@ import java.util.Objects;
  * Collection of item metadata {@link Editor editors}.
  *
  * @author Danny Nguyen
- * @version 0.2.0
+ * @version 0.2.1
  * @since 0.0.27
  */
 public class ItemEditorGUI extends GUI implements Editor {
@@ -38,16 +38,22 @@ public class ItemEditorGUI extends GUI implements Editor {
   private ItemStack item;
 
   /**
+   * Interacting player.
+   * <p>
+   * To prevent user desync, update the player object to refer
+   * to the player whenever the {@link GUI} is clicked.
+   */
+  private Player player;
+
+  /**
    * Associates the {@link GUI} with its user and interacting item.
    * <p>
    * The inventory creates a new item object from the constructor's item parameter,
    * and all future references to the item refer to the inventory's copy.
    *
-   * @param user {@link GUI} user
    * @param item interacting item
    */
-  public ItemEditorGUI(@NotNull Player user, @Nullable ItemStack item) {
-    super(user);
+  public ItemEditorGUI(@Nullable ItemStack item) {
     Inventory inv = getInventory();
     inv.setItem(4, item);
     this.item = inv.getItem(4);
@@ -146,9 +152,11 @@ public class ItemEditorGUI extends GUI implements Editor {
     if (isNullOrPlayerInventoryClick(event)) {
       return;
     }
-
     event.setCancelled(true);
-
+    if (ItemUtils.Read.isNullOrAir(event.getCurrentItem())) {
+      return;
+    }
+    this.player = (Player) event.getWhoClicked();
     switch (event.getRawSlot()) {
       case 4 -> new Interaction().setItemByClickedSlot(event);
       case 10 -> new Interaction().openItemAppearanceGUI();
@@ -215,7 +223,7 @@ public class ItemEditorGUI extends GUI implements Editor {
    * {@link GUI} interaction.
    *
    * @author Danny Nguyen
-   * @version 0.1.26
+   * @version 0.2.1
    * @since 0.1.26
    */
   private class Interaction {
@@ -243,9 +251,9 @@ public class ItemEditorGUI extends GUI implements Editor {
      */
     private void openItemAppearanceGUI() {
       if (ItemUtils.Read.isNotNullOrAir(item)) {
-        Plugin.getGUIManager().openGUI(user, new ItemAppearanceGUI(user, item.clone()));
+        Plugin.getGUIManager().openGUI(player, new ItemAppearanceGUI(item.clone()));
       } else {
-        Plugin.getGUIManager().openGUI(user, new ItemAppearanceGUI(user, null));
+        Plugin.getGUIManager().openGUI(player, new ItemAppearanceGUI(null));
       }
     }
   }

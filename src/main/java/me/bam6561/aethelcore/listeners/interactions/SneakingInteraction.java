@@ -14,7 +14,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
  * {@link SneakingInteractEvent} interaction.
  *
  * @author Danny Nguyen
- * @version 0.1.2
+ * @version 0.2.1
  * @since 0.0.9
  */
 public class SneakingInteraction {
@@ -63,7 +63,7 @@ public class SneakingInteraction {
         }
 
         event.setCancelled(true);
-        Plugin.getGUIManager().openGUI(player, new CraftingTableGUI(player));
+        Plugin.getGUIManager().openGUI(player, new CraftingTableGUI());
       }
     }
   }

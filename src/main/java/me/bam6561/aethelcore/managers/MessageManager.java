@@ -26,7 +26,7 @@ import java.util.*;
  * </ul>
  *
  * @author Danny Nguyen
- * @version 0.1.26
+ * @version 0.2.1
  * @since 0.1.10
  */
 public class MessageManager {
@@ -51,15 +51,15 @@ public class MessageManager {
     Player player = event.getPlayer();
     String message = event.getMessage();
 
+    if (MessageFlag.hasMessageFlag(message)) {
+      new MessageFlag(event, player, message).interpretAction();
+      return;
+    }
+
     MessageInput.Request request = activeInputRequests.get(player.getUniqueId());
     if (request != null) {
       new MessageInput.Response(request, player, message).interpretInput();
       event.setCancelled(true);
-      return;
-    }
-
-    if (MessageFlag.hasMessageFlag(message)) {
-      new MessageFlag(event, player, message).interpretAction();
     }
   }
 
@@ -208,7 +208,7 @@ public class MessageManager {
        * {@link Response Responses} that affect an {@link ItemAppearanceGUI}.
        *
        * @author Danny Nguyen
-       * @version 0.2.0
+       * @version 0.2.1
        * @since 0.1.23
        */
       private class ItemAppearance {
@@ -241,14 +241,14 @@ public class MessageManager {
           if (message.equals("-")) {
             meta.setCustomModelData(null);
             item.setItemMeta(meta);
-            player.sendMessage(ChatColor.GREEN + Message.ASCII.CHECKMARK.asString() + " Removed Custom Model Data");
+            player.sendMessage(ChatColor.GREEN + Message.ASCII.CHECKMARK.asString() + " Custom Model Data " + ChatColor.GRAY + Message.ASCII.CROSS_MARK);
             reopenUpdatedGUI(button);
             return;
           }
           try {
             meta.setCustomModelData(Integer.parseInt(message));
             item.setItemMeta(meta);
-            player.sendMessage(ChatColor.GREEN + Message.ASCII.CHECKMARK.asString() + " Set Custom Model Data " + ChatColor.GRAY + message);
+            player.sendMessage(ChatColor.GREEN + Message.ASCII.CHECKMARK.asString() + " Custom Model Data " + ChatColor.GRAY + message);
             reopenUpdatedGUI(button);
           } catch (NumberFormatException ex) {
             player.sendMessage(Message.Error.NON_INTEGER_INPUT.asString());
@@ -262,10 +262,10 @@ public class MessageManager {
           ItemAppearanceGUI.DynamicButtons.Button button = ItemAppearanceGUI.DynamicButtons.Button.DISPLAY_NAME;
           if (message.equals("-")) {
             meta.setDisplayName(null);
-            player.sendMessage(ChatColor.GREEN + Message.ASCII.CHECKMARK.asString() + " Removed Display Name");
+            player.sendMessage(ChatColor.GREEN + Message.ASCII.CHECKMARK.asString() + " Display Name " + ChatColor.GRAY + Message.ASCII.CROSS_MARK);
           } else {
             meta.setDisplayName(TextUtils.Color.translate(message, '&'));
-            player.sendMessage(ChatColor.GREEN + Message.ASCII.CHECKMARK.asString() + " Set Display Name " + ChatColor.GRAY + message);
+            player.sendMessage(ChatColor.GREEN + Message.ASCII.CHECKMARK.asString() + " Display Name " + ChatColor.GRAY + message);
           }
           item.setItemMeta(meta);
           reopenUpdatedGUI(button);
@@ -284,7 +284,7 @@ public class MessageManager {
             meta.setLore(List.of(TextUtils.Color.translate(message, '&')));
           }
           item.setItemMeta(meta);
-          player.sendMessage(ChatColor.GREEN + Message.ASCII.CHECKMARK.asString() + " Added Lore " + ChatColor.GRAY + message);
+          player.sendMessage(ChatColor.GREEN + Message.ASCII.CHECKMARK.asString() + " Add Lore " + ChatColor.GRAY + message);
           reopenUpdatedGUI(button);
         }
 
@@ -310,7 +310,7 @@ public class MessageManager {
             lore.set(line, TextUtils.Color.translate(messageInput[1], '&'));
             meta.setLore(lore);
             item.setItemMeta(meta);
-            player.sendMessage(ChatColor.GREEN + Message.ASCII.CHECKMARK.asString() + " Edited Lore " + ChatColor.GRAY + message);
+            player.sendMessage(ChatColor.GREEN + Message.ASCII.CHECKMARK.asString() + " Edit Lore " + ChatColor.GRAY + message);
             reopenUpdatedGUI(button);
           } catch (IndexOutOfBoundsException ex) {
             player.sendMessage(Message.Error.INVALID_LINE.asString());
@@ -370,7 +370,7 @@ public class MessageManager {
             lore.remove(line);
             meta.setLore(lore);
             item.setItemMeta(meta);
-            player.sendMessage(ChatColor.GREEN + Message.ASCII.CHECKMARK.asString() + " Removed Lore " + ChatColor.GRAY + message);
+            player.sendMessage(ChatColor.GREEN + Message.ASCII.CHECKMARK.asString() + " Remove Lore " + ChatColor.GRAY + message);
             reopenUpdatedGUI(button);
           } catch (NumberFormatException ex) {
             player.sendMessage(Message.Error.INVALID_LINE.asString());
@@ -408,7 +408,7 @@ public class MessageManager {
    * Message flags.
    *
    * @author Danny Nguyen
-   * @version 0.1.20
+   * @version 0.2.1
    * @since 0.1.14
    */
   private static class MessageFlag {
@@ -450,6 +450,7 @@ public class MessageManager {
      * Either:
      * <ul>
      *   <li>color codes messages
+     *   <li>escapes a {@link Message.Input}
      * </ul>
      */
     private void interpretAction() {
@@ -461,6 +462,10 @@ public class MessageManager {
             player.sendMessage(Message.Error.INSUFFICIENT_PERMISSION.asString());
             event.setCancelled(true);
           }
+        }
+        case '-' -> {
+          Plugin.getMessageManager().removeMessageInput(player);
+          player.sendMessage(ChatColor.GREEN + Message.ASCII.CHECKMARK.asString() + " Escape Input");
         }
       }
     }

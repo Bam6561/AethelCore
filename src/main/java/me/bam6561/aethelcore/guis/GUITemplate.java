@@ -13,17 +13,14 @@ import java.util.Objects;
  * {@link GUI}.
  *
  * @author Danny Nguyen
- * @version 0.1.9
+ * @version 0.2.1
  * @since 0.0.27
  */
 public class GUITemplate extends GUI {
   /**
-   * Associates the {@link GUI} with its user.
-   *
-   * @param user {@link GUI} user
+   * No parameter constructor.
    */
   public GUITemplate(@NotNull Player user) {
-    super(user);
   }
 
   /**

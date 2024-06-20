@@ -28,7 +28,7 @@ import java.util.Set;
  * Item appearance {@link GUI}.
  *
  * @author Danny Nguyen
- * @version 0.2.0
+ * @version 0.2.1
  * @since 0.1.2
  */
 public class ItemAppearanceGUI extends GUI implements Editor, MessageInputReceiver {
@@ -41,16 +41,22 @@ public class ItemAppearanceGUI extends GUI implements Editor, MessageInputReceiv
   private ItemStack item;
 
   /**
+   * Interacting player.
+   * <p>
+   * To prevent user desync, update the player object to refer
+   * to the player whenever the {@link GUI} is clicked.
+   */
+  private Player user;
+
+  /**
    * Associates the {@link GUI} with its user and interacting item.
    * <p>
    * The inventory creates a new item object from the constructor's item parameter,
    * and all future references to the item refer to the inventory's copy.
    *
-   * @param user {@link GUI} user
    * @param item interacting item
    */
-  public ItemAppearanceGUI(@NotNull Player user, @Nullable ItemStack item) {
-    super(user);
+  public ItemAppearanceGUI(@Nullable ItemStack item) {
     Inventory inv = getInventory();
     inv.setItem(4, item);
     this.item = inv.getItem(4);
@@ -148,8 +154,8 @@ public class ItemAppearanceGUI extends GUI implements Editor, MessageInputReceiv
       }
       return;
     }
-
-    switch (event.getRawSlot()) {
+    this.user = (Player) event.getWhoClicked();
+    switch (rawSlot) {
       case 2 -> new Interaction().openItemAppearanceGUI();
       case 4 -> new Interaction().setItemByClickedSlot(event);
       case 10 -> new Interaction().queryMessageInput(this, Message.Input.DISPLAY_NAME);
@@ -595,7 +601,7 @@ public class ItemAppearanceGUI extends GUI implements Editor, MessageInputReceiv
    * {@link GUI} interaction.
    *
    * @author Danny Nguyen
-   * @version 0.2.0
+   * @version 0.2.1
    * @since 0.1.26
    */
   private class Interaction {
@@ -610,9 +616,9 @@ public class ItemAppearanceGUI extends GUI implements Editor, MessageInputReceiv
      */
     private void openItemAppearanceGUI() {
       if (ItemUtils.Read.isNotNullOrAir(item)) {
-        Plugin.getGUIManager().openGUI(user, new ItemEditorGUI(user, item.clone()));
+        Plugin.getGUIManager().openGUI(user, new ItemEditorGUI(item.clone()));
       } else {
-        Plugin.getGUIManager().openGUI(user, new ItemEditorGUI(user, null));
+        Plugin.getGUIManager().openGUI(user, new ItemEditorGUI(null));
       }
     }
 
@@ -696,7 +702,7 @@ public class ItemAppearanceGUI extends GUI implements Editor, MessageInputReceiv
       ItemMeta meta = item.getItemMeta();
       meta.setLore(null);
       item.setItemMeta(meta);
-      user.sendMessage(ChatColor.GREEN + Message.ASCII.CHECKMARK.asString() + " Cleared Lore");
+      user.sendMessage(ChatColor.GREEN + Message.ASCII.CHECKMARK.asString() + " Clear Lore");
       new DynamicButtons().update(DynamicButtons.Button.LORE);
     }
 

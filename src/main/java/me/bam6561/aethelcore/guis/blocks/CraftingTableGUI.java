@@ -4,7 +4,6 @@ import me.bam6561.aethelcore.Plugin;
 import me.bam6561.aethelcore.guis.GUI;
 import me.bam6561.aethelcore.guis.blocks.markers.Workstation;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.*;
 import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
@@ -15,17 +14,14 @@ import java.util.Objects;
  * Crafting table {@link GUI}.
  *
  * @author Danny Nguyen
- * @version 0.1.9
+ * @version 0.2.1
  * @since 0.0.11
  */
 public class CraftingTableGUI extends GUI implements Workstation {
   /**
-   * Associates the {@link GUI} with its user.
-   *
-   * @param user {@link GUI} user
+   * No parameter constructor.
    */
-  public CraftingTableGUI(@NotNull Player user) {
-    super(user);
+  public CraftingTableGUI() {
   }
 
   /**
