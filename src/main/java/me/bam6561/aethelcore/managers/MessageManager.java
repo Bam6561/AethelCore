@@ -2,6 +2,7 @@ package me.bam6561.aethelcore.managers;
 
 import me.bam6561.aethelcore.Plugin;
 import me.bam6561.aethelcore.guis.commands.ItemAppearanceGUI;
+import me.bam6561.aethelcore.guis.commands.ItemDurabilityGUI;
 import me.bam6561.aethelcore.guis.markers.MessageInputReceiver;
 import me.bam6561.aethelcore.references.Message;
 import me.bam6561.aethelcore.references.Permission;
@@ -11,7 +12,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.Repairable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -108,7 +111,7 @@ public class MessageManager {
      * @param receiver {@link MessageInputReceiver}
      * @param input    {@link Message.Input}
      * @author Danny Nguyen
-     * @version 0.1.22
+     * @version 0.3.0
      * @since 0.1.17
      */
     private record Request(MessageInputReceiver receiver, Message.Input input) {
@@ -120,6 +123,11 @@ public class MessageManager {
           case DISPLAY_NAME, CUSTOM_MODEL_DATA, LORE_ADD, LORE_INSERT, LORE_SET, LORE_EDIT, LORE_REMOVE -> {
             if (!(receiver instanceof ItemAppearanceGUI)) {
               throw new IllegalArgumentException("Item Appearance GUI input only");
+            }
+          }
+          case DAMAGE, DURABILITY, MAX_DURABILITY, REPAIR_COST -> {
+            if (!(receiver instanceof ItemDurabilityGUI)) {
+              throw new IllegalArgumentException("Item Durability GUI input only");
             }
           }
         }
@@ -150,7 +158,7 @@ public class MessageManager {
      * Response to a {@link Request}.
      *
      * @author Danny Nguyen
-     * @version 0.2.3
+     * @version 0.3.0
      * @since 0.1.13
      */
     private static class Response {
@@ -201,6 +209,10 @@ public class MessageManager {
           case LORE_SET -> new ItemAppearance().inputLoreSet();
           case LORE_EDIT -> new ItemAppearance().inputLoreEdit();
           case LORE_REMOVE -> new ItemAppearance().inputLoreRemove();
+          case DAMAGE -> new ItemDurability().inputDamage();
+          case DURABILITY -> new ItemDurability().inputDurability();
+          case MAX_DURABILITY -> new ItemDurability().inputMaxDurability();
+          case REPAIR_COST -> new ItemDurability().inputRepairCost();
         }
       }
 
@@ -399,6 +411,158 @@ public class MessageManager {
          * @param button {@link me.bam6561.aethelcore.guis.commands.ItemAppearanceGUI.DynamicButtons.Button}
          */
         private void reopenUpdatedGUI(ItemAppearanceGUI.DynamicButtons.Button button) {
+          Plugin.getMessageManager().removeMessageInput(player);
+          gui.new DynamicButtons().update(button);
+          Bukkit.getScheduler().runTask(Plugin.getInstance(), () -> {
+            Plugin.getGUIManager().openGUI(player, gui);
+          });
+        }
+      }
+
+      /**
+       * {@link Response Responses} that affect an {@link ItemDurabilityGUI}.
+       *
+       * @author Danny Nguyen
+       * @author 0.3.0
+       * @version 0.3.0
+       */
+      private class ItemDurability {
+        /**
+         * {@link ItemDurabilityGUI}
+         */
+        private final ItemDurabilityGUI gui = (ItemDurabilityGUI) receiver;
+
+        /**
+         * Item being edited.
+         */
+        private final ItemStack item = gui.getItem();
+
+        /**
+         * Item metadata.
+         */
+        private final ItemMeta meta = item.getItemMeta();
+
+        /**
+         * No parameter constructor.
+         */
+        private ItemDurability() {
+        }
+
+        /**
+         * {@link Message.Input#DAMAGE}
+         */
+        private void inputDamage() {
+          ItemDurabilityGUI.DynamicButtons.Button button = ItemDurabilityGUI.DynamicButtons.Button.DAMAGE;
+          int damage;
+          try {
+            damage = Integer.parseInt(message);
+          } catch (NumberFormatException ex) {
+            player.sendMessage(Message.Error.NON_INTEGER_INPUT.asString());
+            return;
+          }
+          Damageable damageable = (Damageable) meta;
+          if (!damageable.hasMaxDamage()) {
+            short materialMaxDurability = item.getType().getMaxDurability();
+            if (damage > materialMaxDurability) {
+              damage = materialMaxDurability;
+            }
+          } else {
+            int maxDamage = damageable.getMaxDamage();
+            if (damage > maxDamage) {
+              damage = maxDamage;
+            }
+          }
+          damageable.setDamage(damage);
+          item.setItemMeta(damageable);
+          player.sendMessage(ChatColor.GREEN + Message.ASCII.CHECKMARK.asString() + " Damage " + ChatColor.GRAY + message);
+          reopenUpdatedGUI(button);
+        }
+
+        /**
+         * {@link Message.Input#DURABILITY}
+         */
+        private void inputDurability() {
+          ItemDurabilityGUI.DynamicButtons.Button button = ItemDurabilityGUI.DynamicButtons.Button.DURABILITY;
+          int durability;
+          try {
+            durability = Integer.parseInt(message);
+          } catch (NumberFormatException ex) {
+            player.sendMessage(Message.Error.NON_INTEGER_INPUT.asString());
+            return;
+          }
+          Damageable damageable = (Damageable) meta;
+          if (!damageable.hasMaxDamage()) {
+            short materialMaxDurability = item.getType().getMaxDurability();
+            if (durability > materialMaxDurability) {
+              durability = 0;
+            } else {
+              durability = Math.abs(durability - materialMaxDurability);
+            }
+          } else {
+            int maxDamage = damageable.getMaxDamage();
+            if (durability > maxDamage) {
+              durability = 0;
+            } else {
+              durability = Math.abs(durability - maxDamage);
+            }
+          }
+          damageable.setDamage(durability);
+          item.setItemMeta(damageable);
+          player.sendMessage(ChatColor.GREEN + Message.ASCII.CHECKMARK.asString() + " Durability " + ChatColor.GRAY + message);
+          reopenUpdatedGUI(button);
+        }
+
+        /**
+         * {@link Message.Input#MAX_DURABILITY}
+         */
+        private void inputMaxDurability() {
+          ItemDurabilityGUI.DynamicButtons.Button button = ItemDurabilityGUI.DynamicButtons.Button.MAX_DURABILITY;
+          Damageable damageable = (Damageable) meta;
+          if (message.equals("-")) {
+            damageable.setMaxDamage(null);
+            item.setItemMeta(damageable);
+            player.sendMessage(ChatColor.GREEN + Message.ASCII.CHECKMARK.asString() + " Max Durability " + ChatColor.GRAY + Message.ASCII.CROSS_MARK.asString());
+            reopenUpdatedGUI(button);
+            return;
+          }
+          int maxDurability;
+          try {
+            maxDurability = Integer.parseInt(message);
+          } catch (NumberFormatException ex) {
+            player.sendMessage(Message.Error.NON_INTEGER_INPUT.asString());
+            return;
+          }
+          damageable.setMaxDamage(maxDurability);
+          item.setItemMeta(damageable);
+          player.sendMessage(ChatColor.GREEN + Message.ASCII.CHECKMARK.asString() + " Max Durability " + ChatColor.GRAY + message);
+          reopenUpdatedGUI(button);
+        }
+
+        /**
+         * {@link Message.Input#REPAIR_COST}
+         */
+        private void inputRepairCost() {
+          ItemDurabilityGUI.DynamicButtons.Button button = ItemDurabilityGUI.DynamicButtons.Button.REPAIR_COST;
+          int repairCost;
+          try {
+            repairCost = Integer.parseInt(message);
+          } catch (NumberFormatException ex) {
+            player.sendMessage(Message.Error.NON_INTEGER_INPUT.asString());
+            return;
+          }
+          Repairable repairable = (Repairable) meta;
+          repairable.setRepairCost(repairCost);
+          item.setItemMeta(repairable);
+          player.sendMessage(ChatColor.GREEN + Message.ASCII.CHECKMARK.asString() + " Repair Cost " + ChatColor.GRAY + message);
+          reopenUpdatedGUI(button);
+        }
+
+        /**
+         * Opens the updated {@link ItemDurabilityGUI} synchronously.
+         *
+         * @param button {@link me.bam6561.aethelcore.guis.commands.ItemDurabilityGUI.DynamicButtons.Button}
+         */
+        private void reopenUpdatedGUI(ItemDurabilityGUI.DynamicButtons.Button button) {
           Plugin.getMessageManager().removeMessageInput(player);
           gui.new DynamicButtons().update(button);
           Bukkit.getScheduler().runTask(Plugin.getInstance(), () -> {
