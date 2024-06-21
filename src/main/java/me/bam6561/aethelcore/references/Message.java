@@ -1,6 +1,7 @@
 package me.bam6561.aethelcore.references;
 
 import me.bam6561.aethelcore.Plugin;
+import me.bam6561.aethelcore.guis.GUI;
 import me.bam6561.aethelcore.guis.markers.MessageInputReceiver;
 import me.bam6561.aethelcore.references.markers.StringValue;
 import net.md_5.bungee.api.ChatColor;
@@ -135,6 +136,8 @@ public class Message {
 
   /**
    * {@link MessageInputReceiver} inputs.
+   * <p>
+   * Arranged by {@link GUI} button order.
    *
    * @author Danny Nguyen
    * @version 0.2.4
@@ -142,14 +145,14 @@ public class Message {
    */
   public enum Input {
     /**
-     * Sets the custom model data.
-     */
-    CUSTOM_MODEL_DATA("Custom Model Data " + ChatColor.GRAY + "#"),
-
-    /**
      * Sets the display name.
      */
     DISPLAY_NAME("Display Name " + ChatColor.GRAY + "Text"),
+
+    /**
+     * Sets the custom model data.
+     */
+    CUSTOM_MODEL_DATA("Custom Model Data " + ChatColor.GRAY + "#"),
 
     /**
      * Adds a line of lore.
@@ -157,24 +160,24 @@ public class Message {
     LORE_ADD("Add Lore " + ChatColor.GRAY + "Text"),
 
     /**
-     * Edit a line of lore.
-     */
-    LORE_EDIT("Edit Lore " + ChatColor.GRAY + "#, Text"),
-
-    /**
      * Inserts a line of lore.
      */
     LORE_INSERT("Insert Lore " + ChatColor.GRAY + "#, Text"),
 
     /**
-     * Removes a line of lore.
-     */
-    LORE_REMOVE("Remove Lore " + ChatColor.GRAY + "#"),
-
-    /**
      * Sets the lore.
      */
     LORE_SET("Set Lore " + ChatColor.GRAY + "Text (Use \" ; \" for new lines.)"),
+
+    /**
+     * Edit a line of lore.
+     */
+    LORE_EDIT("Edit Lore " + ChatColor.GRAY + "#, Text"),
+
+    /**
+     * Removes a line of lore.
+     */
+    LORE_REMOVE("Remove Lore " + ChatColor.GRAY + "#"),
 
     /**
      * Sets the damage.

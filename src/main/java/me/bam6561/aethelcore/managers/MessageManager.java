@@ -117,7 +117,7 @@ public class MessageManager {
        */
       private Request {
         switch (input) {
-          case CUSTOM_MODEL_DATA, DISPLAY_NAME, LORE_ADD, LORE_EDIT, LORE_INSERT, LORE_REMOVE, LORE_SET -> {
+          case DISPLAY_NAME, CUSTOM_MODEL_DATA, LORE_ADD, LORE_INSERT, LORE_SET, LORE_EDIT, LORE_REMOVE -> {
             if (!(receiver instanceof ItemAppearanceGUI)) {
               throw new IllegalArgumentException("Item Appearance GUI input only");
             }
@@ -194,13 +194,13 @@ public class MessageManager {
        */
       private void interpretInput() {
         switch (input) {
-          case CUSTOM_MODEL_DATA -> new ItemAppearance().inputCustomModelData();
           case DISPLAY_NAME -> new ItemAppearance().inputDisplayName();
+          case CUSTOM_MODEL_DATA -> new ItemAppearance().inputCustomModelData();
           case LORE_ADD -> new ItemAppearance().inputLoreAdd();
-          case LORE_EDIT -> new ItemAppearance().inputLoreEdit();
           case LORE_INSERT -> new ItemAppearance().inputLoreInsert();
-          case LORE_REMOVE -> new ItemAppearance().inputLoreRemove();
           case LORE_SET -> new ItemAppearance().inputLoreSet();
+          case LORE_EDIT -> new ItemAppearance().inputLoreEdit();
+          case LORE_REMOVE -> new ItemAppearance().inputLoreRemove();
         }
       }
 
@@ -234,6 +234,22 @@ public class MessageManager {
         }
 
         /**
+         * {@link Message.Input#DISPLAY_NAME}
+         */
+        private void inputDisplayName() {
+          ItemAppearanceGUI.DynamicButtons.Button button = ItemAppearanceGUI.DynamicButtons.Button.DISPLAY_NAME;
+          if (message.equals("-")) {
+            meta.setDisplayName(null);
+            player.sendMessage(ChatColor.GREEN + Message.ASCII.CHECKMARK.asString() + " Display Name " + ChatColor.GRAY + Message.ASCII.CROSS_MARK.asString());
+          } else {
+            meta.setDisplayName(TextUtils.Color.translate(message, '&'));
+            player.sendMessage(ChatColor.GREEN + Message.ASCII.CHECKMARK.asString() + " Display Name " + ChatColor.GRAY + message);
+          }
+          item.setItemMeta(meta);
+          reopenUpdatedGUI(button);
+        }
+
+        /**
          * {@link Message.Input#CUSTOM_MODEL_DATA}
          */
         private void inputCustomModelData() {
@@ -256,22 +272,6 @@ public class MessageManager {
         }
 
         /**
-         * {@link Message.Input#DISPLAY_NAME}
-         */
-        private void inputDisplayName() {
-          ItemAppearanceGUI.DynamicButtons.Button button = ItemAppearanceGUI.DynamicButtons.Button.DISPLAY_NAME;
-          if (message.equals("-")) {
-            meta.setDisplayName(null);
-            player.sendMessage(ChatColor.GREEN + Message.ASCII.CHECKMARK.asString() + " Display Name " + ChatColor.GRAY + Message.ASCII.CROSS_MARK.asString());
-          } else {
-            meta.setDisplayName(TextUtils.Color.translate(message, '&'));
-            player.sendMessage(ChatColor.GREEN + Message.ASCII.CHECKMARK.asString() + " Display Name " + ChatColor.GRAY + message);
-          }
-          item.setItemMeta(meta);
-          reopenUpdatedGUI(button);
-        }
-
-        /**
          * {@link Message.Input#LORE_ADD}
          */
         private void inputLoreAdd() {
@@ -286,35 +286,6 @@ public class MessageManager {
           item.setItemMeta(meta);
           player.sendMessage(ChatColor.GREEN + Message.ASCII.CHECKMARK.asString() + " Add Lore " + ChatColor.GRAY + message);
           reopenUpdatedGUI(button);
-        }
-
-        /**
-         * {@link Message.Input#LORE_EDIT}
-         */
-        private void inputLoreEdit() {
-          ItemAppearanceGUI.DynamicButtons.Button button = ItemAppearanceGUI.DynamicButtons.Button.LORE;
-          String[] messageInput = message.split(" ", 2);
-          if (messageInput.length != 2) {
-            player.sendMessage(Message.Error.UNRECOGNIZED_PARAMETERS.asString());
-            return;
-          }
-          int line;
-          try {
-            line = Integer.parseInt(messageInput[0]) - 1;
-          } catch (NumberFormatException ex) {
-            player.sendMessage(Message.Error.INVALID_LINE.asString());
-            return;
-          }
-          try {
-            List<String> lore = meta.getLore();
-            lore.set(line, TextUtils.Color.translate(messageInput[1], '&'));
-            meta.setLore(lore);
-            item.setItemMeta(meta);
-            player.sendMessage(ChatColor.GREEN + Message.ASCII.CHECKMARK.asString() + " Edit Lore " + ChatColor.GRAY + message);
-            reopenUpdatedGUI(button);
-          } catch (IndexOutOfBoundsException ex) {
-            player.sendMessage(Message.Error.INVALID_LINE.asString());
-          }
         }
 
         /**
@@ -359,6 +330,46 @@ public class MessageManager {
         }
 
         /**
+         * {@link Message.Input#LORE_SET}
+         */
+        private void inputLoreSet() {
+          ItemAppearanceGUI.DynamicButtons.Button button = ItemAppearanceGUI.DynamicButtons.Button.LORE;
+          meta.setLore(List.of(TextUtils.Color.translate(message, '&').split("; ")));
+          item.setItemMeta(meta);
+          player.sendMessage(ChatColor.GREEN + Message.ASCII.CHECKMARK.asString() + " Set Lore " + ChatColor.GRAY + message);
+          reopenUpdatedGUI(button);
+        }
+
+        /**
+         * {@link Message.Input#LORE_EDIT}
+         */
+        private void inputLoreEdit() {
+          ItemAppearanceGUI.DynamicButtons.Button button = ItemAppearanceGUI.DynamicButtons.Button.LORE;
+          String[] messageInput = message.split(" ", 2);
+          if (messageInput.length != 2) {
+            player.sendMessage(Message.Error.UNRECOGNIZED_PARAMETERS.asString());
+            return;
+          }
+          int line;
+          try {
+            line = Integer.parseInt(messageInput[0]) - 1;
+          } catch (NumberFormatException ex) {
+            player.sendMessage(Message.Error.INVALID_LINE.asString());
+            return;
+          }
+          try {
+            List<String> lore = meta.getLore();
+            lore.set(line, TextUtils.Color.translate(messageInput[1], '&'));
+            meta.setLore(lore);
+            item.setItemMeta(meta);
+            player.sendMessage(ChatColor.GREEN + Message.ASCII.CHECKMARK.asString() + " Edit Lore " + ChatColor.GRAY + message);
+            reopenUpdatedGUI(button);
+          } catch (IndexOutOfBoundsException ex) {
+            player.sendMessage(Message.Error.INVALID_LINE.asString());
+          }
+        }
+
+        /**
          * {@link Message.Input#LORE_REMOVE}
          */
         private void inputLoreRemove() {
@@ -380,17 +391,6 @@ public class MessageManager {
           } catch (NumberFormatException ex) {
             player.sendMessage(Message.Error.INVALID_LINE.asString());
           }
-        }
-
-        /**
-         * {@link Message.Input#LORE_SET}
-         */
-        private void inputLoreSet() {
-          ItemAppearanceGUI.DynamicButtons.Button button = ItemAppearanceGUI.DynamicButtons.Button.LORE;
-          meta.setLore(List.of(TextUtils.Color.translate(message, '&').split("; ")));
-          item.setItemMeta(meta);
-          player.sendMessage(ChatColor.GREEN + Message.ASCII.CHECKMARK.asString() + " Set Lore " + ChatColor.GRAY + message);
-          reopenUpdatedGUI(button);
         }
 
         /**
