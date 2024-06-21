@@ -80,7 +80,7 @@ public class ItemAppearanceGUI extends GUI implements Editor, MessageInputReceiv
   @Override
   protected void addButtons() {
     Inventory inv = getInventory();
-    inv.setItem(2, ItemUtils.Create.createPluginPlayerHead(Item.PlayerHead.ARROW_UP_IRON_BLOCK, "Item Editor"));
+    inv.setItem(2, ItemUtils.Create.createPluginPlayerHead(Item.PlayerHead.ARROW_UP_IRON_BLOCK, ChatColor.AQUA + "Item Editor"));
     updateDynamicButtons();
   }
 
@@ -134,6 +134,7 @@ public class ItemAppearanceGUI extends GUI implements Editor, MessageInputReceiv
    * <ul>
    *   <li>opens a {@link ItemEditorGUI}
    *   <li>sets the item being edited
+   *   <li>modifies item appearance metadata
    * </ul>
    * <p>
    * For player inventories, collecting to the cursor and shift clicking is prohibited.
@@ -670,7 +671,7 @@ public class ItemAppearanceGUI extends GUI implements Editor, MessageInputReceiv
           user.sendMessage(ChatColor.GREEN + Message.ASCII.CHECKMARK.asString() + " " + TextUtils.Format.asTitle(itemFlag.name()) + ChatColor.GRAY + " Never");
         }
       } else {
-        user.sendMessage(ChatColor.RED + Message.ASCII.CROSS_MARK.asString() + " " + TextUtils.Format.asTitle(itemFlag.name()) + " Not Applicable");
+        user.sendMessage(ChatColor.RED + Message.ASCII.CROSS_MARK.asString() + " " + TextUtils.Format.asTitle(itemFlag.name()) + ChatColor.GRAY + " Not Applicable");
       }
       new DynamicButtons().update(button);
     }

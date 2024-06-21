@@ -1,18 +1,16 @@
 package me.bam6561.aethelcore.guis.commands;
 
 import me.bam6561.aethelcore.Plugin;
-import me.bam6561.aethelcore.commands.ItemEditorCommand;
 import me.bam6561.aethelcore.guis.GUI;
 import me.bam6561.aethelcore.guis.commands.markers.Editor;
+import me.bam6561.aethelcore.references.Item;
 import me.bam6561.aethelcore.utils.ItemUtils;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.*;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -20,15 +18,13 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 
 /**
- * {@link ItemEditorCommand} {@link GUI}.
- * <p>
- * Collection of item metadata {@link Editor editors}.
+ * Item durability {@link GUI}.
  *
  * @author Danny Nguyen
  * @version 0.2.3
- * @since 0.0.27
+ * @since 0.2.3
  */
-public class ItemEditorGUI extends GUI implements Editor {
+public class ItemDurabilityGUI extends GUI implements Editor {
   /**
    * Interacting item.
    * <p>
@@ -43,7 +39,7 @@ public class ItemEditorGUI extends GUI implements Editor {
    * To prevent user desync, update the player object to refer
    * to the player whenever the {@link GUI} is clicked.
    */
-  private Player player;
+  private Player user;
 
   /**
    * Associates the {@link GUI} with its user and interacting item.
@@ -53,7 +49,7 @@ public class ItemEditorGUI extends GUI implements Editor {
    *
    * @param item interacting item
    */
-  public ItemEditorGUI(@Nullable ItemStack item) {
+  public ItemDurabilityGUI(@Nullable ItemStack item) {
     Inventory inv = getInventory();
     inv.setItem(4, item);
     this.item = inv.getItem(4);
@@ -67,25 +63,16 @@ public class ItemEditorGUI extends GUI implements Editor {
   @NotNull
   @Override
   protected Inventory createInventory() {
-    return Bukkit.createInventory(null, 54, "Item Editor");
+    return Bukkit.createInventory(null, 54, "Item Durability");
   }
 
   /**
-   * Adds accessible {@link Editor editors}.
+   * Adds item durability metadata buttons.
    */
   @Override
   protected void addButtons() {
     Inventory inv = getInventory();
-    inv.setItem(10, ItemUtils.Create.createItem(Material.ARMOR_STAND, ChatColor.AQUA + "Appearance"));
-    inv.setItem(11, ItemUtils.Create.createItem(Material.ANVIL, ChatColor.AQUA + "Durability"));
-    inv.setItem(19, ItemUtils.Create.createItem(Material.IRON_SWORD, ChatColor.AQUA + "Attributes", ItemFlag.HIDE_ATTRIBUTES));
-    inv.setItem(20, ItemUtils.Create.createItem(Material.ENCHANTED_BOOK, ChatColor.AQUA + "Enchantments"));
-    inv.setItem(21, ItemUtils.Create.createItem(Material.TNT, ChatColor.AQUA + "Skills"));
-
-    inv.setItem(15, ItemUtils.Create.createItem(Material.PAPER, ChatColor.AQUA + "Stack Size"));
-    inv.setItem(23, ItemUtils.Create.createItem(Material.POTION, ChatColor.AQUA + "Potion Effects", ItemFlag.HIDE_ADDITIONAL_TOOLTIP));
-    inv.setItem(24, ItemUtils.Create.createItem(Material.GOLDEN_APPLE, ChatColor.AQUA + "Food"));
-    inv.setItem(25, ItemUtils.Create.createItem(Material.IRON_PICKAXE, ChatColor.AQUA + "Tool", ItemFlag.HIDE_ATTRIBUTES));
+    inv.setItem(2, ItemUtils.Create.createPluginPlayerHead(Item.PlayerHead.ARROW_UP_IRON_BLOCK, ChatColor.AQUA + "Item Editor"));
     updateDynamicButtons();
   }
 
@@ -137,9 +124,9 @@ public class ItemEditorGUI extends GUI implements Editor {
   /**
    * Either:
    * <ul>
+   *   <li>opens a {@link ItemEditorGUI}
    *   <li>sets the item being edited
-   *   <li>opens a {@link ItemAppearanceGUI}
-   *   <li>opens a {@link ItemDurabilityGUI}
+   *   <li>modifies item durability metadata
    * </ul>
    * <p>
    * For player inventories, collecting to the cursor and shift clicking is prohibited.
@@ -154,14 +141,17 @@ public class ItemEditorGUI extends GUI implements Editor {
       return;
     }
     event.setCancelled(true);
+    int rawSlot = event.getRawSlot();
     if (ItemUtils.Read.isNullOrAir(event.getCurrentItem())) {
+      if (rawSlot == 4) {
+        new Interaction().setItemByClickedSlot(event);
+      }
       return;
     }
-    this.player = (Player) event.getWhoClicked();
-    switch (event.getRawSlot()) {
+    this.user = (Player) event.getWhoClicked();
+    switch (rawSlot) {
+      case 2 -> new Interaction().openItemAppearanceGUI();
       case 4 -> new Interaction().setItemByClickedSlot(event);
-      case 10 -> new Interaction().openItemAppearanceGUI();
-      case 11 -> new Interaction().openItemDurabilityGUI();
     }
   }
 
@@ -198,15 +188,15 @@ public class ItemEditorGUI extends GUI implements Editor {
   }
 
   /**
-   * Shows a "Save to Database" button when an item is being edited.
+   * Shows durability metadata buttons when an item is being edited.
    */
   @Override
   public void updateDynamicButtons() {
-    Inventory inv = getInventory();
+    DynamicButtons buttons = new DynamicButtons();
     if (ItemUtils.Read.isNotNullOrAir(item)) {
-      inv.setItem(40, ItemUtils.Create.createItem(Material.BOOKSHELF, ChatColor.AQUA + "Save to Database"));
+      buttons.updateAll();
     } else {
-      inv.setItem(40, null);
+      buttons.clearAll();
     }
   }
 
@@ -219,55 +209,5 @@ public class ItemEditorGUI extends GUI implements Editor {
   @Override
   public ItemStack getItem() {
     return this.item;
-  }
-
-  /**
-   * {@link GUI} interaction.
-   *
-   * @author Danny Nguyen
-   * @version 0.2.3
-   * @since 0.1.26
-   */
-  private class Interaction {
-    /**
-     * No parameter constructor.
-     */
-    private Interaction() {
-    }
-
-    /**
-     * Sets the item currently being edited.
-     *
-     * @param event inventory click event
-     */
-    private void setItemByClickedSlot(InventoryClickEvent event) {
-      event.setCancelled(false);
-      Bukkit.getScheduler().runTaskLater(Plugin.getInstance(), () -> {
-        item = getInventory().getItem(4);
-        updateDynamicButtons();
-      }, 1);
-    }
-
-    /**
-     * Opens an {@link ItemAppearanceGUI} with the item currently being edited.
-     */
-    private void openItemAppearanceGUI() {
-      if (ItemUtils.Read.isNotNullOrAir(item)) {
-        Plugin.getGUIManager().openGUI(player, new ItemAppearanceGUI(item.clone()));
-      } else {
-        Plugin.getGUIManager().openGUI(player, new ItemAppearanceGUI(null));
-      }
-    }
-
-    /**
-     * Opens an {@link ItemDurabilityGUI} with the item currently being edited.
-     */
-    private void openItemDurabilityGUI() {
-      if (ItemUtils.Read.isNotNullOrAir(item)) {
-        Plugin.getGUIManager().openGUI(player, new ItemDurabilityGUI(item.clone()));
-      } else {
-        Plugin.getGUIManager().openGUI(player, new ItemDurabilityGUI(null));
-      }
-    }
   }
 }

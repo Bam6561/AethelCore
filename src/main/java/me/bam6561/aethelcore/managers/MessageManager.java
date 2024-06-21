@@ -150,7 +150,7 @@ public class MessageManager {
      * Response to a {@link Request}.
      *
      * @author Danny Nguyen
-     * @version 0.1.21
+     * @version 0.2.3
      * @since 0.1.13
      */
     private static class Response {
@@ -241,7 +241,7 @@ public class MessageManager {
           if (message.equals("-")) {
             meta.setCustomModelData(null);
             item.setItemMeta(meta);
-            player.sendMessage(ChatColor.GREEN + Message.ASCII.CHECKMARK.asString() + " Custom Model Data " + ChatColor.GRAY + Message.ASCII.CROSS_MARK);
+            player.sendMessage(ChatColor.GREEN + Message.ASCII.CHECKMARK.asString() + " Custom Model Data " + ChatColor.GRAY + Message.ASCII.CROSS_MARK.asString());
             reopenUpdatedGUI(button);
             return;
           }
@@ -262,7 +262,7 @@ public class MessageManager {
           ItemAppearanceGUI.DynamicButtons.Button button = ItemAppearanceGUI.DynamicButtons.Button.DISPLAY_NAME;
           if (message.equals("-")) {
             meta.setDisplayName(null);
-            player.sendMessage(ChatColor.GREEN + Message.ASCII.CHECKMARK.asString() + " Display Name " + ChatColor.GRAY + Message.ASCII.CROSS_MARK);
+            player.sendMessage(ChatColor.GREEN + Message.ASCII.CHECKMARK.asString() + " Display Name " + ChatColor.GRAY + Message.ASCII.CROSS_MARK.asString());
           } else {
             meta.setDisplayName(TextUtils.Color.translate(message, '&'));
             player.sendMessage(ChatColor.GREEN + Message.ASCII.CHECKMARK.asString() + " Display Name " + ChatColor.GRAY + message);
@@ -345,7 +345,12 @@ public class MessageManager {
             meta.setLore(lore);
           } else {
             lore = new ArrayList<>();
-            lore.add(line, TextUtils.Color.translate(message, '&'));
+            try {
+              lore.add(line, TextUtils.Color.translate(message, '&'));
+            } catch (IndexOutOfBoundsException ex) {
+              player.sendMessage(Message.Error.INVALID_LINE.asString());
+              return;
+            }
             meta.setLore(lore);
           }
           item.setItemMeta(meta);
