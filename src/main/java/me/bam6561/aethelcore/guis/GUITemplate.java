@@ -2,7 +2,6 @@ package me.bam6561.aethelcore.guis;
 
 import me.bam6561.aethelcore.Plugin;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.*;
 import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
@@ -13,14 +12,14 @@ import java.util.Objects;
  * {@link GUI}.
  *
  * @author Danny Nguyen
- * @version 0.2.1
+ * @version 0.2.2
  * @since 0.0.27
  */
 public class GUITemplate extends GUI {
   /**
    * No parameter constructor.
    */
-  public GUITemplate(@NotNull Player user) {
+  public GUITemplate() {
   }
 
   /**

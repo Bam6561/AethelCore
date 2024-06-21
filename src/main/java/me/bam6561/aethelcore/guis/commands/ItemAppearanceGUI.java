@@ -4,6 +4,7 @@ import me.bam6561.aethelcore.Plugin;
 import me.bam6561.aethelcore.guis.GUI;
 import me.bam6561.aethelcore.guis.commands.markers.Editor;
 import me.bam6561.aethelcore.guis.markers.MessageInputReceiver;
+import me.bam6561.aethelcore.references.Item;
 import me.bam6561.aethelcore.references.Message;
 import me.bam6561.aethelcore.utils.ItemUtils;
 import me.bam6561.aethelcore.utils.TextUtils;
@@ -28,7 +29,7 @@ import java.util.Set;
  * Item appearance {@link GUI}.
  *
  * @author Danny Nguyen
- * @version 0.2.1
+ * @version 0.2.2
  * @since 0.1.2
  */
 public class ItemAppearanceGUI extends GUI implements Editor, MessageInputReceiver {
@@ -79,7 +80,7 @@ public class ItemAppearanceGUI extends GUI implements Editor, MessageInputReceiv
   @Override
   protected void addButtons() {
     Inventory inv = getInventory();
-    inv.setItem(2, ItemUtils.Create.createItem(Material.POTATO, ChatColor.AQUA + "Item Editor"));
+    inv.setItem(2, ItemUtils.Create.createPluginPlayerHead(Item.PlayerHead.ARROW_UP_IRON_BLOCK, "Item Editor"));
     updateDynamicButtons();
   }
 

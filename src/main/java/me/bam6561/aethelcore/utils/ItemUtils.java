@@ -1,5 +1,7 @@
 package me.bam6561.aethelcore.utils;
 
+import me.bam6561.aethelcore.references.Item;
+import me.bam6561.aethelcore.references.Item.PlayerHead;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -37,7 +39,7 @@ public class ItemUtils {
    * Creates and serializes ItemStacks with metadata.
    *
    * @author Danny Nguyen
-   * @version 0.1.0
+   * @version 0.2.2
    * @since 0.1.0
    */
   public static class Create {
@@ -163,6 +165,45 @@ public class ItemUtils {
       SkullMeta meta = (SkullMeta) item.getItemMeta();
       meta.setOwningPlayer(player);
       meta.setDisplayName(ChatColor.DARK_PURPLE + player.getName());
+      meta.setLore(lore);
+      item.setItemMeta(meta);
+      return item;
+    }
+
+    /**
+     * Creates a named player head from {@link PlayerHead} textures.
+     *
+     * @param head {@link PlayerHead}
+     * @param name item name
+     * @return named player head texture
+     */
+    @NotNull
+    public static ItemStack createPluginPlayerHead(@NotNull Item.PlayerHead head, @NotNull String name) {
+      Objects.requireNonNull(head, "Null head");
+      Objects.requireNonNull(name, "Null name");
+      ItemStack item = head.asItem().clone();
+      ItemMeta meta = item.getItemMeta();
+      meta.setDisplayName(name);
+      item.setItemMeta(meta);
+      return item;
+    }
+
+    /**
+     * Creates a named player head from {@link PlayerHead} textures with lore.
+     *
+     * @param head {@link PlayerHead}
+     * @param name item name
+     * @param lore item lore
+     * @return named player head texture with lore
+     */
+    @NotNull
+    public static ItemStack createPluginPlayerHead(@NotNull Item.PlayerHead head, @NotNull String name, @NotNull List<String> lore) {
+      Objects.requireNonNull(head, "Null head");
+      Objects.requireNonNull(name, "Null name");
+      Objects.requireNonNull(lore, "Null lore");
+      ItemStack item = head.asItem();
+      ItemMeta meta = item.getItemMeta();
+      meta.setDisplayName(name);
       meta.setLore(lore);
       item.setItemMeta(meta);
       return item;

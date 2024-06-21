@@ -6,7 +6,6 @@ import me.bam6561.aethelcore.guis.GUI;
 import me.bam6561.aethelcore.guis.commands.markers.Database;
 import me.bam6561.aethelcore.guis.commands.markers.Paginated;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.*;
 import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
