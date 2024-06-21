@@ -7,8 +7,11 @@ import org.jetbrains.annotations.Nullable;
 /**
  * {@link GUI} associated with a command that creates and/or modifies items.
  * <p>
- * {@link GUI GUIs} that implement this interface must include a method to
- * handle situations where a player clicks on a dynamic button that has been removed.
+ * {@link GUI GUIs} that implement this interface:
+ * <ul>
+ *   <li>contain a DynamicButtons class with a nested Button enumeration and Display record
+ *   <li>handle situations where a player clicks on a dynamic button slot that has been hidden
+ * </ul>
  *
  * @author Danny Nguyen
  * @version 0.1.25

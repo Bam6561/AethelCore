@@ -3,28 +3,36 @@ package me.bam6561.aethelcore.guis.commands;
 import me.bam6561.aethelcore.Plugin;
 import me.bam6561.aethelcore.guis.GUI;
 import me.bam6561.aethelcore.guis.commands.markers.Editor;
+import me.bam6561.aethelcore.guis.markers.MessageInputReceiver;
 import me.bam6561.aethelcore.references.Item;
+import me.bam6561.aethelcore.references.Message;
 import me.bam6561.aethelcore.utils.ItemUtils;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.*;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.Repairable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * Item durability {@link GUI}.
  *
  * @author Danny Nguyen
- * @version 0.2.3
+ * @version 0.2.4
  * @since 0.2.3
  */
-public class ItemDurabilityGUI extends GUI implements Editor {
+public class ItemDurabilityGUI extends GUI implements Editor, MessageInputReceiver {
   /**
    * Interacting item.
    * <p>
@@ -152,6 +160,12 @@ public class ItemDurabilityGUI extends GUI implements Editor {
     switch (rawSlot) {
       case 2 -> new Interaction().openItemAppearanceGUI();
       case 4 -> new Interaction().setItemByClickedSlot(event);
+      case 10 -> new Interaction().queryMessageInput(this, Message.Input.DAMAGE);
+      case 11 -> new Interaction().queryMessageInput(this, Message.Input.DURABILITY);
+      case 12 -> new Interaction().queryMessageInput(this, Message.Input.MAX_DURABILITY);
+      case 14 -> new Interaction().queryMessageInput(this, Message.Input.REPAIR_COST);
+      case 15 -> new Interaction().toggleIsFireResistant();
+      case 16 -> new Interaction().toggleIsUnbreakable();
     }
   }
 
@@ -209,5 +223,283 @@ public class ItemDurabilityGUI extends GUI implements Editor {
   @Override
   public ItemStack getItem() {
     return this.item;
+  }
+
+  /**
+   * Represent dynamic {@link Button buttons}.
+   * <p>
+   * Check if an item exists first before updating any {@link Button buttons}.
+   *
+   * @author Danny Nguyen
+   * @version 0.2.4
+   * @since 0.2.4
+   */
+  public class DynamicButtons {
+    /**
+     * {@link Button} positions.
+     */
+    private static final Set<Integer> POSITIONS = Set.of(10, 11, 12, 14, 15, 16);
+
+    /**
+     * {@link GUI} inventory.
+     */
+    private final Inventory inv = getInventory();
+
+    /**
+     * No parameter constructor.
+     */
+    public DynamicButtons() {
+    }
+
+    /**
+     * Updates the {@link Button button's} {@link Display}.
+     *
+     * @param button {@link Button}
+     */
+    public void update(DynamicButtons.Button button) {
+      Display display = new Display(item.getItemMeta());
+      switch (button) {
+        case DAMAGE -> inv.setItem(10, display.iconDamage());
+        case DURABILITY -> inv.setItem(11, display.iconDurability());
+        case MAX_DURABILITY -> inv.setItem(12, display.iconMaxDurability());
+        case REPAIR_COST -> inv.setItem(14, display.iconRepairCost());
+        case FIRE_RESISTANT -> inv.setItem(15, display.iconFireResistant());
+        case UNBREAKABLE -> inv.setItem(16, display.iconUnbreakable());
+      }
+    }
+
+    /**
+     * Updates all {@link Button} {@link Display displays}.
+     */
+    private void updateAll() {
+      Display display = new Display(item.getItemMeta());
+      inv.setItem(10, display.iconDamage());
+      inv.setItem(11, display.iconDurability());
+      inv.setItem(12, display.iconMaxDurability());
+
+      inv.setItem(14, display.iconRepairCost());
+      inv.setItem(15, display.iconFireResistant());
+      inv.setItem(16, display.iconUnbreakable());
+    }
+
+    /**
+     * Clears all {@link Button buttons}.
+     */
+    private void clearAll() {
+      for (int slot : POSITIONS) {
+        inv.setItem(slot, null);
+      }
+    }
+
+    /**
+     * Item durability metadata.
+     *
+     * @author Danny Nguyen
+     * @version 0.2.4
+     * @since 0.2.4
+     */
+    public enum Button {
+      /**
+       * Durability damage.
+       */
+      DAMAGE,
+
+      /**
+       * Remaining durability.
+       */
+      DURABILITY,
+
+      /**
+       * Max durability.
+       */
+      MAX_DURABILITY,
+
+      /**
+       * Anvil repair cost.
+       */
+      REPAIR_COST,
+
+      /**
+       * Fire resistant.
+       */
+      FIRE_RESISTANT,
+
+      /**
+       * Unbreakable.
+       */
+      UNBREAKABLE
+    }
+
+    /**
+     * Reads item durability metadata and returns representative display icons.
+     *
+     * @param meta
+     * @author Danny Nguyen
+     * @version 0.2.4
+     * @since 0.2.4
+     */
+    private record Display(ItemMeta meta) {
+      /**
+       * Sets the item metadata to be read.
+       */
+      private Display {
+      }
+
+      /**
+       * Creates an icon for the item's damage.
+       *
+       * @return damage icon
+       */
+      private ItemStack iconDamage() {
+        if (meta instanceof Damageable damageable) {
+          return ItemUtils.Create.createItem(Material.COBBLESTONE, ChatColor.AQUA + "Damage", List.of(ChatColor.WHITE + "" + damageable.getDamage()));
+        }
+        return ItemUtils.Create.createItem(Material.BARRIER, ChatColor.WHITE + "Not Damageable");
+      }
+
+      /**
+       * Creates an icon for the item's durability.
+       *
+       * @return durability icon
+       */
+      private ItemStack iconDurability() {
+        if (meta instanceof Damageable damageable) {
+          return ItemUtils.Create.createItem(Material.STONE, ChatColor.AQUA + "Durability", List.of(ChatColor.WHITE + "" + (damageable.getMaxDamage() - damageable.getDamage())));
+        }
+        return ItemUtils.Create.createItem(Material.BARRIER, ChatColor.WHITE + "Not Damageable");
+      }
+
+      /**
+       * Creates an icon for the item's max durability.
+       *
+       * @return max durability icon
+       */
+      private ItemStack iconMaxDurability() {
+        if (meta instanceof Damageable damageable) {
+          return ItemUtils.Create.createItem(Material.STONE, ChatColor.AQUA + "Durability", List.of(ChatColor.WHITE + "" + damageable.getMaxDamage()));
+        }
+        return ItemUtils.Create.createItem(Material.BARRIER, ChatColor.WHITE + "Not Damageable");
+      }
+
+      /**
+       * Creates an icon for the item's repair cost.
+       *
+       * @return repair cost icon
+       */
+      private ItemStack iconRepairCost() {
+        if (meta instanceof Repairable repairable) {
+          return ItemUtils.Create.createItem(Material.ANVIL, ChatColor.AQUA + "Repair Cost", List.of(ChatColor.WHITE + "" + repairable.getRepairCost()));
+        }
+        return ItemUtils.Create.createItem(Material.BARRIER, ChatColor.WHITE + "Not Repairable");
+      }
+
+      /**
+       * Creates an icon for the item's fire-resistant.
+       *
+       * @return fire-resistant icon
+       */
+      private ItemStack iconFireResistant() {
+        if (meta.isFireResistant()) {
+          return ItemUtils.Create.createItem(Material.LAVA_BUCKET, ChatColor.AQUA + "Fire Resistant", List.of(ChatColor.GREEN + Message.ASCII.CHECKMARK.asString()));
+        } else {
+          return ItemUtils.Create.createItem(Material.LAVA_BUCKET, ChatColor.AQUA + "Fire Resistant");
+        }
+      }
+
+      /**
+       * Creates an icon for the item's unbreakable.
+       *
+       * @return unbreakable icon
+       */
+      private ItemStack iconUnbreakable() {
+        if (meta.isUnbreakable()) {
+          return ItemUtils.Create.createItem(Material.BEDROCK, ChatColor.AQUA + "Unbreakable", List.of(ChatColor.GREEN + Message.ASCII.CHECKMARK.asString()));
+        } else {
+          return ItemUtils.Create.createItem(Material.BEDROCK, ChatColor.AQUA + "Unbreakable");
+        }
+      }
+    }
+  }
+
+  /**
+   * {@link GUI} interaction.
+   *
+   * @author Danny Nguyen
+   * @version 0.2.4
+   * @since 0.2.4
+   */
+  private class Interaction {
+    /**
+     * No parameter constructor.
+     */
+    private Interaction() {
+    }
+
+    /**
+     * Opens an {@link ItemEditorGUI} with the item currently being edited.
+     */
+    private void openItemAppearanceGUI() {
+      if (ItemUtils.Read.isNotNullOrAir(item)) {
+        Plugin.getGUIManager().openGUI(user, new ItemEditorGUI(item.clone()));
+      } else {
+        Plugin.getGUIManager().openGUI(user, new ItemEditorGUI(null));
+      }
+    }
+
+    /**
+     * Sets the item currently being edited.
+     *
+     * @param event inventory click event
+     */
+    private void setItemByClickedSlot(InventoryClickEvent event) {
+      event.setCancelled(false);
+      Bukkit.getScheduler().runTaskLater(Plugin.getInstance(), () -> {
+        item = getInventory().getItem(4);
+        updateDynamicButtons();
+      }, 1);
+    }
+
+    /**
+     * Queries a message input and closes the inventory so the user can respond.
+     *
+     * @param receiver {@link MessageInputReceiver}
+     * @param input    {@link Message.Input}
+     */
+    private void queryMessageInput(MessageInputReceiver receiver, Message.Input input) {
+      Plugin.getMessageManager().queryMessageInput(user, receiver, input);
+      user.closeInventory();
+    }
+
+    /**
+     * Toggles the item's fire-resistant.
+     */
+    private void toggleIsFireResistant() {
+      ItemMeta meta = item.getItemMeta();
+      if (meta.isFireResistant()) {
+        meta.setFireResistant(false);
+        user.sendMessage(ChatColor.GREEN + Message.ASCII.CHECKMARK.asString() + " Fire Resistant" + ChatColor.GRAY + " Never");
+      } else {
+        meta.setFireResistant(true);
+        user.sendMessage(ChatColor.GREEN + Message.ASCII.CHECKMARK.asString() + " Fire Resistant" + ChatColor.GRAY + " Always");
+      }
+      item.setItemMeta(meta);
+      new DynamicButtons().update(DynamicButtons.Button.FIRE_RESISTANT);
+    }
+
+    /**
+     * Toggles the item's unbreakable.
+     */
+    private void toggleIsUnbreakable() {
+      ItemMeta meta = item.getItemMeta();
+      if (meta.isUnbreakable()) {
+        meta.setUnbreakable(false);
+        user.sendMessage(ChatColor.GREEN + Message.ASCII.CHECKMARK.asString() + " Unbreakable" + ChatColor.GRAY + " Never");
+      } else {
+        meta.setUnbreakable(true);
+        user.sendMessage(ChatColor.GREEN + Message.ASCII.CHECKMARK.asString() + " Unbreakable" + ChatColor.GRAY + " Always");
+      }
+      item.setItemMeta(meta);
+      new DynamicButtons().update(DynamicButtons.Button.UNBREAKABLE);
+    }
   }
 }

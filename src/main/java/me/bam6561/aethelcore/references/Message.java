@@ -132,7 +132,7 @@ public class Message {
    * {@link MessageInputReceiver} inputs.
    *
    * @author Danny Nguyen
-   * @version 0.2.0
+   * @version 0.2.4
    * @since 0.1.10
    */
   public enum Input {
@@ -169,7 +169,27 @@ public class Message {
     /**
      * Sets the lore.
      */
-    LORE_SET("Set Lore " + ChatColor.GRAY + "Text (Use \" ; \" for new lines.)");
+    LORE_SET("Set Lore " + ChatColor.GRAY + "Text (Use \" ; \" for new lines.)"),
+
+    /**
+     * Sets the damage.
+     */
+    DAMAGE("Damage " + ChatColor.GRAY + "#"),
+
+    /**
+     * Sets the durability.
+     */
+    DURABILITY("Durability " + ChatColor.GRAY + "#"),
+
+    /**
+     * Sets the max durability.
+     */
+    MAX_DURABILITY("Max Durability " + ChatColor.GRAY + "#"),
+
+    /**
+     * Sets the repair cost.
+     */
+    REPAIR_COST("Repair Cost " + ChatColor.GRAY + "#");
 
     /**
      * Input message.
