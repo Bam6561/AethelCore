@@ -9,7 +9,7 @@ import org.jetbrains.annotations.Nullable;
  * <p>
  * {@link GUI GUIs} that implement this interface:
  * <ul>
- *   <li>contain a DynamicButtons class with a nested Button enumeration and Display record
+ *   <li>contain a DynamicButtons class with a nested Button enumeration and Display class
  *   <li>handle situations where a player clicks on a dynamic button slot that has been hidden
  * </ul>
  *

@@ -73,7 +73,7 @@ public class Message {
    * Error messages.
    *
    * @author Danny Nguyen
-   * @version 0.2.0
+   * @version 0.2.5
    * @since 0.0.14
    */
   public enum Error implements StringValue {
@@ -88,9 +88,14 @@ public class Message {
     PLAYER_ONLY_COMMAND("Player-only command."),
 
     /**
+     * Not applicable action.
+     */
+    NOT_APPLICABLE("Not applicable."),
+
+    /**
      * Unrecognized parameters.
      */
-    UNRECOGNIZED_PARAMETERS("Unrecognized parameters"),
+    UNRECOGNIZED_PARAMETERS("Unrecognized parameters."),
 
     /**
      * Non-integer input.

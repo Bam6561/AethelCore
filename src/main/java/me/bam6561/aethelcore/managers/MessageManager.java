@@ -413,7 +413,7 @@ public class MessageManager {
    * Message flags.
    *
    * @author Danny Nguyen
-   * @version 0.2.1
+   * @version 0.2.5
    * @since 0.1.14
    */
   private static class MessageFlag {
@@ -471,6 +471,7 @@ public class MessageManager {
         case '-' -> {
           Plugin.getMessageManager().removeMessageInput(player);
           player.sendMessage(ChatColor.GREEN + Message.ASCII.CHECKMARK.asString() + " Escape Input");
+          event.setCancelled(true);
         }
       }
     }

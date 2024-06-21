@@ -29,7 +29,7 @@ import java.util.Set;
  * Item durability {@link GUI}.
  *
  * @author Danny Nguyen
- * @version 0.2.4
+ * @version 0.2.5
  * @since 0.2.3
  */
 public class ItemDurabilityGUI extends GUI implements Editor, MessageInputReceiver {
@@ -160,9 +160,9 @@ public class ItemDurabilityGUI extends GUI implements Editor, MessageInputReceiv
     switch (rawSlot) {
       case 2 -> new Interaction().openItemAppearanceGUI();
       case 4 -> new Interaction().setItemByClickedSlot(event);
-      case 10 -> new Interaction().queryMessageInput(this, Message.Input.DAMAGE);
-      case 11 -> new Interaction().queryMessageInput(this, Message.Input.DURABILITY);
-      case 12 -> new Interaction().queryMessageInput(this, Message.Input.MAX_DURABILITY);
+      case 10 -> new Interaction().isDurabilityApplicable(event, this, Message.Input.DAMAGE);
+      case 11 -> new Interaction().isDurabilityApplicable(event, this, Message.Input.DURABILITY);
+      case 12 -> new Interaction().isDurabilityApplicable(event, this, Message.Input.MAX_DURABILITY);
       case 14 -> new Interaction().queryMessageInput(this, Message.Input.REPAIR_COST);
       case 15 -> new Interaction().toggleIsFireResistant();
       case 16 -> new Interaction().toggleIsUnbreakable();
@@ -231,7 +231,7 @@ public class ItemDurabilityGUI extends GUI implements Editor, MessageInputReceiv
    * Check if an item exists first before updating any {@link Button buttons}.
    *
    * @author Danny Nguyen
-   * @version 0.2.4
+   * @version 0.2.5
    * @since 0.2.4
    */
   public class DynamicButtons {
@@ -257,7 +257,7 @@ public class ItemDurabilityGUI extends GUI implements Editor, MessageInputReceiv
      * @param button {@link Button}
      */
     public void update(DynamicButtons.Button button) {
-      Display display = new Display(item.getItemMeta());
+      Display display = new Display();
       switch (button) {
         case DAMAGE -> inv.setItem(10, display.iconDamage());
         case DURABILITY -> inv.setItem(11, display.iconDurability());
@@ -272,7 +272,7 @@ public class ItemDurabilityGUI extends GUI implements Editor, MessageInputReceiv
      * Updates all {@link Button} {@link Display displays}.
      */
     private void updateAll() {
-      Display display = new Display(item.getItemMeta());
+      Display display = new Display();
       inv.setItem(10, display.iconDamage());
       inv.setItem(11, display.iconDurability());
       inv.setItem(12, display.iconMaxDurability());
@@ -333,16 +333,20 @@ public class ItemDurabilityGUI extends GUI implements Editor, MessageInputReceiv
     /**
      * Reads item durability metadata and returns representative display icons.
      *
-     * @param meta
      * @author Danny Nguyen
-     * @version 0.2.4
+     * @version 0.2.5
      * @since 0.2.4
      */
-    private record Display(ItemMeta meta) {
+    private class Display {
       /**
-       * Sets the item metadata to be read.
+       * Item metadata.
        */
-      private Display {
+      private final ItemMeta meta = item.getItemMeta();
+
+      /**
+       * No parameter constructor.
+       */
+      private Display() {
       }
 
       /**
@@ -351,7 +355,8 @@ public class ItemDurabilityGUI extends GUI implements Editor, MessageInputReceiv
        * @return damage icon
        */
       private ItemStack iconDamage() {
-        if (meta instanceof Damageable damageable) {
+        short materialMaxDurability = item.getType().getMaxDurability();
+        if (materialMaxDurability != 0 && meta instanceof Damageable damageable) {
           return ItemUtils.Create.createItem(Material.COBBLESTONE, ChatColor.AQUA + "Damage", List.of(ChatColor.WHITE + "" + damageable.getDamage()));
         }
         return ItemUtils.Create.createItem(Material.BARRIER, ChatColor.WHITE + "Not Damageable");
@@ -363,8 +368,13 @@ public class ItemDurabilityGUI extends GUI implements Editor, MessageInputReceiv
        * @return durability icon
        */
       private ItemStack iconDurability() {
-        if (meta instanceof Damageable damageable) {
-          return ItemUtils.Create.createItem(Material.STONE, ChatColor.AQUA + "Durability", List.of(ChatColor.WHITE + "" + (damageable.getMaxDamage() - damageable.getDamage())));
+        short materialMaxDurability = item.getType().getMaxDurability();
+        if (materialMaxDurability != 0 && meta instanceof Damageable damageable) {
+          if (damageable.hasMaxDamage()) {
+            return ItemUtils.Create.createItem(Material.STONE, ChatColor.AQUA + "Durability", List.of(ChatColor.WHITE + "" + (damageable.getMaxDamage() - damageable.getDamage())));
+          } else {
+            return ItemUtils.Create.createItem(Material.STONE, ChatColor.AQUA + "Durability", List.of(ChatColor.WHITE + "" + (materialMaxDurability - damageable.getDamage())));
+          }
         }
         return ItemUtils.Create.createItem(Material.BARRIER, ChatColor.WHITE + "Not Damageable");
       }
@@ -375,8 +385,13 @@ public class ItemDurabilityGUI extends GUI implements Editor, MessageInputReceiv
        * @return max durability icon
        */
       private ItemStack iconMaxDurability() {
-        if (meta instanceof Damageable damageable) {
-          return ItemUtils.Create.createItem(Material.STONE, ChatColor.AQUA + "Durability", List.of(ChatColor.WHITE + "" + damageable.getMaxDamage()));
+        short materialMaxDurability = item.getType().getMaxDurability();
+        if (materialMaxDurability != 0 && meta instanceof Damageable damageable) {
+          if (damageable.hasMaxDamage()) {
+            return ItemUtils.Create.createItem(Material.STONE_BRICKS, ChatColor.AQUA + "Max Durability", List.of(ChatColor.WHITE + "" + damageable.getMaxDamage()));
+          } else {
+            return ItemUtils.Create.createItem(Material.STONE_BRICKS, ChatColor.AQUA + "Max Durability", List.of(ChatColor.WHITE + "" + materialMaxDurability));
+          }
         }
         return ItemUtils.Create.createItem(Material.BARRIER, ChatColor.WHITE + "Not Damageable");
       }
@@ -425,7 +440,7 @@ public class ItemDurabilityGUI extends GUI implements Editor, MessageInputReceiv
    * {@link GUI} interaction.
    *
    * @author Danny Nguyen
-   * @version 0.2.4
+   * @version 0.2.5
    * @since 0.2.4
    */
   private class Interaction {
@@ -457,6 +472,22 @@ public class ItemDurabilityGUI extends GUI implements Editor, MessageInputReceiv
         item = getInventory().getItem(4);
         updateDynamicButtons();
       }, 1);
+    }
+
+    /**
+     * Verifies that the item has a durability to
+     * interact with before querying a message input.
+     *
+     * @param event    inventory click event
+     * @param receiver {@link MessageInputReceiver}
+     * @param input    {@link Message.Input}
+     */
+    private void isDurabilityApplicable(InventoryClickEvent event, MessageInputReceiver receiver, Message.Input input) {
+      if (event.getCurrentItem().getType() != Material.BARRIER) {
+        new Interaction().queryMessageInput(receiver, input);
+      } else {
+        user.sendMessage(Message.Error.NOT_APPLICABLE.asString());
+      }
     }
 
     /**

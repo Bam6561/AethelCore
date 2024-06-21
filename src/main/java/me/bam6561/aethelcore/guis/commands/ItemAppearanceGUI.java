@@ -250,7 +250,7 @@ public class ItemAppearanceGUI extends GUI implements Editor, MessageInputReceiv
    * Check if an item exists first before updating any {@link Button buttons}.
    *
    * @author Danny Nguyen
-   * @version 0.1.25
+   * @version 0.2.5
    * @since 0.1.22
    */
   public class DynamicButtons {
@@ -276,7 +276,7 @@ public class ItemAppearanceGUI extends GUI implements Editor, MessageInputReceiv
      * @param button {@link Button}
      */
     public void update(DynamicButtons.Button button) {
-      Display display = new Display(item.getItemMeta());
+      Display display = new Display();
       switch (button) {
         case DISPLAY_NAME -> inv.setItem(10, display.iconDisplayName());
         case CUSTOM_MODEL_DATA -> inv.setItem(11, display.iconCustomModelData());
@@ -298,7 +298,7 @@ public class ItemAppearanceGUI extends GUI implements Editor, MessageInputReceiv
      * Updates all {@link Button} {@link Display displays}.
      */
     private void updateAll() {
-      Display display = new Display(item.getItemMeta());
+      Display display = new Display();
       inv.setItem(10, display.iconDisplayName());
       inv.setItem(11, display.iconCustomModelData());
       inv.setItem(12, display.iconEnchantmentGlintOverride());
@@ -409,16 +409,20 @@ public class ItemAppearanceGUI extends GUI implements Editor, MessageInputReceiv
     /**
      * Reads item appearance metadata and returns representative display icons.
      *
-     * @param meta item metadata
      * @author Danny Nguyen
-     * @version 0.2.0
+     * @version 0.2.5
      * @since 0.1.5
      */
-    private record Display(ItemMeta meta) {
+    private class Display {
       /**
-       * Sets the item metadata to be read.
+       * Item metadata.
        */
-      private Display {
+      private final ItemMeta meta = item.getItemMeta();
+
+      /**
+       * No parameter constructor.
+       */
+      private Display() {
       }
 
       /**
