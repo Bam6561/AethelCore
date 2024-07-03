@@ -94,6 +94,7 @@ Project Link: https://github.com/Bam6561/AethelCore
 ## Acknowledgements
 * [Legitimoose](https://www.youtube.com/@Legitimoose)
 * [README Template](https://github.com/othneildrew/Best-README-Template#prerequisites)
+* [A Modern Approach to Inventory GUIs](https://www.spigotmc.org/threads/a-modern-approach-to-inventory-guis.594005/)
 
 <p align="right"><a href="#top">Back to Top</a></p>
 
